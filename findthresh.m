@@ -1,21 +1,11 @@
 % find a threshold from a histogram by smoothing with a gaussian with
 % standard deviation sigma and find the low valley location
 % sizeparam should be at least 4, with larger giving less smoothing
-function thresh = findthresh(thehist,sizeparam,show)
+function thresh = findthresh(thehist)
 
   [len,x] = size(thehist);
 
-  % convolve with a gaussian smoothing window here
-  filterlen = 5;                               % filter length
-  thefilter = mygausswin(filterlen,sizeparam);
-  thefilter = thefilter/sum(thefilter);                  % normalize
-  tmp2=conv(thefilter,thehist);               
-  tmp1=tmp2(1+filterlen/2:len+filterlen/2);     % select corresponding portion
-  if show > 0
-     figure(show)
-     clf
-     plot(log(tmp1))
-  end
+  tmp1=thehist;
 
   % find largest peak
   peak = find(tmp1 == max(tmp1));
