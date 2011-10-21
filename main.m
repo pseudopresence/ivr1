@@ -23,7 +23,10 @@ ImgData = myreadfolder('data2/', 100);
 
 % adaptive thresholding
 for k = 1:100
+    filter = fspecial('gaussian', [10 10], 5);
+    
     Img = ImgData(:,:,:,k);
+    Img = imfilter(Img, filter, 'symmetric', 'conv');
 
     NImg = normalize_rgb(Img);
     AdtImg = zeros(size(NImg));
@@ -34,50 +37,69 @@ for k = 1:100
     end
     % imshow(AdtImg);
 
+    % NImg = windowmedian(NImg, 8);
+    
+    ImgR = NImg(:,:,1);
+    ImgG = NImg(:,:,2);
+    ImgB = NImg(:,:,3);
 
+    ImgG = ImgG - 0.7 * ImgB;
+    
+    ImgR = normchannel(ImgR);
+    ImgG = normchannel(ImgG);
+    ImgB = normchannel(ImgB);
+    
+    % Centre of mass along each channel
+%     CR = [0 0];
+%     SR = 0
+%     for y = 1:size(ImgR, 1)
+%         for x = 1:size(ImgR, 2)
+%             V = exp(10 * ImgR(y, x) - 1);
+%             CR = CR + [y x] .* V;
+%             SR = SR + V;
+%         end
+%     end
+%     CR = CR ./ SR
+
+    
+%     ImgR2 = max(max(ImgR, -ImgG), -ImgB);
+%     ImgG2 = max(max(-ImgR, ImgG), -ImgB);
+%     ImgB2 = max(max(-ImgR, -ImgG), ImgB);
+%     
+%     ImgR = ImgR2;
+%     ImgG = ImgG2;
+%     ImgB = ImgB2;
+    
+    NNImg = NImg;
+    NNImg(:,:,1) = ImgR;
+    NNImg(:,:,2) = ImgG;
+    NNImg(:,:,3) = ImgB;
+
+    
+    
+    % 
+    % ImgR = NNImg(:,:,1);
+    % ImgG = NNImg(:,:,2);
+    % ImgB = NNImg(:,:,3);
+
+    % Marginal Histogram along X-axis, Y-axis
+    CR = xyhistmax(ImgR);
+    CG = xyhistmax(ImgG);
+    CB = xyhistmax(ImgB);
+    
     %Test with a single histogram
     Bins = 1024;
     edges = zeros(Bins,1);
     for i = 1 : Bins;
          edges(i) = ((i-1)/(Bins-1.0)) - 0.5;
     end
-
-    ImgR = NImg(:,:,1);
-    ImgG = NImg(:,:,2);
-    ImgB = NImg(:,:,3);
-
-    AvgR = mean(reshape(ImgR, 1, numel(ImgR)));
-    AvgG = mean(reshape(ImgG, 1, numel(ImgG)));
-    AvgB = mean(reshape(ImgB, 1, numel(ImgB)));
-
-    ImgR = ImgR - AvgR;
-    ImgG = ImgG - AvgG;
-    ImgB = ImgB - AvgB;
-
-    ImgG = ImgG - 0.5 * ImgB;
-
-    StdR = std(reshape(ImgR, 1, numel(ImgR)));
-    StdG = std(reshape(ImgG, 1, numel(ImgG)));
-    StdB = std(reshape(ImgB, 1, numel(ImgB)));
-
-    ImgR = 0.1 * ImgR / StdR;
-    ImgG = 0.1 * ImgG / StdG;
-    ImgB = 0.1 * ImgB / StdB;
-
-    NNImg = NImg;
-    NNImg(:,:,1) = ImgR;
-    NNImg(:,:,2) = ImgG;
-    NNImg(:,:,3) = ImgB;
-
-    % NNImg = windowmedian(NNImg, 8);
-    % 
-    % ImgR = NNImg(:,:,1);
-    % ImgG = NNImg(:,:,2);
-    % ImgB = NNImg(:,:,3);
-
-    % HistR = processHist(ImgR, edges, 50, 5);
-    % HistG = processHist(ImgG, edges, 50, 5);
-    % HistB = processHist(ImgB, edges, 50, 5);
+    
+    HistR = processHist(ImgR, edges, 200, 5);
+    HistG = processHist(ImgG, edges, 200, 5);
+    HistB = processHist(ImgB, edges, 200, 5);
+    
+    % thresholdR = findthresh(HistR/255);
+    
     % figure(1);
     % subplot(3,3,1:3);
     % imshow(NNImg * 3.0);
@@ -87,22 +109,45 @@ for k = 1:100
     % axis([-1.0, 1.0, 0, 1.1*max(HistR)]);
 
     str = strel(ones(3,3));
-    TImgR = imopen(bitand((ImgR >= 0.5), (ImgR <= 1.0)), str);
-    TImgG = imopen(bitand((ImgG >= 0.5), (ImgG <= 1.0)), str);
-    TImgB = imopen(bitand((ImgB >= 0.5), (ImgB <= 1.0)), str);
+    TImgR = imopen(bitand((ImgR >= 0.3), (ImgR <= 1.0)), str);
+    TImgG = imopen(bitand((ImgG >= 0.3), (ImgG <= 1.0)), str);
+    TImgB = imopen(bitand((ImgB >= 0.3), (ImgB <= 1.0)), str);
 
+
+    
     subplot(3,3,1:6);
+    %imshow(edge(NNImg(:,:,1)));
+    %imshow(0.5 * NNImg + 0.5);
     imshow(NNImg);
     xlabel(int2str(k));
+    
+    %subplot(3,3,4:6);
+    %plot(edges, HistR, 'r', edges, HistG, 'g', edges, HistB, 'b');
+    %axis([-1.0, 1.0, 0, 1.1*max(HistR)]);
+    %plot(XHistR);
+    % axis([0, 640, 0, 1.0]);
+    
     subplot(3,3,7);
     imshow(TImgR);
+    hold on;
+    plot(CR(2),CR(1),'o');
+    hold off;
     xlabel('red');
+    
     subplot(3,3,8);
     imshow(TImgG);
     xlabel('green');
+    hold on;
+    plot(CG(2),CG(1),'o');
+    hold off;
+    
     subplot(3,3,9);
     imshow(TImgB);
     xlabel('blue');
+    hold on;
+    plot(CB(2),CB(1),'o');
+    hold off;
+    
     pause(0.1);
 end
 %thresholdR = findthresh(HistR, 5/255, 4);
