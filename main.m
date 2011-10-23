@@ -34,11 +34,11 @@ yLinkerB=[];
 % end
 
 % adaptive thresholding
-
-
-
-for k = 5:5
+for k = 5:10:75
+    filter = fspecial('gaussian', [10 10], 5);
+    
     Img = ImgData(:,:,:,k);
+    Img = imfilter(Img, filter, 'symmetric', 'conv');
     NImg = Img;
     NImg = normalize_rgb(Img);
     %AdtImg = zeros(size(NImg));
@@ -49,169 +49,121 @@ for k = 5:5
     %end
     % imshow(AdtImg);
 
+    % NImg = windowmedian(NImg, 8);
+    
+    ImgR = NImg(:,:,1);
+    ImgG = NImg(:,:,2);
+    ImgB = NImg(:,:,3);
 
+    ImgG = ImgG - 0.7 * ImgB;
+    
+    ImgR = normchannel(ImgR);
+    ImgG = normchannel(ImgG);
+    ImgB = normchannel(ImgB);
+    
+    % Centre of mass along each channel
+%     CR = [0 0];
+%     SR = 0
+%     for y = 1:size(ImgR, 1)
+%         for x = 1:size(ImgR, 2)
+%             V = exp(10 * ImgR(y, x) - 1);
+%             CR = CR + [y x] .* V;
+%             SR = SR + V;
+%         end
+%     end
+%     CR = CR ./ SR
+
+    
+%     ImgR2 = max(max(ImgR, -ImgG), -ImgB);
+%     ImgG2 = max(max(-ImgR, ImgG), -ImgB);
+%     ImgB2 = max(max(-ImgR, -ImgG), ImgB);
+%     
+%     ImgR = ImgR2;
+%     ImgG = ImgG2;
+%     ImgB = ImgB2;
+    
+    NNImg = NImg;
+    NNImg(:,:,1) = ImgR;
+    NNImg(:,:,2) = ImgG;
+    NNImg(:,:,3) = ImgB;
+
+    
+    
+    % 
+    % ImgR = NNImg(:,:,1);
+    % ImgG = NNImg(:,:,2);
+    % ImgB = NNImg(:,:,3);
+
+
+    % Marginal Histogram along X-axis, Y-axis
+    CR = xyhistmax(ImgR);
+    CG = xyhistmax(ImgG);
+    CB = xyhistmax(ImgB);
+    
     %Test with a single histogram
     Bins = 1024;
     edges = zeros(Bins,1);
     for i = 1 : Bins;
          edges(i) = ((i-1)/(Bins-1.0)) - 0.5;
     end
+    
+    HistR = processHist(ImgR, edges, 200, 5);
+    HistG = processHist(ImgG, edges, 200, 5);
+    HistB = processHist(ImgB, edges, 200, 5);
+    
+    % thresholdR = findthresh(HistR/255);
+    
+    % figure(1);
+    % subplot(3,3,1:3);
+    % imshow(NNImg * 3.0);
+    % xlabel('value');
+    % subplot(3,3,4:6);
+    % plot(edges, HistR, 'r', edges, HistG, 'g', edges, HistB, 'b');
+    % axis([-1.0, 1.0, 0, 1.1*max(HistR)]);
 
-    ImgR = NImg(:,:,1);
-    ImgG = NImg(:,:,2);
-    ImgB = NImg(:,:,3);
-
-    AvgR = mean(reshape(ImgR, 1, numel(ImgR)));
-    AvgG = mean(reshape(ImgG, 1, numel(ImgG)));
-    AvgB = mean(reshape(ImgB, 1, numel(ImgB)));
-
-    ImgR = ImgR - AvgR;
-    ImgG = ImgG - AvgG;
-    ImgB = ImgB - AvgB;
-
-    ImgG = ImgG - 0.5 * ImgB;
-
-    StdR = std(reshape(ImgR, 1, numel(ImgR)));
-    StdG = std(reshape(ImgG, 1, numel(ImgG)));
-    StdB = std(reshape(ImgB, 1, numel(ImgB)));
-
-    ImgR = 0.1 * ImgR / StdR;
-    ImgG = 0.1 * ImgG / StdG;
-    ImgB = 0.1 * ImgB / StdB;
-
-    NNImg = NImg;
-    NNImg(:,:,1) = ImgR;
-    NNImg(:,:,2) = ImgG;
-    NNImg(:,:,3) = ImgB;
-
-    % NNImg = windowmedian(NNImg, 8);
-    % 
-    % ImgR = NNImg(:,:,1);
-    % ImgG = NNImg(:,:,2);
-    % ImgB = NNImg(:,:,3);
-
-    HistR = processHist(ImgR, edges, 50, 5);
-    HistG = processHist(ImgG, edges, 50, 5);
-    HistB = processHist(ImgB, edges, 50, 5);
-    %figure(1);
-    %subplot(2,3,3);
-    %imshow(NNImg);
-    %xlabel('value');
-    %subplot(3,3,4:6);
-    %plot(edges, HistR, 'r', edges, HistG, 'g', edges, HistB, 'b');
-   % axis([-1.0, 1.0, 0, 1.1*max(HistR)]);
 
     str = strel(ones(3,3));
-    TImgR = imopen(bitand((ImgR >= 0.5), (ImgR <= 1.0)), str);
-    TImgG = imopen(bitand((ImgG >= 0.5), (ImgG <= 1.0)), str);
-    TImgB = imopen(bitand((ImgB >= 0.5), (ImgB <= 1.0)), str);
-
-    %Find the edges of each image
-    size(TImgR(:,:,1));
-    %TImgR = edge(TImgR(:,:));
-    %TImgG = edge(TImgG(:,:));
-    %TImgB = edge(TImgB(:,:));
+    TImgR = imopen(bitand((ImgR >= 0.3), (ImgR <= 1.0)), str);
+    TImgG = imopen(bitand((ImgG >= 0.3), (ImgG <= 1.0)), str);
+    TImgB = imopen(bitand((ImgB >= 0.3), (ImgB <= 1.0)), str);
     
-    %***********************************
-    %Calculate the area of the object in the binary image for each channel
-    [rows,cols,valsR] = find(TImgR==1);
-    imageAreaR = sum(valsR);
-    [rows,cols,valsG] = find(TImgG==1);
-    imageAreaG = sum(valsG);
-    [rows,cols,valsB] = find(TImgB==1);
-    imageAreaB = sum(valsB);
+    subplot(3,3,1:6);
+    %imshow(edge(NNImg(:,:,1)));
+    %imshow(0.5 * NNImg + 0.5);
+    imshow(NNImg);
+    xlabel(int2str(k));
     
-    %Calculate the center of mass for image
-    centerMass=zeros(3,2);
-    for r=1:size(NNImg,1)
-        for c=1:size(NNImg,2)
-           centerMass(1,1) = centerMass(1,1)+r*TImgR(r,c);
-           centerMass(1,2) = centerMass(1,2)+c*TImgR(r,c);
-           centerMass(2,1) = centerMass(2,1)+r*TImgG(r,c);
-           centerMass(2,2) = centerMass(2,2)+c*TImgG(r,c);
-           centerMass(3,1) = centerMass(3,1)+r*TImgB(r,c);
-           centerMass(3,2) =  centerMass(3,2)+c*TImgB(r,c);
-        end
-    end
-    rcenterR = centerMass(1,1)/imageAreaR;
-    ccenterR = centerMass(1,2)/imageAreaR;
+    %subplot(3,3,4:6);
+    %plot(edges, HistR, 'r', edges, HistG, 'g', edges, HistB, 'b');
+    %axis([-1.0, 1.0, 0, 1.1*max(HistR)]);
+    %plot(XHistR);
+    % axis([0, 640, 0, 1.0]);
     
-    rcenterG = centerMass(2,1)/imageAreaG;
-    ccenterG = centerMass(2,2)/imageAreaG;
-    
-    rcenterB = centerMass(3,1)/imageAreaB;
-    ccenterB = centerMass(3,2)/imageAreaB;
-    
-    %**********************************
-    %Calculate the moments for each of the images
-    propertiesVecR = getproperties(TImgR);
-    propertiesVecG = getproperties(TImgG);
-    propertiesVecB = getproperties(TImgB);
-   
-    
-    
-    %Calculate and display the counding box for the image
-    
-    %RED CHANNEL  
-    %Label the image
-    labelR = mybwlabel(TImgR);
-    %Then extract the various properties from the image
-    propsR = regionprops(labelR, ['basic']);
-    %Look at the image bounding box
-    boundingBoxR = cat(1,propsR.BoundingBox);
-    
-    
-    size(labelR);
-    labelRCount = 0;
-    for i=1:size(labelR,1)
-        for j=1:size(labelR,2)
-           if(labelR(i,j)==0)
-               
-           else
-              labelRCount = labelRCount+1; 
-           end
-        end
-    end
-%     [rows,cols,vals] = find(labelR==1);
-%     imageAreaR2 = sum(vals);
-    %******************************************************
-       
-    
-    %Track the location of each image.Calculate the image center of mass
-    
-    
-    %%subplot(3,3,1:6);
-    %%imshow(NNImg);
-   % xlabel(int2str(k));
-   %************************************************
-   %To link the points on the estimated background image
-   xLinkerR = [xLinkerR ccenterR]
-   yLinkerR = [yLinkerR rcenterR]
-   xLinkerG = [xLinkerG ccenterG]
-   yLinkerG = [yLinkerG rcenterG]
-   xLinkerB = [xLinkerB ccenterB]
-   yLinkerB = [yLinkerB rcenterB]
-   %Plot of the background image 
-    subplot(2,3,2);
-    imshow(medImg);
-    hold on
-    plot(xLinkerR, yLinkerR, 'xr-', xLinkerG, yLinkerG, 'xg-', xLinkerB, yLinkerB, 'xb-');
-    
-    subplot(2,3,4);
+    subplot(3,3,7);
     imshow(TImgR);
-    hold on
-    plot(xLinkerR, yLinkerR,'xr-' )
+    hold on;
+    plot(CR(2),CR(1),'o');
+    hold off;
     xlabel('red');
-    subplot(2,3,5);
+    
+    subplot(3,3,8);
     imshow(TImgG);
     hold on
     plot(ccenterG, rcenterG,'og' )
     xlabel('green');
-    subplot(2,3,6);
+    hold on;
+    plot(CG(2),CG(1),'o');
+    hold off;
+    
+    subplot(3,3,9);
     imshow(TImgB);
     hold on
     plot(ccenterB, rcenterB,'ob' )
     xlabel('blue');
+    hold on;
+    plot(CB(2),CB(1),'o');
+    hold off;
+    
     pause(0.1);
 end
 %thresholdR = findthresh(HistR, 5/255, 4);
