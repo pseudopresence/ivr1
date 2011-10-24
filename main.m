@@ -1,6 +1,6 @@
 clear all
 
-ImgData = myreadfolder('data7/', 100);
+ImgData = myreadfolder('data2/', 100);
 
 % compute the average for each pixel
 % average = zeros(size(test_img));
@@ -21,7 +21,6 @@ ImgData = myreadfolder('data7/', 100);
 %     imagesc((ImgData(:,:,:,i) - med)/2 + 0.5);
 % end
 
-% adaptive thresholding
 for k = 1:100
     filter = fspecial('gaussian', [10 10], 5);
     
@@ -127,26 +126,32 @@ for k = 1:100
     %plot(XHistR);
     % axis([0, 640, 0, 1.0]);
     
+    AABB_W = 150;
+    AABB_H = 150;
+    
     subplot(3,3,7);
-    imshow(ImgR);
     hold on;
+    imshow(ImgR);
     plot(CR(2),CR(1),'o');
+    rectangle('Position', [CR(2) - AABB_W/2, CR(1) - AABB_H/2, AABB_W, AABB_H]);
     hold off;
     xlabel('red');
     
     subplot(3,3,8);
-    imshow(ImgG);
-    xlabel('green');
     hold on;
+    imshow(ImgG);
     plot(CG(2),CG(1),'o');
+    rectangle('Position', [CG(2) - AABB_W/2, CG(1) - AABB_H/2, AABB_W, AABB_H]);
     hold off;
+    xlabel('green');
     
     subplot(3,3,9);
-    imshow(ImgB);
-    xlabel('blue');
     hold on;
+    imshow(ImgB);
     plot(CB(2),CB(1),'o');
+    rectangle('Position', [CB(2) - AABB_W/2, CB(1) - AABB_H/2, AABB_W, AABB_H]);
     hold off;
+    xlabel('blue');
     
     pause(0.1);
 end
