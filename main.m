@@ -1,6 +1,6 @@
 clear all
 
-ImgData = myreadfolder('data2/', 100);
+ImgData = myreadfolder('data7/', 100);
 
 % compute the average for each pixel
 % average = zeros(size(test_img));
@@ -43,7 +43,7 @@ for k = 1:100
     ImgG = NImg(:,:,2);
     ImgB = NImg(:,:,3);
 
-    ImgG = ImgG - 0.7 * ImgB;
+    ImgG = ImgG - 0.2 * ImgB;
     
     ImgR = normchannel(ImgR);
     ImgG = normchannel(ImgG);
@@ -128,21 +128,21 @@ for k = 1:100
     % axis([0, 640, 0, 1.0]);
     
     subplot(3,3,7);
-    imshow(TImgR);
+    imshow(ImgR);
     hold on;
     plot(CR(2),CR(1),'o');
     hold off;
     xlabel('red');
     
     subplot(3,3,8);
-    imshow(TImgG);
+    imshow(ImgG);
     xlabel('green');
     hold on;
     plot(CG(2),CG(1),'o');
     hold off;
     
     subplot(3,3,9);
-    imshow(TImgB);
+    imshow(ImgB);
     xlabel('blue');
     hold on;
     plot(CB(2),CB(1),'o');
