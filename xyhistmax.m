@@ -1,4 +1,4 @@
-function [C] = xyhistmax(Img)
+function [C, T] = xyhistmax(Img)
     % find the maximum value along each axis
     XHist = max(Img, [], 1)';
     YHist = max(Img, [], 2);
@@ -16,6 +16,4 @@ function [C] = xyhistmax(Img)
     
    C(1) = round(mean(find(YHist > 0.9 * max(YHist))));
    C(2) = round(mean(find(XHist > 0.9 * max(XHist))));
-    
-    
-    
+   T = 0.75 * min(max(YHist), max(XHist));

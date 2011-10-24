@@ -1,4 +1,5 @@
 clear all
+clc
 
 ImgData = myreadfolder('data2/', 100);
 
@@ -22,18 +23,21 @@ ImgData = myreadfolder('data2/', 100);
 % end
 
 for k = 1:100
-    filter = fspecial('gaussian', [10 10], 5);
+    filter = fspecial('gaussian', [5 5], 5);
     
     Img = ImgData(:,:,:,k);
-    Img = imfilter(Img, filter, 'symmetric', 'conv');
+    FImg = imfilter(Img, filter, 'symmetric', 'conv');
 
-    NImg = normalize_rgb(Img);
-    AdtImg = zeros(size(NImg));
-    str = strel(ones(3,3));
-    for i = 1:3
+    NImg = normalize_rgb(FImg);
+    
+    % Filter2 = fspecial('gaussian', [10 10], 100);
+    % TTImg = normalize_rgb(imfilter(Img, Filter2, 'symmetric', 'conv'));
+    % AdtImg = zeros(size(NImg));
+    % str = strel(ones(3,3));
+    % for i = 1:3
         % AdtImg(:,:,i) = imclose(imopen(adapt(Img(:,:,i), 45, 0.3), str), str);
         % AdtImg(:,:,i) = adapt(NImg(:,:,i), 45, 0.05);
-    end
+    % end
     % imshow(AdtImg);
 
     % NImg = windowmedian(NImg, 8);
@@ -59,7 +63,6 @@ for k = 1:100
 %         end
 %     end
 %     CR = CR ./ SR
-
     
 %     ImgR2 = max(max(ImgR, -ImgG), -ImgB);
 %     ImgG2 = max(max(-ImgR, ImgG), -ImgB);
@@ -74,17 +77,10 @@ for k = 1:100
     NNImg(:,:,2) = ImgG;
     NNImg(:,:,3) = ImgB;
 
-    
-    
-    % 
-    % ImgR = NNImg(:,:,1);
-    % ImgG = NNImg(:,:,2);
-    % ImgB = NNImg(:,:,3);
-
     % Marginal Histogram along X-axis, Y-axis
-    CR = xyhistmax(ImgR);
-    CG = xyhistmax(ImgG);
-    CB = xyhistmax(ImgB);
+    [CR, ThreshR] = xyhistmax(ImgR);
+    [CG, ThreshG] = xyhistmax(ImgG);
+    [CB, ThreshB] = xyhistmax(ImgB);
     
     %Test with a single histogram
     Bins = 1024;
@@ -93,12 +89,12 @@ for k = 1:100
          edges(i) = ((i-1)/(Bins-1.0)) - 0.5;
     end
     
-    HistR = processHist(ImgR, edges, 200, 5);
-    HistG = processHist(ImgG, edges, 200, 5);
-    HistB = processHist(ImgB, edges, 200, 5);
+    % HistR = processHist(ImgR, edges, 200, 5);
+    % HistG = processHist(ImgG, edges, 200, 5);
+    % HistB = processHist(ImgB, edges, 200, 5);
     
     % thresholdR = findthresh(HistR/255);
-    
+    clf();
     % figure(1);
     % subplot(3,3,1:3);
     % imshow(NNImg * 3.0);
@@ -107,49 +103,70 @@ for k = 1:100
     % plot(edges, HistR, 'r', edges, HistG, 'g', edges, HistB, 'b');
     % axis([-1.0, 1.0, 0, 1.1*max(HistR)]);
 
-    str = strel(ones(3,3));
-    TImgR = imopen(bitand((ImgR >= 0.3), (ImgR <= 1.0)), str);
-    TImgG = imopen(bitand((ImgG >= 0.3), (ImgG <= 1.0)), str);
-    TImgB = imopen(bitand((ImgB >= 0.3), (ImgB <= 1.0)), str);
+%     str = strel(ones(3,3));
+%     TImgR = imopen(bitand((ImgR >= 0.3), (ImgR <= 1.0)), str);
+%     TImgG = imopen(bitand((ImgG >= 0.3), (ImgG <= 1.0)), str);
+%     TImgB = imopen(bitand((ImgB >= 0.3), (ImgB <= 1.0)), str);
 
-
-    
-    subplot(3,3,1:6);
+    subplot(3,3,1:3);
     %imshow(edge(NNImg(:,:,1)));
     %imshow(0.5 * NNImg + 0.5);
     imshow(NNImg);
     xlabel(int2str(k));
     
-    %subplot(3,3,4:6);
-    %plot(edges, HistR, 'r', edges, HistG, 'g', edges, HistB, 'b');
-    %axis([-1.0, 1.0, 0, 1.1*max(HistR)]);
-    %plot(XHistR);
-    % axis([0, 640, 0, 1.0]);
+    subplot(3,3,4:6);
     
-    AABB_W = 150;
-    AABB_H = 150;
+    BBSize = 120;
+    
+    Bins = 256;
+    Edges = zeros(Bins,1);
+    for i = 1 : Bins;
+         Edges(i) = (i-1)/(Bins-1);
+    end
+    
+    TImgR = cliprect(ImgR, CR, BBSize);
+    HistR = processHist(TImgR, Edges, 50, 7);
+    %ThreshR = findthresh(HistR) / 255;
+    TImgG = cliprect(ImgG, CG, BBSize);
+    HistG = processHist(TImgG, Edges, 50, 7);
+    %ThreshG = findthresh(HistG) / 255;
+    TImgB = cliprect(ImgB, CB, BBSize);
+    HistB = processHist(TImgB, Edges, 50, 7);
+    %ThreshB = findthresh(HistB) / 255;
+    
+    hold on;
+    plot(Edges, HistR, 'r', Edges, HistG, 'g', Edges, HistB, 'b');
+    % line([0, 0], [0, 1]);
+    axis([-1.0, 1.0, 0, 1.1*max(HistR)]);
+    hold off;
+    
+    % plot(XHistR);
+    % axis([0, 640, 0, 1.0]);
     
     subplot(3,3,7);
     hold on;
-    imshow(ImgR);
-    plot(CR(2),CR(1),'o');
-    rectangle('Position', [CR(2) - AABB_W/2, CR(1) - AABB_H/2, AABB_W, AABB_H]);
+    % imshow(ImgR);
+    % plot(CR(2),CR(1),'o');
+    % rectangle('Position', [, CR(1) - AABB_H/2, AABB_W, AABB_H]);
+    imshow(TImgR > ThreshR);
     hold off;
     xlabel('red');
     
     subplot(3,3,8);
     hold on;
-    imshow(ImgG);
-    plot(CG(2),CG(1),'o');
-    rectangle('Position', [CG(2) - AABB_W/2, CG(1) - AABB_H/2, AABB_W, AABB_H]);
+    % imshow(ImgG);
+    % plot(CG(2),CG(1),'o');
+    % rectangle('Position', [CG(2) - BBSize/2, CG(1) - BBSize/2, BBSize, BBSize]);
+    imshow(TImgG > ThreshG);
     hold off;
     xlabel('green');
     
     subplot(3,3,9);
     hold on;
-    imshow(ImgB);
-    plot(CB(2),CB(1),'o');
-    rectangle('Position', [CB(2) - AABB_W/2, CB(1) - AABB_H/2, AABB_W, AABB_H]);
+%     imshow(ImgB);
+%     plot(CB(2),CB(1),'o');
+%     rectangle('Position', [CB(2) - BBSize/2, CB(1) - BBSize/2, BBSize, BBSize]);
+    imshow(TImgB > ThreshB);
     hold off;
     xlabel('blue');
     
