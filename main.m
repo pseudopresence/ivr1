@@ -164,37 +164,3 @@ for k = 5:5
     
     pause(0.1);
 end
-%thresholdR = findthresh(HistR, 5/255, 4);
-% filter = fspecial('gaussian', [50 1], 6);
-% filter = filter/sum(filter);  % this normalises the filter
-% edges = zeros(256,1);
-% for i = 1 : 256;
-%     edges(i) = (i-1)/255.0;
-% end
-  
-% for i = 1:100
-%     NrmImg = normalize_rgb(ImgData(:,:,:,i));
-% %     HistR = dohist(NrmImg(:,:,1), 0, edges);
-% %     HistG = dohist(NrmImg(:,:,2), 0, edges);
-% %     HistB = dohist(NrmImg(:,:,3), 0, edges);
-% %     SmoothHistR = conv(filter,HistR);
-% %     SmoothHistG = conv(filter,HistG);
-% %     SmoothHistB = conv(filter,HistB);
-% %     TImg = NrmImg;
-% %     for j = 1:3
-% %         TImg(:,:,j) = (NrmImg(:,:,j) > 0.45);
-% %     end
-%     
-%     clf
-%     
-% %     subplot(2,1,1);
-% %     imshow(TImg);
-% %     subplot(2,1,2);
-% %     plot(edges, HistR, 'r', edges, HistG, 'g', edges, HistB, 'b');
-% %     axis([0, 1, 0, 1.1*max(HistR)]);
-%     
-%     pause(0.1);
-% end
-% 
-
-
