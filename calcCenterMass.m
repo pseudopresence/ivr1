@@ -14,12 +14,25 @@ function centerMassOut = calcCenterMass(TImgR, TImgG, TImgB)
         for c=1:size(TImgR,2)
            centerMass(1,1) = centerMass(1,1)+r*TImgR(r,c);
            centerMass(1,2) = centerMass(1,2)+c*TImgR(r,c);
-           centerMass(2,1) = centerMass(2,1)+r*TImgG(r,c);
+        end
+    end
+    
+     for r=1:size(TImgG,1)
+        for c=1:size(TImgG,2)
+        centerMass(2,1) = centerMass(2,1)+r*TImgG(r,c);
            centerMass(2,2) = centerMass(2,2)+c*TImgG(r,c);
-           centerMass(3,1) = centerMass(3,1)+r*TImgB(r,c);
+        end
+     end
+    
+      for r=1:size(TImgB,1)
+        for c=1:size(TImgB,2)
+         centerMass(3,1) = centerMass(3,1)+r*TImgB(r,c);
            centerMass(3,2) =  centerMass(3,2)+c*TImgB(r,c);
         end
     end
+    
+     
+          
     
     %Center of Mass output
     centerMassOut = zeros(3,2);

@@ -1,23 +1,11 @@
 clc
 clear all
-
-ImgData = myreadfolder('data2/',80);
-
-% compute the average for each pixel
-% average = zeros(size(test_img));
-%for m = 3:size(input, 4)
-%    average = average + input(:,:,:,m);
-%end
-%average = average / (size(input, 4) - 2);
-%imshow(average);
-X = [0 1 2 3 4 5]
-% compute the median for each pixel
-%med =  median(input, 4);
-%med =  median(input(:,:,:,60:100), 4);
-medImg =  median(ImgData(:,:,:,[5 70 80]), 4);
+clc
 
 
-%****************************************************
+ImgData = myreadfolder('data2/', 60);
+
+medImg =  median(ImgData(:,:,:,[5 55 60]), 4);
 
 %****************************************************
 %The variables used to link the objects movement
@@ -28,139 +16,131 @@ yLinkerG=[];
 xLinkerB = [];
 yLinkerB=[];
 
-
-% difference between each image and the median
-% for i = 1:100
-%     imagesc((ImgData(:,:,:,i) - med)/2 + 0.5);
-% end
-
-% adaptive thresholding
-for k = 5:5
-    filter = fspecial('gaussian', [10 10], 5);
+for k = 5:5:60
+    filter = fspecial('gaussian', [5 5], 5);
     
     Img = ImgData(:,:,:,k);
-    Img = imfilter(Img, filter, 'symmetric', 'conv');
-    NImg = Img;
-    NImg = normalize_rgb(Img);
-    %AdtImg = zeros(size(NImg));
-    str = strel(ones(3,3));
-    %for i = 1:3
-        % AdtImg(:,:,i) = imclose(imopen(adapt(Img(:,:,i), 45, 0.3), str), str);
-        % AdtImg(:,:,i) = adapt(NImg(:,:,i), 45, 0.05);
-    %end
-    % imshow(AdtImg);
+    FImg = imfilter(Img, filter, 'symmetric', 'conv');
 
-    % NImg = windowmedian(NImg, 8);
+    NImg = normalize_rgb(FImg);
     
     ImgR = NImg(:,:,1);
     ImgG = NImg(:,:,2);
     ImgB = NImg(:,:,3);
 
-    ImgG = ImgG - 0.7 * ImgB;
+    ImgG = ImgG - 0.2 * ImgB;
     
     ImgR = normchannel(ImgR);
     ImgG = normchannel(ImgG);
     ImgB = normchannel(ImgB);
-    
-    % Centre of mass along each channel
-%     CR = [0 0];
-%     SR = 0
-%     for y = 1:size(ImgR, 1)
-%         for x = 1:size(ImgR, 2)
-%             V = exp(10 * ImgR(y, x) - 1);
-%             CR = CR + [y x] .* V;
-%             SR = SR + V;
-%         end
-%     end
-%     CR = CR ./ SR
-
-    
-%     ImgR2 = max(max(ImgR, -ImgG), -ImgB);
-%     ImgG2 = max(max(-ImgR, ImgG), -ImgB);
-%     ImgB2 = max(max(-ImgR, -ImgG), ImgB);
-%     
-%     ImgR = ImgR2;
-%     ImgG = ImgG2;
-%     ImgB = ImgB2;
-    
+        
     NNImg = NImg;
     NNImg(:,:,1) = ImgR;
     NNImg(:,:,2) = ImgG;
     NNImg(:,:,3) = ImgB;
 
-    
-    
-    % 
-    % ImgR = NNImg(:,:,1);
-    % ImgG = NNImg(:,:,2);
-    % ImgB = NNImg(:,:,3);
-
-
     % Marginal Histogram along X-axis, Y-axis
-    CR = xyhistmax(ImgR);
-    CG = xyhistmax(ImgG);
-    CB = xyhistmax(ImgB);
+    [CR, ThreshR] = xyhistmax(ImgR);
+    [CG, ThreshG] = xyhistmax(ImgG);
+    [CB, ThreshB] = xyhistmax(ImgB);
     
-    %Test with a single histogram
-    Bins = 1024;
-    edges = zeros(Bins,1);
-    for i = 1 : Bins;
-         edges(i) = ((i-1)/(Bins-1.0)) - 0.5;
-    end
-    
-    HistR = processHist(ImgR, edges, 200, 5);
-    HistG = processHist(ImgG, edges, 200, 5);
-    HistB = processHist(ImgB, edges, 200, 5);
-    
-    % thresholdR = findthresh(HistR/255);
-    
-    % figure(1);
-    % subplot(3,3,1:3);
-    % imshow(NNImg * 3.0);
-    % xlabel('value');
-    % subplot(3,3,4:6);
-    % plot(edges, HistR, 'r', edges, HistG, 'g', edges, HistB, 'b');
-    % axis([-1.0, 1.0, 0, 1.1*max(HistR)]);
 
+    clf();
 
-    str = strel(ones(3,3));
-    TImgR = imopen(bitand((ImgR >= 0.3), (ImgR <= 1.0)), str);
-    TImgG = imopen(bitand((ImgG >= 0.3), (ImgG <= 1.0)), str);
-    TImgB = imopen(bitand((ImgB >= 0.3), (ImgB <= 1.0)), str);
+    BBSize = 120;
+
     
-    subplot(3,3,1:6);
-    %imshow(edge(NNImg(:,:,1)));
-    %imshow(0.5 * NNImg + 0.5);
-    imshow(NNImg);
+%     imshow(NNImg);
+%     plot(CR(2),CR(1),'o');
+%     rectangle('Position', [CR(2) - BBSize/2, CR(1) - BBSize/2, BBSize, BBSize]);
+%     plot(CG(2),CG(1),'o');
+%     rectangle('Position', [CG(2) - BBSize/2, CG(1) - BBSize/2, BBSize, BBSize]);
+%     plot(CB(2),CB(1),'o');
+%     rectangle('Position', [CB(2) - BBSize/2, CB(1) - BBSize/2, BBSize, BBSize]);
+%     hold off;
     xlabel(int2str(k));
     
-    %subplot(3,3,4:6);
-    %plot(edges, HistR, 'r', edges, HistG, 'g', edges, HistB, 'b');
-    %axis([-1.0, 1.0, 0, 1.1*max(HistR)]);
-    %plot(XHistR);
-    % axis([0, 640, 0, 1.0]);
+    TImgR = cliprect(ImgR, CR, BBSize)>ThreshR;
+    TImgG = cliprect(ImgG, CG, BBSize)>ThreshG;
+    TImgB = cliprect(ImgB, CB, BBSize)>ThreshB;
     
+    %To determine the center of mass of the objects
+    %***********************************
+    
+    centerMass = calcCenterMass(TImgR, TImgG, TImgB);
+   
+    
+    %******************************************************
+    %Calculate and display the bounding box for the image
+
+    [verticesXR, verticesYR, centroidR] = calcBoundingBox(TImgR);
+    [verticesXG, verticesYG, centroidG] = calcBoundingBox(TImgG);
+    [verticesXB, verticesYB, centroidB] = calcBoundingBox(TImgB);
+    
+    
+    centrRX = centroidR(1)
+    centrRY = centroidR(2)
+    %******************************************************
+    %Calculate the orientation for each robot
+    [centerMassXR,centerMassYR] = calcBoundingBoxCM(verticesXR, verticesYR, TImgR)
+    [centerMassXG,centerMassYG] = calcBoundingBoxCM(verticesXG, verticesYG, TImgG)
+    [centerMassXB,centerMassYB] = calcBoundingBoxCM(verticesXB, verticesYB, TImgB)
+    
+   %************************************************
+   %To link the points on the estimated background image
+   xLinkerR = [xLinkerR (centerMass(1,2) + CR(2) - BBSize/2)];
+   yLinkerR = [yLinkerR (centerMass(1,1) + CR(1) - BBSize/2)];
+   xLinkerG = [xLinkerG (centerMass(2,2) + CG(2) - BBSize/2)];
+   yLinkerG = [yLinkerG (centerMass(2,1) + CG(1) - BBSize/2)];
+   xLinkerB = [xLinkerB (centerMass(3,2) + CB(2) - BBSize/2)];
+   yLinkerB = [yLinkerB (centerMass(3,1) + CB(1) - BBSize/2)];
+   
+   %Define unit vectors in the direction of the centroid
+   centerMassR = [centerMassXR centerMassYR];
+   dR = (centroidR - centerMassR);
+   
+   centerMassG = [centerMassXG centerMassYG];
+   dG = (centroidG - centerMassG);
+   
+   centerMassB = [centerMassXB centerMassYB];
+   dB = (centroidB - centerMassB);
+   
+   %The unit vectors for each channel
+   dR = dR/norm(dR);
+   dG = dG/norm(dG);
+   dB = dB/norm(dB);
+   
+    subplot(3,3,1:6);
+    imshow(NNImg);
+    hold on
+    plot(xLinkerR, yLinkerR, 'xr-', xLinkerG, yLinkerG, 'xg-', xLinkerB, yLinkerB, 'xb-');
+    xlabel(k);
+        
     subplot(3,3,7);
-    imshow(TImgR);
     hold on;
-    plot(CR(2),CR(1),'o');
-    hold off;
+    imshow(TImgR);
+    plot(verticesXR, verticesYR, 'r-', 'LineWidth', 2);
+    hold on
+    plot([centerMassR(1),centroidR(1)+30*dR(1)], [centerMassR(2), centroidR(2)+30*dR(2)],'b-', 'LineWidth',2);
     xlabel('red');
     
     subplot(3,3,8);
+    hold on;
     imshow(TImgG);
     hold on
+    plot(verticesXG, verticesYG, 'g-', 'LineWidth', 2);
+    hold on
+    plot([centerMassG(1),centroidG(1)+30*dG(1)], [centerMassG(2), centroidG(2)+30*dG(2)],'b-', 'LineWidth',2);
     xlabel('green');
-    plot(CG(2),CG(1),'o');
-    hold off;
     
     subplot(3,3,9);
+    hold on;
     imshow(TImgB);
     hold on
+    plot(verticesXB, verticesYB, 'b-', 'LineWidth', 2);
+    hold on
+    plot([centerMassB(1),centroidB(1)+30*dB(1)], [centerMassB(2), centroidB(2)+30*dB(2)],'b-', 'LineWidth',2);
     xlabel('blue');
-    hold on;
-    plot(CB(2),CB(1),'o');
-    hold off;
     
     pause(0.1);
 end
