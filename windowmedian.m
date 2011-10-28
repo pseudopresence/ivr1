@@ -10,7 +10,7 @@ function [Out] = windowmedian(Img, WindowSize)
             windowMaxX = min(W, ix+HalfWindow);
             for c = 1:C
                 I = Img(windowMinY:windowMaxY, windowMinX:windowMaxX, c);
-                S = prod(size(I));
+                S = numel(I);
                 Out(iy, ix, c) = median(reshape(I, 1, S));
             end
         end
