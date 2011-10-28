@@ -1,6 +1,7 @@
+clc
 clear all
 
-ImgData = myreadfolder('data1/',80);
+ImgData = myreadfolder('data2/',80);
 
 % compute the average for each pixel
 % average = zeros(size(test_img));
@@ -34,7 +35,7 @@ yLinkerB=[];
 % end
 
 % adaptive thresholding
-for k = 5:10:75
+for k = 5:5
     filter = fspecial('gaussian', [10 10], 5);
     
     Img = ImgData(:,:,:,k);
@@ -149,16 +150,13 @@ for k = 5:10:75
     subplot(3,3,8);
     imshow(TImgG);
     hold on
-    plot(ccenterG, rcenterG,'og' )
     xlabel('green');
-    hold on;
     plot(CG(2),CG(1),'o');
     hold off;
     
     subplot(3,3,9);
     imshow(TImgB);
     hold on
-    plot(ccenterB, rcenterB,'ob' )
     xlabel('blue');
     hold on;
     plot(CB(2),CB(1),'o');
