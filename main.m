@@ -3,10 +3,10 @@ clear all
 clc
 
 
-ImgData = myreadfolder('data2/', 60);
+ImgData = myreadfolder('data2/', 80);
 
-medImg =  median(ImgData(:,:,:,[5 55 60]), 4);
-
+medImg =  median(ImgData(:,:,:,[5 70 80]), 4);
+medImg = adaptiveThreshold(medImg,20,12);
 %****************************************************
 %The variables used to link the objects movement
 xLinkerR = [];
@@ -16,7 +16,7 @@ yLinkerG=[];
 xLinkerB = [];
 yLinkerB=[];
 
-for k = 5:5:60
+for k = 5:5:80
     filter = fspecial('gaussian', [5 5], 5);
     
     Img = ImgData(:,:,:,k);
@@ -111,7 +111,7 @@ for k = 5:5:60
    dB = dB/norm(dB);
    
     subplot(3,3,1:6);
-    imshow(NNImg);
+    imshow(medImg);
     hold on
     plot(xLinkerR, yLinkerR, 'xr-', xLinkerG, yLinkerG, 'xg-', xLinkerB, yLinkerB, 'xb-');
     xlabel(k);
@@ -121,7 +121,9 @@ for k = 5:5:60
     imshow(TImgR);
     plot(verticesXR, verticesYR, 'r-', 'LineWidth', 2);
     hold on
-    plot([centerMassR(1),centroidR(1)+30*dR(1)], [centerMassR(2), centroidR(2)+30*dR(2)],'b-', 'LineWidth',2);
+    plot_arrow(centerMassR(1),(centroidR(1)+30*dR(1)),...
+        centerMassR(2), (centroidR(2)+30*dR(2)),...
+        'linewidth', 4,'color','b',[0.5 0.5 0.5],'facecolor');
     xlabel('red');
     
     subplot(3,3,8);
