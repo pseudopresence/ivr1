@@ -9,6 +9,14 @@ blobMeasurements = regionprops(labelX, ['basic']);
 %Look at the image bounding box
 %boundingBox = cat(1,propsX.BoundingBox)
 
+
+if size(blobMeasurements,1) == 0
+    verticesX = [0 0 0 0 0];
+    verticesY = [0 0 0 0 0];
+    centroidX = [0 0];
+    return;
+end
+
 allBlobAreas = [blobMeasurements.Area];
 [maxBlobArea, index] = max(allBlobAreas);
 
@@ -26,8 +34,7 @@ allBlobAreas = [blobMeasurements.Area];
     centroidX(1,2) = (y2+y1)/2;
     % Calculate width/height ratio.
     aspectRatio(index) = boundingBox(3) / boundingBox(4);
-    fprintf('For blob #%d, area = %d, aspect ratio = %.2f\n', ...
-        index, allBlobAreas(index), aspectRatio(index));
+
 % Plot the box in the overlay.
 %plot(verticesX, verticesY, 'r-', 'LineWidth', 2);
 %end
