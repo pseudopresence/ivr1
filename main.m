@@ -1,18 +1,12 @@
-clc
-clear all
-clc
-%****************************************************
-%The variables used to link the objects movement
-xLinkerR = [];
-yLinkerR=[];
-xLinkerG = [];
-yLinkerG=[];
-xLinkerB = [];
-yLinkerB=[];
+clear all;
+clc;
 
-ImgData = myreadfolder('data1s2/',50);
+global HaveToolbox;
+HaveToolbox = 0; % TODO - explicitly request Image Toolbox license and fall back
 
-medianIdx = [5 45 50];
+ImgData = myreadfolder('data2/', 80);
+
+medianIdx = [5 75 80];
 medianImgs = [];
 
 oldDirR = [0 0];
@@ -21,10 +15,10 @@ oldDirB = [0 0];
 
 for mki = 1:size(medianIdx,2)
     mk = medianIdx(mki);
-    filter = fspecial('gaussian', [5 5], 5);
-    
+        
     Img = ImgData(:,:,:,mk);
-    FImg = imfilter(Img, filter, 'symmetric', 'conv');
+    
+    FImg = myimgblur(Img, 5, 5);
 
     NImg = normalize_rgb(FImg);
     
@@ -49,11 +43,6 @@ for mki = 1:size(medianIdx,2)
     Img = eraseRegion(Img, CG, BBSize);
     Img = eraseRegion(Img, CB, BBSize);
     medianImgs(:,:,:,mki) = Img;
-%     clf();
-%     figure(1);
-%     imshow(Img);
-%     xlabel(mk);
-%     pause(1);
 end
 
 medImg =  median(medianImgs, 4);
@@ -70,14 +59,10 @@ yLinkerG = [];
 xLinkerB = [];
 yLinkerB = [];
 
-for k = 1:5:50
-    %Create a Gaussian smoothing filter
-    filter = fspecial('gaussian', [5 5], 5);
-    
-    %Store the kth image in the variable Img
+for k = 5:80
     Img = ImgData(:,:,:,k);
-    %Filter the image with the Gaussian smoothing filer
-    FImg = imfilter(Img, filter, 'symmetric', 'conv');
+    
+    FImg = myimgblur(Img, 5, 5);
 
     %Normalise the image
     NImg = normalize_rgb(FImg);
@@ -105,24 +90,6 @@ for k = 1:5:50
     [CB, ThreshB, XHistB, YHistB] = xyhistmax(ImgB);
     
    
-    
-    clf();
-%     NNImg = NImg;
-%     NNImg(:,:,1) = ImgR;
-%     NNImg(:,:,2) = ImgG;
-%     NNImg(:,:,3) = ImgB;
-%     imshow(NNImg);
-%     plot(CR(2),CR(1),'o');
-%     rectangle('Position', [CR(2) - BBSize/2, CR(1) - BBSize/2, BBSize, BBSize]);
-%     plot(CG(2),CG(1),'o');
-%     rectangle('Position', [CG(2) - BBSize/2, CG(1) - BBSize/2, BBSize, BBSize]);
-%     plot(CB(2),CB(1),'o');
-%     rectangle('Position', [CB(2) - BBSize/2, CB(1) - BBSize/2, BBSize, BBSize]);
-%     hold off;
-    xlabel(int2str(k));
-    
-    %Remove the image contained within the bounding box
-    %and threshold the image to create a binary image
     TImgR = cliprect(ImgR, CR, BBSize)>ThreshR;
     TImgG = cliprect(ImgG, CG, BBSize)>ThreshG;
     TImgB = cliprect(ImgB, CB, BBSize)>ThreshB;
@@ -216,66 +183,36 @@ for k = 1:5:50
     oldDirG = dG;
     oldDirB = dB;
     
-    subplot(3,3,1:6);
-    imshow(medImg);
+    figure(1);
+    clf();
     
-    if((trueCMXR>70 && trueCMXR<570)...
-        && ((trueCMYR>70 && trueCMYR<410)...
-        && StateR==1))
-    hold on
-    plot(xLinkerR, yLinkerR, 'xr-');
-    elseif((trueCMXR>70 && trueCMXR<570)...
-        && ((trueCMYR>70 && trueCMYR<410)...
-        && StateR==0))
-    hold on
-    plot(xLinkerR, yLinkerR, 'xr-');
-    StateR=1;
-    elseif((trueCMXR<70 && trueCMXR>570)...
-        || (trueCMYR<70 && trueCMYR>410)...
-        && StateX==1)
-    hold on
-    plot(xLinkerR, yLinkerR, 'xr-');
-    end
-    hold on
-    plot(xLinkerG, yLinkerG, 'xg-');
-    hold on
-    plot(xLinkerB, yLinkerB, 'xb-');
-    hold on
+    subplot(3,3,1:6);
+    %imshow(medImg);
+    imshow(FImg);
+    hold on;
+    plot(xLinkerR, yLinkerR, 'xr-', xLinkerG, yLinkerG, 'xg-', xLinkerB, yLinkerB, 'xb-');
     xlabel(k);
 
     subplot(3,3,7);
     hold on;
     imshow(TImgR);
     plot(verticesXR, verticesYR, 'r-', 'LineWidth', 2);
-    hold on
     plot([centerMassR(1),centroidR(1)+30*dR(1)], [centerMassR(2), centroidR(2)+30*dR(2)], LineColR, 'LineWidth',2);
     xlabel('red');
 
     subplot(3,3,8);
     hold on;
     imshow(TImgG);
-    hold on
     plot(verticesXG, verticesYG, 'g-', 'LineWidth', 2);
-    hold on
-    plot([centerMassG(1),centroidG(1)+30*dG(1)], [centerMassG(2), centroidG(2)+30*dG(2)],LineColG, 'LineWidth',2);
+    plot([centerMassG(1),centroidG(1)+30*dG(1)], [centerMassG(2), centroidG(2)+30*dG(2)], LineColG, 'LineWidth',2);
     xlabel('green');
 
     subplot(3,3,9);
     hold on;
     imshow(TImgB);
-    hold on
     plot(verticesXB, verticesYB, 'b-', 'LineWidth', 2);
-    hold on
-    plot([centerMassB(1),centroidB(1)+30*dB(1)], [centerMassB(2), centroidB(2)+30*dB(2)],LineColB, 'LineWidth',2);
+    plot([centerMassB(1),centroidB(1)+30*dB(1)], [centerMassB(2), centroidB(2)+30*dB(2)], LineColB, 'LineWidth',2);
     xlabel('blue');
 
-%     clf();
-%     figure(1);
-%     imshow(edge(rgb2gray(FImg)));
-%     pause(1);
-    %print('-depsc','-tiff','-r300','picture1')
-%     filename = sprintf('..\0000%d.jpg', k);
-%     imwrite(figure, filename);
-    pause(1);
-   %input('...');
+    pause(0.1);
 end
