@@ -112,25 +112,14 @@ for k = 5:80
     if min(verticesXR) == 0 || min(verticesXG) == 0 || min(verticesXB) == 0
         continue;
     end
-    
-    if(falseImageR==0)
+
     [centerMassXR,centerMassYR] = calcBoundingBoxCM(verticesXR, verticesYR, TImgR);
-    elseif(falseImageR==1)
-    centerMassXR = previousCMXR;
-    centerMassYR = previousCMYR;
-    end
-    if(falseImageG==0)
+
     [centerMassXG,centerMassYG] = calcBoundingBoxCM(verticesXG, verticesYG, TImgG);
-    elseif(falseImageG==1)
-    centerMassXG = previousCMXG;
-    centerMassYG = previousCMYG;
-    end
-    if(falseImageB==0)
+
+
     [centerMassXB,centerMassYB] = calcBoundingBoxCM(verticesXB, verticesYB, TImgB);
-    elseif(falseImageB==1)
-    centerMassXB = previousCMXB;
-    centerMassYB = previousCMYB;
-    end
+
     
     %Add variables for the true center of mass
     trueCMXR = (centerMassXR + CR(2) - BBSize/2);
