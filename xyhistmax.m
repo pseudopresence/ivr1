@@ -1,4 +1,4 @@
-function [C, T] = xyhistmax(Img)
+function [C, T, XHist, YHist] = xyhistmax(Img)
     % find the maximum value along each axis
     XHist = max(Img, [], 1)';
     YHist = max(Img, [], 2);

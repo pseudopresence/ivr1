@@ -1,4 +1,9 @@
-function [verticesX, verticesY, centroidX] = calcBoundingBox(TImgX)
+function [verticesX, verticesY, centroidX, falseImageX] = calcBoundingBox(TImgX)
+
+%Set the image thresholds
+thresholdUpper=4000;
+thresholdLower=1500;
+falseImageX=0;
 
 %Label the image
 [labelX, numXBlobs] = mybwlabel(TImgX);
@@ -20,22 +25,30 @@ end
 allBlobAreas = [blobMeasurements.Area];
 [maxBlobArea, index] = max(allBlobAreas);
 
-%for k = 1 : numXBlobs
-    boundingBox = blobMeasurements(index).BoundingBox;	 % Get box.
-    %Get the centroid values for the image
-    %centroidX = blobMeasurements(index).Centroid;
-    x1 = boundingBox(1);
-    y1 = boundingBox(2);
-    x2 = x1 + boundingBox(3) - 1;
-    y2 = y1 + boundingBox(4) - 1;
-    verticesX = [x1 x2 x2 x1 x1];
-    verticesY = [y1 y1 y2 y2 y1];
-    centroidX(1,1) = (x2+x1)/2;
-    centroidX(1,2) = (y2+y1)/2;
-    % Calculate width/height ratio.
-    aspectRatio(index) = boundingBox(3) / boundingBox(4);
+boundingBox = blobMeasurements(index).BoundingBox;	 % Get box.
+x1 = boundingBox(1);
+y1 = boundingBox(2);
+x2 = x1 + boundingBox(3) - 1;
+y2 = y1 + boundingBox(4) - 1;
+verticesX = [x1 x2 x2 x1 x1];
+verticesY = [y1 y1 y2 y2 y1];
+centroidX(1,1) = (x2+x1)/2;
+centroidX(1,2) = (y2+y1)/2;
 
-% Plot the box in the overlay.
-%plot(verticesX, verticesY, 'r-', 'LineWidth', 2);
-%end
+%Check the area of the blob to determine
+%whether the blob falls within the correct region.
+
+
+    %If the blob falls out of a certain limit
+    if(maxBlobArea> thresholdUpper || ...
+            maxBlobArea<thresholdLower)
+        falseImageX= 1;
+    else
+        falseImageX=0;
+    end
+    
+    
+
 end
+
+

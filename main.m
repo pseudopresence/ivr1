@@ -10,9 +10,9 @@ yLinkerG=[];
 xLinkerB = [];
 yLinkerB=[];
 
-ImgData = myreadfolder('data8/', 100);
+ImgData = myreadfolder('data1s2/',50);
 
-medianIdx = [5 75 100];
+medianIdx = [5 45 50];
 medianImgs = [];
 
 oldDirR = [0 0];
@@ -41,9 +41,9 @@ for mki = 1:size(medianIdx,2)
     BBSize = 120;
     
     % Marginal Histogram along X-axis, Y-axis
-    [CR, ThreshR] = xyhistmax(ImgR);
-    [CG, ThreshG] = xyhistmax(ImgG);
-    [CB, ThreshB] = xyhistmax(ImgB);
+    [CR, ThreshR, XHist, YHist] = xyhistmax(ImgR);
+    [CG, ThreshG, XHist, YHist] = xyhistmax(ImgG);
+    [CB, ThreshB, XHist, YHist] = xyhistmax(ImgB);
     
     Img = eraseRegion(Img, CR, BBSize);
     Img = eraseRegion(Img, CG, BBSize);
@@ -58,7 +58,8 @@ end
 
 medImg =  median(medianImgs, 4);
 % medImg = windowmedian(medImg, 10);
-            
+clf;
+
 
 %****************************************************
 %The variables used to link the objects movement
@@ -69,32 +70,42 @@ yLinkerG = [];
 xLinkerB = [];
 yLinkerB = [];
 
-for k = 5:100
+for k = 1:5:50
+    %Create a Gaussian smoothing filter
     filter = fspecial('gaussian', [5 5], 5);
     
+    %Store the kth image in the variable Img
     Img = ImgData(:,:,:,k);
+    %Filter the image with the Gaussian smoothing filer
     FImg = imfilter(Img, filter, 'symmetric', 'conv');
 
+    %Normalise the image
     NImg = normalize_rgb(FImg);
     
+    %Split the image into its three colour channels
     ImgR = NImg(:,:,1);
     ImgG = NImg(:,:,2);
     ImgB = NImg(:,:,3);
 
+    %Subtract the blue channel from the green channel
+    %to remove some of the excess blue in the green channel
     ImgG = ImgG - 0.2 * ImgB;
-    
+   
+    %Renormalise each channel
     ImgR = normchannel(ImgR);
     ImgG = normchannel(ImgG);
     ImgB = normchannel(ImgB);
        
+    %Create the bounding box dimensions of 120x120
     BBSize = 120;
     
     % Marginal Histogram along X-axis, Y-axis
-    [CR, ThreshR] = xyhistmax(ImgR);
-    [CG, ThreshG] = xyhistmax(ImgG);
-    [CB, ThreshB] = xyhistmax(ImgB);
+    [CR, ThreshR, XHistR, YHistR] = xyhistmax(ImgR);
+    [CG, ThreshG, XHistG, YHistG] = xyhistmax(ImgG);
+    [CB, ThreshB, XHistB, YHistB] = xyhistmax(ImgB);
     
-
+   
+    
     clf();
 %     NNImg = NImg;
 %     NNImg(:,:,1) = ImgR;
@@ -110,10 +121,13 @@ for k = 5:100
 %     hold off;
     xlabel(int2str(k));
     
+    %Remove the image contained within the bounding box
+    %and threshold the image to create a binary image
     TImgR = cliprect(ImgR, CR, BBSize)>ThreshR;
     TImgG = cliprect(ImgG, CG, BBSize)>ThreshG;
     TImgB = cliprect(ImgB, CB, BBSize)>ThreshB;
     
+    %Calculating the bounding box for the thresholded image
     %To determine the center of mass of the objects
     %***********************************
     
@@ -121,30 +135,55 @@ for k = 5:100
    
     
     %******************************************************
-    %Calculate and display the bounding box for the image
-
-    [verticesXR, verticesYR, centroidR] = calcBoundingBox(TImgR);
-    [verticesXG, verticesYG, centroidG] = calcBoundingBox(TImgG);
-    [verticesXB, verticesYB, centroidB] = calcBoundingBox(TImgB);
+    %Calculate and display the bounding box for the image   
+    [verticesXR, verticesYR, centroidR, falseImageR] = calcBoundingBox(TImgR);
+    [verticesXG, verticesYG, centroidG, falseImageG] = calcBoundingBox(TImgG);
+    [verticesXB, verticesYB, centroidB, falseImageB] = calcBoundingBox(TImgB);
     
     %******************************************************
     %Calculate the orientation for each robot
     if min(verticesXR) == 0 || min(verticesXG) == 0 || min(verticesXB) == 0
         continue;
     end
+    
+    if(falseImageR==0)
     [centerMassXR,centerMassYR] = calcBoundingBoxCM(verticesXR, verticesYR, TImgR);
+    elseif(falseImageR==1)
+    centerMassXR = previousCMXR;
+    centerMassYR = previousCMYR;
+    end
+    if(falseImageG==0)
     [centerMassXG,centerMassYG] = calcBoundingBoxCM(verticesXG, verticesYG, TImgG);
+    elseif(falseImageG==1)
+    centerMassXG = previousCMXG;
+    centerMassYG = previousCMYG;
+    end
+    if(falseImageB==0)
     [centerMassXB,centerMassYB] = calcBoundingBoxCM(verticesXB, verticesYB, TImgB);
-
+    elseif(falseImageB==1)
+    centerMassXB = previousCMXB;
+    centerMassYB = previousCMYB;
+    end
+    
+    %Add variables for the true center of mass
+    trueCMXR = (centerMassXR + CR(2) - BBSize/2);
+    trueCMYR = (centerMassYR + CR(1) - BBSize/2);
+    trueCMXG = (centerMassXG + CG(2) - BBSize/2);
+    trueCMYG = (centerMassYG + CG(1) - BBSize/2);
+    trueCMXB = (centerMassXB + CB(2) - BBSize/2);
+    trueCMYB = (centerMassYB + CB(1) - BBSize/2);
+    %Store the previous Center of mass of the objects
+    %for plotting purposes
+    
     %************************************************
     %To link the points on the estimated background image
-    xLinkerR = [xLinkerR (centerMass(1,2) + CR(2) - BBSize/2)];
-    yLinkerR = [yLinkerR (centerMass(1,1) + CR(1) - BBSize/2)];
-    xLinkerG = [xLinkerG (centerMass(2,2) + CG(2) - BBSize/2)];
-    yLinkerG = [yLinkerG (centerMass(2,1) + CG(1) - BBSize/2)];
-    xLinkerB = [xLinkerB (centerMass(3,2) + CB(2) - BBSize/2)];
-    yLinkerB = [yLinkerB (centerMass(3,1) + CB(1) - BBSize/2)];
-
+    xLinkerR = [xLinkerR trueCMXR];
+    yLinkerR = [yLinkerR trueCMYR];
+    xLinkerG = [xLinkerG trueCMXG];
+    yLinkerG = [yLinkerG trueCMYG];
+    xLinkerB = [xLinkerB trueCMXB];
+    yLinkerB = [yLinkerB trueCMYB];
+    
     %Define unit vectors in the direction of the centroid
     centerMassR = [centerMassXR centerMassYR];
     dR = (centroidR - centerMassR);
@@ -179,8 +218,29 @@ for k = 5:100
     
     subplot(3,3,1:6);
     imshow(medImg);
+    
+    if((trueCMXR>70 && trueCMXR<570)...
+        && ((trueCMYR>70 && trueCMYR<410)...
+        && StateR==1))
     hold on
-    plot(xLinkerR, yLinkerR, 'xr-', xLinkerG, yLinkerG, 'xg-', xLinkerB, yLinkerB, 'xb-');
+    plot(xLinkerR, yLinkerR, 'xr-');
+    elseif((trueCMXR>70 && trueCMXR<570)...
+        && ((trueCMYR>70 && trueCMYR<410)...
+        && StateR==0))
+    hold on
+    plot(xLinkerR, yLinkerR, 'xr-');
+    StateR=1;
+    elseif((trueCMXR<70 && trueCMXR>570)...
+        || (trueCMYR<70 && trueCMYR>410)...
+        && StateX==1)
+    hold on
+    plot(xLinkerR, yLinkerR, 'xr-');
+    end
+    hold on
+    plot(xLinkerG, yLinkerG, 'xg-');
+    hold on
+    plot(xLinkerB, yLinkerB, 'xb-');
+    hold on
     xlabel(k);
 
     subplot(3,3,7);
@@ -197,7 +257,7 @@ for k = 5:100
     hold on
     plot(verticesXG, verticesYG, 'g-', 'LineWidth', 2);
     hold on
-    plot([centerMassG(1),centroidG(1)+30*dG(1)], [centerMassG(2), centroidG(2)+30*dG(2)],'b-', 'LineWidth',2);
+    plot([centerMassG(1),centroidG(1)+30*dG(1)], [centerMassG(2), centroidG(2)+30*dG(2)],LineColG, 'LineWidth',2);
     xlabel('green');
 
     subplot(3,3,9);
@@ -206,13 +266,16 @@ for k = 5:100
     hold on
     plot(verticesXB, verticesYB, 'b-', 'LineWidth', 2);
     hold on
-    plot([centerMassB(1),centroidB(1)+30*dB(1)], [centerMassB(2), centroidB(2)+30*dB(2)],'b-', 'LineWidth',2);
+    plot([centerMassB(1),centroidB(1)+30*dB(1)], [centerMassB(2), centroidB(2)+30*dB(2)],LineColB, 'LineWidth',2);
     xlabel('blue');
 
 %     clf();
 %     figure(1);
 %     imshow(edge(rgb2gray(FImg)));
 %     pause(1);
-
-    pause(0.1);
+    %print('-depsc','-tiff','-r300','picture1')
+%     filename = sprintf('..\0000%d.jpg', k);
+%     imwrite(figure, filename);
+    pause(1);
+   %input('...');
 end
