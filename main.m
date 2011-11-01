@@ -2,7 +2,8 @@ clear all;
 clc;
 
 global HaveToolbox;
-HaveToolbox = 0; % TODO - explicitly request Image Toolbox license and fall back
+HaveToolbox = license('checkout', 'Image_Toolbox');
+% HaveToolbox = 0;
 
 ImgData = myreadfolder('data2/', 80);
 
@@ -172,33 +173,38 @@ for k = 5:80
     oldDirG = dG;
     oldDirB = dB;
     
+    %NNImg = Img;
+    %NNImg(:,:,1) = ImgR;
+    %NNImg(:,:,2) = ImgG;
+    %NNImg(:,:,3) = ImgB;
+    
     figure(1);
     clf();
     
     subplot(3,3,1:6);
-    %imshow(medImg);
-    imshow(FImg);
+    %myimshow(medImg);
+    myimshow(Img);
     hold on;
     plot(xLinkerR, yLinkerR, 'xr-', xLinkerG, yLinkerG, 'xg-', xLinkerB, yLinkerB, 'xb-');
     xlabel(k);
 
     subplot(3,3,7);
+    myimshow(TImgR);
     hold on;
-    imshow(TImgR);
     plot(verticesXR, verticesYR, 'r-', 'LineWidth', 2);
     plot([centerMassR(1),centroidR(1)+30*dR(1)], [centerMassR(2), centroidR(2)+30*dR(2)], LineColR, 'LineWidth',2);
     xlabel('red');
 
     subplot(3,3,8);
+    myimshow(TImgG);
     hold on;
-    imshow(TImgG);
     plot(verticesXG, verticesYG, 'g-', 'LineWidth', 2);
     plot([centerMassG(1),centroidG(1)+30*dG(1)], [centerMassG(2), centroidG(2)+30*dG(2)], LineColG, 'LineWidth',2);
     xlabel('green');
 
     subplot(3,3,9);
+    myimshow(TImgB);
     hold on;
-    imshow(TImgB);
     plot(verticesXB, verticesYB, 'b-', 'LineWidth', 2);
     plot([centerMassB(1),centroidB(1)+30*dB(1)], [centerMassB(2), centroidB(2)+30*dB(2)], LineColB, 'LineWidth',2);
     xlabel('blue');
