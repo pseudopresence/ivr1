@@ -6,7 +6,7 @@ clf;
 % Configuration section
 DATA_FOLDER = 'data7/';
 ENABLE_TOOLBOX = 1;
-MAX_IMG_COUNT = 90;
+MAX_IMG_COUNT = 100;
 FILTER_SIZE = 5;
 FILTER_WIDTH = 5;
 BB_SIZE = 120;
@@ -19,7 +19,7 @@ HaveToolbox = ENABLE_TOOLBOX && license('checkout', 'Image_Toolbox');
 ImgData = myreadfolder(DATA_FOLDER, MAX_IMG_COUNT);
 
 % Compute the median image
-MedianIndices = [5 75 80];
+MedianIndices = [5 75 100];
 MedianImgs = zeros(size(ImgData,1),    ...
                    size(ImgData,2),    ...
                    size(ImgData,3),    ...
