@@ -1,3 +1,2 @@
-function I = myreadimg(folder, num)
-   %I = zeros(480,640,3);
-    I = double(imread([folder, sprintf('%08d', num), '.jpg']))/255;
+function I = myreadimg(Folder, Num)
+    I = double(imread([Folder, sprintf('%08d', Num), '.jpg']))/255;

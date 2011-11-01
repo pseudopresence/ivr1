@@ -50,5 +50,3 @@ centroidX(1,2) = (y2+y1)/2;
     
 
 end
-
-
