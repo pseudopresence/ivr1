@@ -1,211 +1,189 @@
+% Clear any existing state
 clear all;
 clc;
-
-global HaveToolbox;
-HaveToolbox = 0; % TODO - explicitly request Image Toolbox license and fall back
-
-ImgData = myreadfolder('data2/', 80);
-
-medianIdx = [5 75 80];
-medianImgs = [];
-
-oldDirR = [0 0];
-oldDirG = [0 0];
-oldDirB = [0 0];
-
-
-
-for mki = 1:size(medianIdx,2)
-    mk = medianIdx(mki);
-        
-    Img = ImgData(:,:,:,mk);
-    
-    FImg = myimgblur(Img, 5, 5);
-
-    NImg = normalize_rgb(FImg);
-    
-    ImgR = NImg(:,:,1);
-    ImgG = NImg(:,:,2);
-    ImgB = NImg(:,:,3);
-
-    ImgG = ImgG - 0.2 * ImgB;
-    
-    ImgR = normchannel(ImgR);
-    ImgG = normchannel(ImgG);
-    ImgB = normchannel(ImgB);
-       
-    BBSize = 120;
-    
-    % Marginal Histogram along X-axis, Y-axis
-    [CR, ThreshR, XHist, YHist] = xyhistmax(ImgR);
-    [CG, ThreshG, XHist, YHist] = xyhistmax(ImgG);
-    [CB, ThreshB, XHist, YHist] = xyhistmax(ImgB);
-    
-    Img = eraseRegion(Img, CR, BBSize);
-    Img = eraseRegion(Img, CG, BBSize);
-    Img = eraseRegion(Img, CB, BBSize);
-    medianImgs(:,:,:,mki) = Img;
-end
-
-medImg =  median(medianImgs, 4);
-% medImg = windowmedian(medImg, 10);
 clf;
 
+% Configuration section
+DATA_FOLDER = 'data2/';
+ENABLE_TOOLBOX = 1;
+MAX_IMG_COUNT = 80;
+FILTER_SIZE = 5;
+FILTER_WIDTH = 5;
+BB_SIZE = 120;
+
+% Attempt to acquire a toolbox license
+global HaveToolbox;
+HaveToolbox = ENABLE_TOOLBOX && license('checkout', 'Image_Toolbox');
+
+% Load in the dataset
+ImgData = myreadfolder(DATA_FOLDER, MAX_IMG_COUNT);
+
+% Compute the median image
+MedianIndices = [5 75 80];
+MedianImgs = zeros(size(ImgData,1),    ...
+                   size(ImgData,2),    ...
+                   size(ImgData,3),    ...
+                   size(MedianIndices, 2), ...
+                   class(ImgData));
+
+
+for Idx = 1:size(MedianIndices,2)
+    ImgIdx = MedianIndices(Idx);
+
+    Img = ImgData(:,:,:,ImgIdx);
+    
+    [ImgR, ImgG, ImgB] = processChannels(Img, FILTER_SIZE, FILTER_WIDTH);
+    
+    % Marginal Histogram along X-axis, Y-axis
+    [CR, ThreshR] = xyhistmax(ImgR);
+    [CG, ThreshG] = xyhistmax(ImgG);
+    [CB, ThreshB] = xyhistmax(ImgB);
+    
+    Img = eraseRegion(Img, CR, BB_SIZE);
+    Img = eraseRegion(Img, CG, BB_SIZE);
+    Img = eraseRegion(Img, CB, BB_SIZE);
+    
+    MedianImgs(:,:,:,Idx) = Img;
+end
+
+MedImg =  median(MedianImgs, 4);
+
+OldDirR = [0 0];
+OldDirG = [0 0];
+OldDirB = [0 0];
 
 %****************************************************
 %The variables used to link the objects movement
-xLinkerR = [];
-yLinkerR = [];
-xLinkerG = [];
-yLinkerG = [];
-xLinkerB = [];
-yLinkerB = [];
 
-%Plotting the red, green or blue object
+XLinkerR = [];
+YLinkerR = [];
+XLinkerG = [];
+YLinkerG = [];
+XLinkerB = [];
+YLinkerB = [];
 
-for k = 5:80
-    Img = ImgData(:,:,:,k);
-    
-    FImg = myimgblur(Img, 5, 5);
-
-    %Normalise the image
-    NImg = normalize_rgb(FImg);
-    
-    %Split the image into its three colour channels
-    ImgR = NImg(:,:,1);
-    ImgG = NImg(:,:,2);
-    ImgB = NImg(:,:,3);
-
-    %Subtract the blue channel from the green channel
-    %to remove some of the excess blue in the green channel
-    ImgG = ImgG - 0.2 * ImgB;
-   
-    %Renormalise each channel
-    ImgR = normchannel(ImgR);
-    ImgG = normchannel(ImgG);
-    ImgB = normchannel(ImgB);
-       
-    %Create the bounding box dimensions of 120x120
-    BBSize = 120;
+for ImgIdx = 5:MAX_IMG_COUNT
+    Img = ImgData(:,:,:,ImgIdx);
+ 
+    [ImgR, ImgG, ImgB] = processChannels(Img, FILTER_SIZE, FILTER_WIDTH);
     
     % Marginal Histogram along X-axis, Y-axis
-    [CR, ThreshR, XHistR, YHistR] = xyhistmax(ImgR);
-    [CG, ThreshG, XHistG, YHistG] = xyhistmax(ImgG);
-    [CB, ThreshB, XHistB, YHistB] = xyhistmax(ImgB);
-    
+    [CR, ThreshR] = xyhistmax(ImgR);
+    [CG, ThreshG] = xyhistmax(ImgG);
+    [CB, ThreshB] = xyhistmax(ImgB);
    
-    TImgR = cliprect(ImgR, CR, BBSize)>ThreshR;
-    TImgG = cliprect(ImgG, CG, BBSize)>ThreshG;
-    TImgB = cliprect(ImgB, CB, BBSize)>ThreshB;
+    TImgR = cliprect(ImgR, CR, BB_SIZE)>ThreshR;
+    TImgG = cliprect(ImgG, CG, BB_SIZE)>ThreshG;
+    TImgB = cliprect(ImgB, CB, BB_SIZE)>ThreshB;
     
     %Calculating the bounding box for the thresholded image
     %To determine the center of mass of the objects
     %***********************************
     
-    centerMass = calcCenterMass(TImgR, TImgG, TImgB);
+    CenterMass = calcCenterMass(TImgR, TImgG, TImgB);
    
     
     %******************************************************
     %Calculate and display the bounding box for the image   
-    [verticesXR, verticesYR, centroidR, falseImageR] = calcBoundingBox(TImgR, HaveToolbox);
-    [verticesXG, verticesYG, centroidG, falseImageG] = calcBoundingBox(TImgG, HaveToolbox);
-    [verticesXB, verticesYB, centroidB, falseImageB] = calcBoundingBox(TImgB, HaveToolbox);
+
+    [VerticesXR, VerticesYR, CentroidR, FalseImageR] = calcBoundingBox(TImgR);
+    [VerticesXG, VerticesYG, CentroidG, FalseImageG] = calcBoundingBox(TImgG);
+    [VerticesXB, VerticesYB, CentroidB, FalseImageB] = calcBoundingBox(TImgB);
     
     %******************************************************
-    %Calculate the center of mass of the robot in its new
-    %bounding box
-    if min(verticesXR) == 0 || min(verticesXG) == 0 || min(verticesXB) == 0
+    %Calculate the orientation for each robot
+    if min(VerticesXR) == 0 || min(VerticesXG) == 0 || min(VerticesXB) == 0
         continue;
     end
 
-    [centerMassXR,centerMassYR] = calcBoundingBoxCM(verticesXR, verticesYR, TImgR);
-
-    [centerMassXG,centerMassYG] = calcBoundingBoxCM(verticesXG, verticesYG, TImgG);
-
-    [centerMassXB,centerMassYB] = calcBoundingBoxCM(verticesXB, verticesYB, TImgB);
-
+    [CenterMassXR,CenterMassYR] = calcBoundingBoxCM(VerticesXR, VerticesYR, TImgR);
+    [CenterMassXG,CenterMassYG] = calcBoundingBoxCM(VerticesXG, VerticesYG, TImgG);
+    [CenterMassXB,CenterMassYB] = calcBoundingBoxCM(VerticesXB, VerticesYB, TImgB);
     
-    %Add variables for the true center of mass of
-    %the entire image
-    trueCMXR = (centerMassXR + CR(2) - BBSize/2);
-    trueCMYR = (centerMassYR + CR(1) - BBSize/2);
-    trueCMXG = (centerMassXG + CG(2) - BBSize/2);
-    trueCMYG = (centerMassYG + CG(1) - BBSize/2);
-    trueCMXB = (centerMassXB + CB(2) - BBSize/2);
-    trueCMYB = (centerMassYB + CB(1) - BBSize/2);
+    %Add variables for the true center of mass
+    trueCMXR = (CenterMassXR + CR(2) - BB_SIZE/2);
+    trueCMYR = (CenterMassYR + CR(1) - BB_SIZE/2);
+    trueCMXG = (CenterMassXG + CG(2) - BB_SIZE/2);
+    trueCMYG = (CenterMassYG + CG(1) - BB_SIZE/2);
+    trueCMXB = (CenterMassXB + CB(2) - BB_SIZE/2);
+    trueCMYB = (CenterMassYB + CB(1) - BB_SIZE/2);
     %Store the previous Center of mass of the objects
     %for plotting purposes
     
     %************************************************
     %To link the points on the estimated background image
-    xLinkerR = [xLinkerR trueCMXR];
-    yLinkerR = [yLinkerR trueCMYR];
-    xLinkerG = [xLinkerG trueCMXG];
-    yLinkerG = [yLinkerG trueCMYG];
-    xLinkerB = [xLinkerB trueCMXB];
-    yLinkerB = [yLinkerB trueCMYB];
+    XLinkerR = [XLinkerR trueCMXR];
+    YLinkerR = [YLinkerR trueCMYR];
+    XLinkerG = [XLinkerG trueCMXG];
+    YLinkerG = [YLinkerG trueCMYG];
+    XLinkerB = [XLinkerB trueCMXB];
+    YLinkerB = [YLinkerB trueCMYB];
     
-    %Define unit vectors in the direction of the centroid
-    centerMassR = [centerMassXR centerMassYR];
-    dR = (centroidR - centerMassR);
+    %Define unit vectors in the direction of the Centroid
+    CenterMassR = [CenterMassXR CenterMassYR];
+    DR = (CentroidR - CenterMassR);
 
-    centerMassG = [centerMassXG centerMassYG];
-    dG = (centroidG - centerMassG);
+    CenterMassG = [CenterMassXG CenterMassYG];
+    DG = (CentroidG - CenterMassG);
 
-    centerMassB = [centerMassXB centerMassYB];
-    dB = (centroidB - centerMassB);
+    CenterMassB = [CenterMassXB CenterMassYB];
+    DB = (CentroidB - CenterMassB);
 
     %The unit vectors for each channel
-    dR = dR/norm(dR);
-    dG = dG/norm(dG);
-    dB = dB/norm(dB);
+    DR = DR/norm(DR);
+    DG = DG/norm(DG);
+    DB = DB/norm(DB);
    
     LineColR = 'b-';
     LineColG = 'b-';
     LineColB = 'b-';
     
-    if dot(dR, oldDirR) < 0.5
+    if dot(DR, OldDirR) < 0.5
         LineColR = 'r-';
     end
-    if dot(dG, oldDirG) < 0.5
+    if dot(DG, OldDirG) < 0.5
         LineColG = 'r-';
     end
-    if dot(dB, oldDirB) < 0.5
+    if dot(DB, OldDirB) < 0.5
         LineColB = 'r-';
     end
-    oldDirR = dR;
-    oldDirG = dG;
-    oldDirB = dB;
+    OldDirR = DR;
+    OldDirG = DG;
+    OldDirB = DB;
     
     figure(1);
     clf();
     
     subplot(3,3,1:6);
-    %imshow(medImg);
-    imshow(FImg);
+    %myimshow(MedImg);
+    myimshow(Img);
+    colormap('default');
     hold on;
-    plot(xLinkerR, yLinkerR, 'xr-', xLinkerG, yLinkerG, 'xg-', xLinkerB, yLinkerB, 'xb-');
-    xlabel(k);
+    plot(XLinkerR, YLinkerR, 'xr-', XLinkerG, YLinkerG, 'xg-', XLinkerB, YLinkerB, 'xb-');
+    xlabel(ImgIdx);
 
     subplot(3,3,7);
+    myimshow(TImgR);
+    colormap('gray');
     hold on;
-    imshow(TImgR);
-    plot(verticesXR, verticesYR, 'r-', 'LineWidth', 2);
-    plot([centerMassR(1),centroidR(1)+30*dR(1)], [centerMassR(2), centroidR(2)+30*dR(2)], LineColR, 'LineWidth',2);
+    plot(VerticesXR, VerticesYR, 'r-', 'LineWidth', 2);
+    plot([CenterMassR(1),CentroidR(1)+30*DR(1)], [CenterMassR(2), CentroidR(2)+30*DR(2)], LineColR, 'LineWidth',2);
     xlabel('red');
 
     subplot(3,3,8);
+    myimshow(TImgG);
+    colormap('gray');
     hold on;
-    imshow(TImgG);
-    plot(verticesXG, verticesYG, 'g-', 'LineWidth', 2);
-    plot([centerMassG(1),centroidG(1)+30*dG(1)], [centerMassG(2), centroidG(2)+30*dG(2)], LineColG, 'LineWidth',2);
+    plot(VerticesXG, VerticesYG, 'g-', 'LineWidth', 2);
+    plot([CenterMassG(1),CentroidG(1)+30*DG(1)], [CenterMassG(2), CentroidG(2)+30*DG(2)], LineColG, 'LineWidth',2);
     xlabel('green');
 
     subplot(3,3,9);
+    myimshow(TImgB);
+    colormap('gray');
     hold on;
-    imshow(TImgB);
-    plot(verticesXB, verticesYB, 'b-', 'LineWidth', 2);
-    plot([centerMassB(1),centroidB(1)+30*dB(1)], [centerMassB(2), centroidB(2)+30*dB(2)], LineColB, 'LineWidth',2);
+    plot(VerticesXB, VerticesYB, 'b-', 'LineWidth', 2);
+    plot([CenterMassB(1),CentroidB(1)+30*DB(1)], [CenterMassB(2), CentroidB(2)+30*DB(2)], LineColB, 'LineWidth',2);
     xlabel('blue');
 
     pause(0.1);

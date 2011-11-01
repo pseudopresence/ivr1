@@ -8,12 +8,6 @@ function [Out] = eraseRegion(Img, C, Size)
     Avg = Avg / 4;
     for y = t:b
         for x = l:r
-%             ty = (y - t)/(b - t);
-%             tx = (x - l)/(r - l);
-%             Out(y, x, :) = (1 - ty) * (1 - tx) * Img(t, l, :) ...
-%             + ty * (1 - tx) * Img(b, l, :) ...
-%             + (1 - ty) * tx * Img(t, r, :) ...
-%             + ty * tx * Img(b, r, :);
             Out(y, x, :) = Avg;
         end
     end

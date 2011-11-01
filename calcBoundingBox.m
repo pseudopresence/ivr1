@@ -1,12 +1,12 @@
-function [verticesX, verticesY, centroidX, falseImageX] = calcBoundingBox(TImgX, HaveToolbox)
-
+function [verticesX, verticesY, centroidX, falseImageX] = calcBoundingBox(TImgX)
+global HaveToolbox;
 %Set the image thresholds
 thresholdUpper=4000;
 thresholdLower=1500;
 falseImageX=0;
 
 %Label the image
-[labelX, numXBlobs, myBoundingBox] = mybwlabel(TImgX);
+[labelX, numXBlobs] = mybwlabel(TImgX);
 
 centroidX = zeros(1,2);
 %Then extract the various properties from the image
@@ -74,5 +74,3 @@ centroidX(1,2) = (y2+y1)/2;
     
 
 end
-
-
