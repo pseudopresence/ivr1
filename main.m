@@ -13,6 +13,8 @@ oldDirR = [0 0];
 oldDirG = [0 0];
 oldDirB = [0 0];
 
+
+
 for mki = 1:size(medianIdx,2)
     mk = medianIdx(mki);
         
@@ -59,6 +61,8 @@ yLinkerG = [];
 xLinkerB = [];
 yLinkerB = [];
 
+%Plotting the red, green or blue object
+
 for k = 5:80
     Img = ImgData(:,:,:,k);
     
@@ -103,12 +107,13 @@ for k = 5:80
     
     %******************************************************
     %Calculate and display the bounding box for the image   
-    [verticesXR, verticesYR, centroidR, falseImageR] = calcBoundingBox(TImgR);
-    [verticesXG, verticesYG, centroidG, falseImageG] = calcBoundingBox(TImgG);
-    [verticesXB, verticesYB, centroidB, falseImageB] = calcBoundingBox(TImgB);
+    [verticesXR, verticesYR, centroidR, falseImageR] = calcBoundingBox(TImgR, HaveToolbox);
+    [verticesXG, verticesYG, centroidG, falseImageG] = calcBoundingBox(TImgG, HaveToolbox);
+    [verticesXB, verticesYB, centroidB, falseImageB] = calcBoundingBox(TImgB, HaveToolbox);
     
     %******************************************************
-    %Calculate the orientation for each robot
+    %Calculate the center of mass of the robot in its new
+    %bounding box
     if min(verticesXR) == 0 || min(verticesXG) == 0 || min(verticesXB) == 0
         continue;
     end
@@ -117,11 +122,11 @@ for k = 5:80
 
     [centerMassXG,centerMassYG] = calcBoundingBoxCM(verticesXG, verticesYG, TImgG);
 
-
     [centerMassXB,centerMassYB] = calcBoundingBoxCM(verticesXB, verticesYB, TImgB);
 
     
-    %Add variables for the true center of mass
+    %Add variables for the true center of mass of
+    %the entire image
     trueCMXR = (centerMassXR + CR(2) - BBSize/2);
     trueCMYR = (centerMassYR + CR(1) - BBSize/2);
     trueCMXG = (centerMassXG + CG(2) - BBSize/2);

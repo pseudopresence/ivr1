@@ -52,7 +52,7 @@
 %% where label is the labelled region image and num is the number of
 %% regions
 
-function [im2,nr] = mybwlabel(im, N)
+function [im2,nr, bb] = mybwlabel(im, N)
 
 %% N.B. N is ignored but makes the call "drop in" compatiable with the image
 %% proc. tookit call [label,num] = bwlabel(input,4);
@@ -275,5 +275,5 @@ end
 %% Eventually transpose result
 if tr, 
   im2 = im2' ; 
-  bb = bb([3,4,1,2],:);
+  bb = bb([3,4,1,2],:)
 end

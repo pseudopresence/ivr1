@@ -1,4 +1,4 @@
-function [verticesX, verticesY, centroidX, falseImageX] = calcBoundingBox(TImgX)
+function [verticesX, verticesY, centroidX, falseImageX] = calcBoundingBox(TImgX, HaveToolbox)
 
 %Set the image thresholds
 thresholdUpper=4000;
@@ -6,30 +6,54 @@ thresholdLower=1500;
 falseImageX=0;
 
 %Label the image
-[labelX, numXBlobs] = mybwlabel(TImgX);
+[labelX, numXBlobs, myBoundingBox] = mybwlabel(TImgX);
 
 centroidX = zeros(1,2);
 %Then extract the various properties from the image
-blobMeasurements = regionprops(labelX, ['basic']);
-%Look at the image bounding box
-%boundingBox = cat(1,propsX.BoundingBox)
+if HaveToolbox==1
+blobMeasurements = regionprops(labelX, ['basic'])
+end
+
+%Calculate the area for each blob
+allBlobAreas = [];
+for i=1:numXBlobs
+    [rows,cols,vals] = find(labelX==i);
+    blobSize = sum(vals);
+    allBlobAreas = [allBlobAreas blobSize];
+    
+end
 
 
-if size(blobMeasurements,1) == 0
+if numXBlobs == 0
     verticesX = [0 0 0 0 0];
     verticesY = [0 0 0 0 0];
     centroidX = [0 0];
     return;
 end
 
-allBlobAreas = [blobMeasurements.Area];
+%allBlobAreas = [blobMeasurements.Area];
+%Find the maximum area in the image
 [maxBlobArea, index] = max(allBlobAreas);
 
-boundingBox = blobMeasurements(index).BoundingBox;	 % Get box.
+
+
+if HaveToolbox==1
+%Extract the bounding box from the image toolbox
+boundingBox = blobMeasurements(index).BoundingBox;
 x1 = boundingBox(1);
 y1 = boundingBox(2);
 x2 = x1 + boundingBox(3) - 1;
 y2 = y1 + boundingBox(4) - 1;
+elseif HaveToolbox==0
+%Without using the image toolkit, extract the bounding box
+
+[rows,cols,vals] = find(labelX==index);
+x1 = min(cols);
+x2 = max(cols);
+y1 = min(rows);
+y2 = max(rows);
+
+end
 verticesX = [x1 x2 x2 x1 x1];
 verticesY = [y1 y1 y2 y2 y1];
 centroidX(1,1) = (x2+x1)/2;
