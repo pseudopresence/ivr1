@@ -11,7 +11,7 @@ falseImageX=0;
 centroidX = zeros(1,2);
 %Then extract the various properties from the image
 if HaveToolbox==1
-blobMeasurements = regionprops(labelX, ['basic'])
+blobMeasurements = regionprops(labelX, ['basic']);
 if size(blobMeasurements,1) == 0
     verticesX = [0 0 0 0 0];
     verticesY = [0 0 0 0 0];

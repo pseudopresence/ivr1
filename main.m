@@ -2,11 +2,11 @@
 clear all;
 clc;
 clf;
-
+tic
 % Configuration section
-DATA_FOLDER = 'data2/';
+DATA_FOLDER = 'data8/';
 ENABLE_TOOLBOX = 1;
-MAX_IMG_COUNT = 100;
+MAX_IMG_COUNT = 90;
 FILTER_SIZE = 5;
 FILTER_WIDTH = 5;
 BB_SIZE = 120;
@@ -14,7 +14,7 @@ BB_SIZE = 120;
 % Attempt to acquire a toolbox license
 global HaveToolbox;
 HaveToolbox = ENABLE_TOOLBOX && license('checkout', 'Image_Toolbox');
-
+HaveToolbox=0;
 % Load in the dataset
 ImgData = myreadfolder(DATA_FOLDER, MAX_IMG_COUNT);
 
@@ -48,8 +48,6 @@ end
 
 MedImg =  median(MedianImgs, 4);
 
-imshow(MedImg);
-
 OldDirR = [0 0];
 OldDirG = [0 0];
 OldDirB = [0 0];
@@ -64,7 +62,7 @@ YLinkerG = [];
 XLinkerB = [];
 YLinkerB = [];
 
-for ImgIdx = 5:5:MAX_IMG_COUNT
+for ImgIdx = 5:10:MAX_IMG_COUNT
     Img = ImgData(:,:,:,ImgIdx);
  
     [ImgR, ImgG, ImgB] = processChannels(Img, FILTER_SIZE, FILTER_WIDTH);
@@ -226,10 +224,16 @@ for ImgIdx = 5:5:MAX_IMG_COUNT
     colormap('gray');
     hold on;
     plot(VerticesXB, VerticesYB, 'b-', 'LineWidth', 5);
-    plot_arrow(CenterMassB(1),CenterMassB(2), CentroidB(1)+30*DR(1),CentroidB(2)+30*DR(2),'linewidth',2,'headwidth',0.25,'headheight',0.33,'color',LineColRArrow,'facecolor',LineColRArrow);
+    plot_arrow(CenterMassB(1),CenterMassB(2), CentroidB(1)+30*DR(1),CentroidB(2)+30*DR(2),'linewidth',2,'headwidth',0.25,'headheight',0.33,'color',LineColBArrow,'facecolor',LineColBArrow);
     %plot([CenterMassB(1),CentroidB(1)+30*DB(1)], [CenterMassB(2), CentroidB(2)+30*DB(2)], LineColB, 'LineWidth',2);
     xlabel('Blue Channel');
 
     pause(0.1);
     %input('...');
 end
+clf();
+myimshow(MedImg);
+hold on
+plot(XLinkerR, YLinkerR, 'xr-', XLinkerG, YLinkerG, 'xg-', XLinkerB, YLinkerB, 'xb-');
+xlabel(ImgIdx);
+toc

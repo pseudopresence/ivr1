@@ -1,7 +1,11 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}
 \BOOKMARK [1][-]{section.2}{Methods}{}
 \BOOKMARK [2][-]{subsection.2.1}{Linking Algorithm}{section.2}
+\BOOKMARK [2][-]{subsection.2.2}{Background Estimation}{section.2}
 \BOOKMARK [1][-]{section.3}{Results}{}
+\BOOKMARK [2][-]{subsection.3.1}{Robot Detection}{section.3}
+\BOOKMARK [2][-]{subsection.3.2}{Robot Orientation}{section.3}
+\BOOKMARK [2][-]{subsection.3.3}{Background Images}{section.3}
 \BOOKMARK [1][-]{section.4}{Discussion}{}
 \BOOKMARK [1][-]{section.5}{Code}{}
 \BOOKMARK [1][-]{section.6}{Conclusion}{}

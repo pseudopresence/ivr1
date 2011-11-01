@@ -27,6 +27,8 @@
 
 %Justify design decisions where appropriate
 
+
+
 \subsection{Linking Algorithm}
 \label{sec:linking}
 The linking algorithm is used to link together detections of a single robot in consecutive frames. Since the images provided in the dataset are RGB, the linking algorithm has been implemented to run on each of the three colour channels respectively. 
@@ -65,10 +67,109 @@ A = \Sigma_{r}\Sigma_{c}P_{rc}
 \label{eqn:cm}
 \end{equation}
 
+\subsection{Background Estimation}
+\label{sec:back}
+Estimation of the background image required the implementation of a variety of different image processing techniques. This is because the datasets provided presented a number of challenges. One such challenge was that of removing robots that were stationary for a significant portion of a frame sequence. This prevented the simple implementation of a median filter to calculate the background image. This is due to the fact that objects that are stationary for a large subset of the frames will be incorporated into the median and subsequently into the background image.\\
+
+Therefore, in order to solve this problem, an algorithm has been developed to calculate the background image, regardless of stationary robots being in large subsets of the frame sequence. \\
+
+The background estimation algorithm consists of three main functional blocks. These blocks are \textit{Channel Processing}, \textit{Region Erasing and Filling} and \textit{Median Filtering} respectively. The \textit{Channel Processing} block receives an image frame and processes the image. This includes blurring, normalising, separating the image into its three channels, subtracting the blue channel from the green channel and renormalising the image. This creates an image that is ready for \textit{Region Erasing and Filling}. In order to implement this functional block, the image channels for the current frame are input into a function called \textit{eraseRegion}. A code snippet of the function is shown below.
+
+\lstinputlisting{eraseRegion.m}
+
+This function calculates the average value of the pixels found at the corner vertices of the bounding boxes surrounding each robot as shown in \figref{fig:vertices}. The corner pixels are averaged across all three colour channels and are stored in the variable \textit{Avg}. All of the pixels in the region containing the robot are then filled with this new average value to produce the image shown in \figref{fig:vertices}. This is applied to each of the robots in the image. 
+
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.8\textwidth]{../Drawings/backgroundErasingMain.pdf}
+	\caption{The corner pixel intensities are averaged and are then used to fill the region of the image containing the robot}
+	\label{fig:vertices}
+\end{figure}
+
+The \textit{Region Erasing and Filling} functional block is implemented on the three image frames that are used for background estimation. The reason three image frames have been chosen is because this is the minimum number of frames required to effectively use a median filter which is utilised in the \textit{Median Filtering} functional block. In addition to this, using a small number of frames to compute the median minimises the algorithm's processing time. The median of the three images is subsequently computed to produce an estimation of the background image.
 
 \section{Results}
 \label{sec:results}
 %Test data
+\subsection{Robot Detection}
+\label{sec:detect}
+An example of an incorrect detection of a robot due to the robot leaving the image frame.
+
+\begin{figure}[h!]
+\begin{minipage}[b]{0.5\linewidth}
+\includegraphics[scale=0.5]{../Drawings/incorrectdetBackdata1.pdf}
+\caption{An incorrect detection of a robot}
+\label{fig:InDetectData2}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.5\linewidth}
+\includegraphics[scale=0.8]{../Drawings/incorrectdetrobotdata1.pdf}
+\caption{The incorrect detection of the red robot as shown in the red channel thresholded image}
+\label{fig:redInDetect}
+\end{minipage}
+\end{figure}
+
+An example of an incorrect detection of a robot due to a region of highly saturated pixels that have a similar colour to that of the robot.
+
+\begin{figure}[h!]
+\begin{minipage}[b]{0.5\linewidth}
+\includegraphics[scale=0.5]{../Drawings/incorrectdetBackdata7.pdf}
+\caption{An incorrect detection of the green robot}
+\label{fig:InDetectData7}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.5\linewidth}
+\includegraphics[scale=0.8]{../Drawings/incorrectdetrobotdata7.pdf}
+\caption{The incorrect detection of the green robot due to a small region of highly saturated pixels}
+\label{fig:greenInDetect}
+\end{minipage}
+\end{figure}
+
+
+\subsection{Robot Orientation}
+\label{sec:orient}
+An example of incorrect and missed orientation in an image frame.
+
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.6\textwidth]{../Drawings/missedandIncorrectDetData2Ready.pdf}
+	\caption{Examples of incorrect and missed detections of invalid arrow orientations}
+	\label{fig:indetect}
+\end{figure}
+
+
+\subsection{Background Images}
+\label{sec:back}
+An example of background images produced using the Background Estimation Algorithm detailed in \secref{sec:back}.
+
+\begin{figure}[h!]
+\begin{minipage}[b]{0.5\linewidth}
+\includegraphics[scale=0.4]{../Drawings/backdata1.pdf}
+\caption{The estimated background image of the first dataset provided for image processing}
+\label{fig:backdata1}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.5\linewidth}
+\includegraphics[scale=0.3]{../Drawings/backdata2.pdf}
+\caption{The estimated background image of the second dataset provided for image processing}
+\label{fig:backdata2}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[h!]
+\begin{minipage}[b]{0.5\linewidth}
+\includegraphics[scale=0.3]{../Drawings/backdata7.pdf}
+\caption{The estimated background image of a new test dataset}
+\label{fig:backdata7}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.5\linewidth}
+\includegraphics[scale=0.3]{../Drawings/backdata10.pdf}
+\caption{The estimated background image of a new test dataset}
+\label{fig:backdata10}
+\end{minipage}
+\end{figure}
 
 %Show an example of results for each stage of detection
 
