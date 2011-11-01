@@ -5,7 +5,7 @@ clf;
 
 % Configuration section
 DATA_FOLDER = 'data2/';
-ENABLE_TOOLBOX = 0;
+ENABLE_TOOLBOX = 1;
 MAX_IMG_COUNT = 100;
 FILTER_SIZE = 5;
 FILTER_WIDTH = 5;
@@ -31,30 +31,17 @@ for Idx = 1:size(MedianIndices,2)
         
     Img = ImgData(:,:,:,ImgIdx);
     
-    FImg = myimgblur(Img, FILTER_SIZE, FILTER_WIDTH);
-
-    NImg = normalize_rgb(FImg);
-    
-    ImgR = NImg(:,:,1);
-    ImgG = NImg(:,:,2);
-    ImgB = NImg(:,:,3);
-
-    ImgG = ImgG - 0.2 * ImgB;
-    
-    ImgR = normchannel(ImgR);
-    ImgG = normchannel(ImgG);
-    ImgB = normchannel(ImgB);
-       
-    BB_SIZE = 120;
+    [ImgR, ImgG, ImgB] = processChannels(Img, FILTER_SIZE, FILTER_WIDTH);
     
     % Marginal Histogram along X-axis, Y-axis
-    [CR, ThreshR, XHist, YHist] = xyhistmax(ImgR);
-    [CG, ThreshG, XHist, YHist] = xyhistmax(ImgG);
-    [CB, ThreshB, XHist, YHist] = xyhistmax(ImgB);
+    [CR, ThreshR] = xyhistmax(ImgR);
+    [CG, ThreshG] = xyhistmax(ImgG);
+    [CB, ThreshB] = xyhistmax(ImgB);
     
     Img = eraseRegion(Img, CR, BB_SIZE);
     Img = eraseRegion(Img, CG, BB_SIZE);
     Img = eraseRegion(Img, CB, BB_SIZE);
+    
     MedianImgs(:,:,:,Idx) = Img;
 end
 
@@ -75,31 +62,13 @@ YLinkerB = [];
 
 for ImgIdx = 5:MAX_IMG_COUNT
     Img = ImgData(:,:,:,ImgIdx);
+ 
+    [ImgR, ImgG, ImgB] = processChannels(Img, FILTER_SIZE, FILTER_WIDTH);
     
-    FImg = myimgblur(Img, FILTER_SIZE, FILTER_WIDTH);
-
-    %Normalise the image
-    NImg = normalize_rgb(FImg);
-    
-    %Split the image into its three colour channels
-    ImgR = NImg(:,:,1);
-    ImgG = NImg(:,:,2);
-    ImgB = NImg(:,:,3);
-
-    %Subtract the blue channel from the green channel
-    %to remove some of the excess blue in the green channel
-    ImgG = ImgG - 0.2 * ImgB;
-   
-    %Renormalise each channel
-    ImgR = normchannel(ImgR);
-    ImgG = normchannel(ImgG);
-    ImgB = normchannel(ImgB);
-       
     % Marginal Histogram along X-axis, Y-axis
-    [CR, ThreshR, XHistR, YHistR] = xyhistmax(ImgR);
-    [CG, ThreshG, XHistG, YHistG] = xyhistmax(ImgG);
-    [CB, ThreshB, XHistB, YHistB] = xyhistmax(ImgB);
-    
+    [CR, ThreshR] = xyhistmax(ImgR);
+    [CG, ThreshG] = xyhistmax(ImgG);
+    [CB, ThreshB] = xyhistmax(ImgB);
    
     TImgR = cliprect(ImgR, CR, BB_SIZE)>ThreshR;
     TImgG = cliprect(ImgG, CG, BB_SIZE)>ThreshG;
@@ -179,23 +148,20 @@ for ImgIdx = 5:MAX_IMG_COUNT
     OldDirG = DG;
     OldDirB = DB;
     
-    %NNImg = Img;
-    %NNImg(:,:,1) = ImgR;
-    %NNImg(:,:,2) = ImgG;
-    %NNImg(:,:,3) = ImgB;
-    
     figure(1);
     clf();
     
     subplot(3,3,1:6);
     %myimshow(MedImg);
     myimshow(Img);
+    colormap('default');
     hold on;
     plot(XLinkerR, YLinkerR, 'xr-', XLinkerG, YLinkerG, 'xg-', XLinkerB, YLinkerB, 'xb-');
     xlabel(ImgIdx);
 
     subplot(3,3,7);
     myimshow(TImgR);
+    colormap('gray');
     hold on;
     plot(VerticesXR, VerticesYR, 'r-', 'LineWidth', 2);
     plot([CenterMassR(1),CentroidR(1)+30*DR(1)], [CenterMassR(2), CentroidR(2)+30*DR(2)], LineColR, 'LineWidth',2);
@@ -203,6 +169,7 @@ for ImgIdx = 5:MAX_IMG_COUNT
 
     subplot(3,3,8);
     myimshow(TImgG);
+    colormap('gray');
     hold on;
     plot(VerticesXG, VerticesYG, 'g-', 'LineWidth', 2);
     plot([CenterMassG(1),CentroidG(1)+30*DG(1)], [CenterMassG(2), CentroidG(2)+30*DG(2)], LineColG, 'LineWidth',2);
@@ -210,6 +177,7 @@ for ImgIdx = 5:MAX_IMG_COUNT
 
     subplot(3,3,9);
     myimshow(TImgB);
+    colormap('gray');
     hold on;
     plot(VerticesXB, VerticesYB, 'b-', 'LineWidth', 2);
     plot([CenterMassB(1),CentroidB(1)+30*DB(1)], [CenterMassB(2), CentroidB(2)+30*DB(2)], LineColB, 'LineWidth',2);
