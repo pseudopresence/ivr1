@@ -12,6 +12,12 @@ centroidX = zeros(1,2);
 %Then extract the various properties from the image
 if HaveToolbox==1
 blobMeasurements = regionprops(labelX, ['basic'])
+if size(blobMeasurements,1) == 0
+    verticesX = [0 0 0 0 0];
+    verticesY = [0 0 0 0 0];
+    centroidX = [0 0];
+    return;
+end
 end
 
 %Calculate the area for each blob
@@ -23,13 +29,13 @@ for i=1:numXBlobs
     
 end
 
-
 if numXBlobs == 0
     verticesX = [0 0 0 0 0];
     verticesY = [0 0 0 0 0];
     centroidX = [0 0];
     return;
 end
+
 
 %allBlobAreas = [blobMeasurements.Area];
 %Find the maximum area in the image

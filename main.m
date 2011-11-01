@@ -4,9 +4,9 @@ clc;
 clf;
 
 % Configuration section
-DATA_FOLDER = 'data2/';
+DATA_FOLDER = 'data7/';
 ENABLE_TOOLBOX = 1;
-MAX_IMG_COUNT = 80;
+MAX_IMG_COUNT = 90;
 FILTER_SIZE = 5;
 FILTER_WIDTH = 5;
 BB_SIZE = 120;
@@ -62,7 +62,7 @@ YLinkerG = [];
 XLinkerB = [];
 YLinkerB = [];
 
-for ImgIdx = 5:MAX_IMG_COUNT
+for ImgIdx = 5:5:MAX_IMG_COUNT
     Img = ImgData(:,:,:,ImgIdx);
  
     [ImgR, ImgG, ImgB] = processChannels(Img, FILTER_SIZE, FILTER_WIDTH);
@@ -84,29 +84,32 @@ for ImgIdx = 5:MAX_IMG_COUNT
    
     
     %******************************************************
-    %Calculate and display the bounding box for the image   
-
+    %Calculate and display the bounding box for the image
+    %Relative to the clipped image from the cliprect function
     [VerticesXR, VerticesYR, CentroidR, FalseImageR] = calcBoundingBox(TImgR);
     [VerticesXG, VerticesYG, CentroidG, FalseImageG] = calcBoundingBox(TImgG);
     [VerticesXB, VerticesYB, CentroidB, FalseImageB] = calcBoundingBox(TImgB);
     
     %******************************************************
-    %Calculate the orientation for each robot
+    %If no image is detected, skip the current frame
     if min(VerticesXR) == 0 || min(VerticesXG) == 0 || min(VerticesXB) == 0
         continue;
     end
-
+    %Calculate the center of mass of the robot within a
+    %bounding box
     [CenterMassXR,CenterMassYR] = calcBoundingBoxCM(VerticesXR, VerticesYR, TImgR);
     [CenterMassXG,CenterMassYG] = calcBoundingBoxCM(VerticesXG, VerticesYG, TImgG);
     [CenterMassXB,CenterMassYB] = calcBoundingBoxCM(VerticesXB, VerticesYB, TImgB);
     
-    %Add variables for the true center of mass
+    %Add variables for the center of mass of the 
+    %robot relative to the original image
     trueCMXR = (CenterMassXR + CR(2) - BB_SIZE/2);
     trueCMYR = (CenterMassYR + CR(1) - BB_SIZE/2);
     trueCMXG = (CenterMassXG + CG(2) - BB_SIZE/2);
     trueCMYG = (CenterMassYG + CG(1) - BB_SIZE/2);
     trueCMXB = (CenterMassXB + CB(2) - BB_SIZE/2);
     trueCMYB = (CenterMassYB + CB(1) - BB_SIZE/2);
+    
     %Store the previous Center of mass of the objects
     %for plotting purposes
     
@@ -157,34 +160,42 @@ for ImgIdx = 5:MAX_IMG_COUNT
     subplot(3,3,1:6);
     %myimshow(MedImg);
     myimshow(Img);
-    colormap('default');
-    hold on;
+    hold on
     plot(XLinkerR, YLinkerR, 'xr-', XLinkerG, YLinkerG, 'xg-', XLinkerB, YLinkerB, 'xb-');
     xlabel(ImgIdx);
-
+%     myimshow(Img);
+%     colormap('default');
+%     hold on;
+%     plot([CenterMassR(1),CentroidR(1)+30*DR(1)], [CenterMassR(2), CentroidR(2)+30*DR(2)], LineColR, 'LineWidth',2);
+%     hold on
+%     plot([CenterMassG(1),CentroidG(1)+30*DG(1)], [CenterMassG(2), CentroidG(2)+30*DG(2)], LineColG, 'LineWidth',2);
+%     hold on
+%     plot([CenterMassB(1),CentroidB(1)+30*DB(1)], [CenterMassB(2), CentroidB(2)+30*DB(2)], LineColB, 'LineWidth',2);
+%     
     subplot(3,3,7);
     myimshow(TImgR);
     colormap('gray');
     hold on;
-    plot(VerticesXR, VerticesYR, 'r-', 'LineWidth', 2);
+    plot(VerticesXR, VerticesYR, 'r-', 'LineWidth', 5);
     plot([CenterMassR(1),CentroidR(1)+30*DR(1)], [CenterMassR(2), CentroidR(2)+30*DR(2)], LineColR, 'LineWidth',2);
-    xlabel('red');
+    xlabel('Red Channel');
 
     subplot(3,3,8);
     myimshow(TImgG);
     colormap('gray');
     hold on;
-    plot(VerticesXG, VerticesYG, 'g-', 'LineWidth', 2);
+    plot(VerticesXG, VerticesYG, 'g-', 'LineWidth', 5);
     plot([CenterMassG(1),CentroidG(1)+30*DG(1)], [CenterMassG(2), CentroidG(2)+30*DG(2)], LineColG, 'LineWidth',2);
-    xlabel('green');
+    xlabel('Green Channel');
 
     subplot(3,3,9);
     myimshow(TImgB);
     colormap('gray');
     hold on;
-    plot(VerticesXB, VerticesYB, 'b-', 'LineWidth', 2);
+    plot(VerticesXB, VerticesYB, 'b-', 'LineWidth', 5);
     plot([CenterMassB(1),CentroidB(1)+30*DB(1)], [CenterMassB(2), CentroidB(2)+30*DB(2)], LineColB, 'LineWidth',2);
-    xlabel('blue');
+    xlabel('Blue Channel');
 
     pause(0.1);
+    %input('...');
 end

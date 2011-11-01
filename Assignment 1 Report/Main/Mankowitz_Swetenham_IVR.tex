@@ -53,6 +53,18 @@ Once the images containing the robots have been received, a bounding box for eac
 
 Once a bounding box for the robot has been determined, the center of mass of the robot needs to be calculated. This is achieved by utilising the `calcBoundingBoxCM' function.
 
+This algorithm makes use of two important equations shown in \eqnref{eqn:area} and \eqnref{eqn:cm} respectively.
+
+\begin{equation}
+A = \Sigma_{r}\Sigma_{c}P_{rc}
+\label{eqn:area}
+\end{equation}
+
+\begin{equation}
+(\widehat{r}, \widehat{c}) = (\frac{1}{A}\Sigma_{r}\Sigma_{c}r P_{rc}, \frac{1}{A}\Sigma_{r}\Sigma_{c}c P_{rc})
+\label{eqn:cm}
+\end{equation}
+
 
 \section{Results}
 \label{sec:results}
