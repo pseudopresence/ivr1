@@ -383,6 +383,54 @@ Another effective method that can be used to detect the robots is edge detection
 
 \section{Code}
 \label{sec:code}
+
+\subsection{Read Image Sequences into Matlab}
+\label{code:read}
+
+\lstinputlisting{../../myreadfolder.m}
+
+\lstinputlisting{../../myreadimg.m}
+
+\subsection{Background Estimation Functions}
+\label{code:background}
+
+\lstinputlisting{../../eraseRegion.m}
+
+
+
+\subsection{Detection Algorithm Helper Functions}
+\label{code:detection}
+
+\lstinputlisting{../../processChannels.m}
+
+\lstinputlisting{../../myimgblur.m}
+
+\lstinputlisting{../../normalize_rgb.m}
+
+\lstinputlisting{../../normchannel.m}
+
+\lstinputlisting{../../xyhistmax.m}
+
+\lstinputlisting{../../findthresh.m}
+
+\lstinputlisting{../../cliprect.m}
+
+\section{Linking Algorithm Functions}
+
+\lstinputlisting{../../calcBoundingBox.m}
+
+
+\lstinputlisting{../../calcBoundingBoxCM.m}
+
+\section{Orientation Algorithm Third Party Helper Function}
+
+
+\lstinputlisting{../../plot_arrow.m}
+
+
+\subsection{Main Program Code}
+\label{code:main}
+\lstinputlisting{../../main.m}
 %Any downloaded code should be recorded in the report. Does not need to be in the appendix
 %Code from course web pages are not needed
 
@@ -393,16 +441,16 @@ The image processing algorithm developed to detect robots in an image sequence h
 \bibliographystyle{witseie}
 \bibliography{bibliography}
 
- \newpage
-\onecolumn
-\appendix
-\setcounter{table}{0}
-\setcounter{figure}{0}
-\setcounter{subsection}{0}
-\makeatletter \renewcommand{\thefigure}{A.\@arabic\c@figure} \renewcommand{\thetable}{A.\@arabic\c@table} \renewcommand{\thesection}{A.\@arabic\c@section} \makeatother
-\section*{APPENDIX A}
-
-\section{Control Program}
+% \newpage
+%\onecolumn
+%\appendix
+%\setcounter{table}{0}
+%\setcounter{figure}{0}
+%\setcounter{subsection}{0}
+%\makeatletter \renewcommand{\thefigure}{A.\@arabic\c@figure} \renewcommand{\thetable}{A.\@arabic\c@table} \renewcommand{\thesection}{A.\@arabic\c@section} \makeatother
+%\section*{APPENDIX A}
+%
+%\section{Control Program}
 %Add the matlab code to this file...
 %\lstinputlisting{codeSnippets.cpp}
  

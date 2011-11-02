@@ -17,5 +17,10 @@
 \BOOKMARK [2][-]{subsection.4.2}{Limitations and Problems}{section.4}
 \BOOKMARK [2][-]{subsection.4.3}{Future Improvements}{section.4}
 \BOOKMARK [1][-]{section.5}{Code}{}
-\BOOKMARK [1][-]{section.6}{Conclusion}{}
-\BOOKMARK [1][-]{appendix.A}{Control Program}{}
+\BOOKMARK [2][-]{subsection.5.1}{Read Image Sequences into Matlab}{section.5}
+\BOOKMARK [2][-]{subsection.5.2}{Background Estimation Functions}{section.5}
+\BOOKMARK [2][-]{subsection.5.3}{Detection Algorithm Helper Functions}{section.5}
+\BOOKMARK [1][-]{section.6}{Linking Algorithm Functions}{}
+\BOOKMARK [1][-]{section.7}{Orientation Algorithm Third Party Helper Function}{}
+\BOOKMARK [2][-]{subsection.7.1}{Main Program Code}{section.7}
+\BOOKMARK [1][-]{section.8}{Conclusion}{}

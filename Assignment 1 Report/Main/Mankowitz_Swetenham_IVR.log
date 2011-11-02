@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (MiKTeX 2.8) (preloaded format=pdflatex 2010.2.2)  2 NOV 2011 21:03
+This is pdfTeX, Version 3.1415926-1.40.10 (MiKTeX 2.8) (preloaded format=pdflatex 2010.2.2)  2 NOV 2011 21:27
 entering extended mode
 **Mankowitz_Swetenham_IVR.tex
 
@@ -401,7 +401,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 12.
 
-<../Drawings/processing.pdf, id=87, 103.76854pt x 365.365pt>
+<../Drawings/processing.pdf, id=107, 103.76854pt x 365.365pt>
 File: ../Drawings/processing.pdf Graphic file (type pdf)
 
 <use ../Drawings/processing.pdf>
@@ -423,7 +423,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 50--51
 pdfTeX warning: pdflatex (file C:/Documents and Settings/Daniel/Desktop/ivr1/As
 signment 1 Report/Drawings/linkingAlgorithm.pdf): PDF inclusion: found PDF vers
 ion <1.5>, but at most version <1.4> allowed
-<../Drawings/linkingAlgorithm.pdf, id=91, 316.18124pt x 289.08pt>
+<../Drawings/linkingAlgorithm.pdf, id=111, 316.18124pt x 289.08pt>
 File: ../Drawings/linkingAlgorithm.pdf Graphic file (type pdf)
 
 <use ../Drawings/linkingAlgorithm.pdf> [1
@@ -435,7 +435,7 @@ ort/Drawings/processing.pdf>]
 pdfTeX warning: pdflatex (file C:/Documents and Settings/Daniel/Desktop/ivr1/As
 signment 1 Report/Drawings/boundingbox.pdf): PDF inclusion: found PDF version <
 1.5>, but at most version <1.4> allowed
-<../Drawings/boundingbox.pdf, id=146, 271.0125pt x 198.7425pt>
+<../Drawings/boundingbox.pdf, id=166, 271.0125pt x 198.7425pt>
 File: ../Drawings/boundingbox.pdf Graphic file (type pdf)
 
 <use ../Drawings/boundingbox.pdf>
@@ -496,7 +496,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 108--109
 
 
 ("C:\Documents and Settings\Daniel\Desktop\ivr1\Assignment 1 Report\Main\linker
-Report.m") <../Drawings/arrowvariation.pdf, id=205, 114.1866pt x 114.4275pt>
+Report.m") <../Drawings/arrowvariation.pdf, id=225, 114.1866pt x 114.4275pt>
 File: ../Drawings/arrowvariation.pdf Graphic file (type pdf)
 
 <use ../Drawings/arrowvariation.pdf>
@@ -506,7 +506,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 123--124
 
 [5 <C:/Documents and Settings/Daniel/Desktop/ivr1/Assignment 1 Report/Drawings/
 arrowvariation.pdf>]
-<../Drawings/orientationAlgorithm.pdf, id=238, 86.724pt x 59.0205pt>
+<../Drawings/orientationAlgorithm.pdf, id=258, 86.724pt x 59.0205pt>
 File: ../Drawings/orientationAlgorithm.pdf Graphic file (type pdf)
 
 <use ../Drawings/orientationAlgorithm.pdf>
@@ -539,18 +539,18 @@ Underfull \hbox (badness 10000) in paragraph at lines 151--152
 
  []
 
-<../Drawings/backgroundErasingMain.pdf, id=291, 803.0pt x 401.5pt>
+<../Drawings/backgroundErasingMain.pdf, id=311, 803.0pt x 401.5pt>
 File: ../Drawings/backgroundErasingMain.pdf Graphic file (type pdf)
 
 <use ../Drawings/backgroundErasingMain.pdf>
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[7] <../Drawings/incorrectdetBackdata1.pdf, id=322, 362.7954pt x 249.3315pt>
+[7] <../Drawings/incorrectdetBackdata1.pdf, id=342, 362.7954pt x 249.3315pt>
 File: ../Drawings/incorrectdetBackdata1.pdf Graphic file (type pdf)
 
 <use ../Drawings/incorrectdetBackdata1.pdf>
-<../Drawings/incorrectdetrobotdata1.pdf, id=323, 114.1866pt x 114.4275pt>
+<../Drawings/incorrectdetrobotdata1.pdf, id=343, 114.1866pt x 114.4275pt>
 File: ../Drawings/incorrectdetrobotdata1.pdf Graphic file (type pdf)
 
 <use ../Drawings/incorrectdetrobotdata1.pdf>
@@ -558,11 +558,11 @@ Overfull \hbox (18.67079pt too wide) in paragraph at lines 190--201
 [][]   [] 
  []
 
-<../Drawings/incorrectdetBackdata7.pdf, id=324, 362.07271pt x 268.84439pt>
+<../Drawings/incorrectdetBackdata7.pdf, id=344, 362.07271pt x 268.84439pt>
 File: ../Drawings/incorrectdetBackdata7.pdf Graphic file (type pdf)
 
 <use ../Drawings/incorrectdetBackdata7.pdf>
-<../Drawings/incorrectdetrobotdata7.pdf, id=325, 62.8749pt x 113.7048pt>
+<../Drawings/incorrectdetrobotdata7.pdf, id=345, 62.8749pt x 113.7048pt>
 File: ../Drawings/incorrectdetrobotdata7.pdf Graphic file (type pdf)
 
 <use ../Drawings/incorrectdetrobotdata7.pdf>
@@ -583,7 +583,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 223--224
 
  []
 
-<../Drawings/correctTracksData8.pdf, id=399, 568.52402pt x 218.9781pt>
+<../Drawings/correctTracksData8.pdf, id=419, 568.52402pt x 218.9781pt>
 File: ../Drawings/correctTracksData8.pdf Graphic file (type pdf)
 
 <use ../Drawings/correctTracksData8.pdf>
@@ -593,11 +593,11 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 [9 <C:/Documents and Settings/Daniel/Desktop/ivr1/Assignment 1 Report/Drawings/
 incorrectdetBackdata7.pdf> <C:/Documents and Settings/Daniel/Desktop/ivr1/Assig
 nment 1 Report/Drawings/incorrectdetrobotdata7.pdf>]
-<../Drawings/arrowdegreevariation.pdf, id=439, 114.1866pt x 114.4275pt>
+<../Drawings/arrowdegreevariation.pdf, id=459, 114.1866pt x 114.4275pt>
 File: ../Drawings/arrowdegreevariation.pdf Graphic file (type pdf)
 
 <use ../Drawings/arrowdegreevariation.pdf>
-<../Drawings/missedandIncorrectDetData2Ready.pdf, id=441, 360.6273pt x 270.2898
+<../Drawings/missedandIncorrectDetData2Ready.pdf, id=461, 360.6273pt x 270.2898
 pt>
 File: ../Drawings/missedandIncorrectDetData2Ready.pdf Graphic file (type pdf)
  <use ../Drawings/missedandIncorrectDetData2Ready.pdf>
@@ -617,7 +617,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 301--302
 [10 <C:/Documents and Settings/Daniel/Desktop/ivr1/Assignment 1 Report/Drawings
 /correctTracksData8.pdf> <C:/Documents and Settings/Daniel/Desktop/ivr1/Assignm
 ent 1 Report/Drawings/arrowdegreevariation.pdf>]
-<../Drawings/IncorrectDirectionResults.pdf, id=488, 144.54pt x 96.36pt>
+<../Drawings/IncorrectDirectionResults.pdf, id=508, 144.54pt x 96.36pt>
 File: ../Drawings/IncorrectDirectionResults.pdf Graphic file (type pdf)
 
 <use ../Drawings/IncorrectDirectionResults.pdf>
@@ -633,11 +633,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 314--315
 [11 <C:/Documents and Settings/Daniel/Desktop/ivr1/Assignment 1 Report/Drawings
 /missedandIncorrectDetData2Ready.pdf> <C:/Documents and Settings/Daniel/Desktop
 /ivr1/Assignment 1 Report/Drawings/IncorrectDirectionResults.pdf>]
-<../Drawings/backdata1.pdf, id=535, 470.75874pt x 348.30125pt>
+<../Drawings/backdata1.pdf, id=555, 470.75874pt x 348.30125pt>
 File: ../Drawings/backdata1.pdf Graphic file (type pdf)
 
 <use ../Drawings/backdata1.pdf>
-<../Drawings/backdata2.pdf, id=536, 597.23125pt x 429.605pt>
+<../Drawings/backdata2.pdf, id=556, 597.23125pt x 429.605pt>
 File: ../Drawings/backdata2.pdf Graphic file (type pdf)
 
 <use ../Drawings/backdata2.pdf>
@@ -645,11 +645,11 @@ Overfull \hbox (18.67079pt too wide) in paragraph at lines 317--328
 [][]   [] 
  []
 
-<../Drawings/backdata7.pdf, id=537, 470.75874pt x 348.30125pt>
+<../Drawings/backdata7.pdf, id=557, 470.75874pt x 348.30125pt>
 File: ../Drawings/backdata7.pdf Graphic file (type pdf)
 
 <use ../Drawings/backdata7.pdf>
-<../Drawings/backdata10.pdf, id=538, 470.75874pt x 348.30125pt>
+<../Drawings/backdata10.pdf, id=558, 470.75874pt x 348.30125pt>
 File: ../Drawings/backdata10.pdf Graphic file (type pdf)
 
 <use ../Drawings/backdata10.pdf>
@@ -702,15 +702,171 @@ n input line 372.
 Package natbib Warning: Citation `ref:digitalprocessing' on page 13 undefined o
 n input line 374.
 
+("C:\Documents and Settings\Daniel\Desktop\ivr1\myreadfolder.m"
+Overfull \hbox (29.28984pt too wide) in paragraph at lines 5--6
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
 
+) ("C:\Documents and Settings\Daniel\Desktop\ivr1\myreadimg.m") [13]
+("C:\Documents and Settings\Daniel\Desktop\ivr1\eraseRegion.m")
+("C:\Documents and Settings\Daniel\Desktop\ivr1\processChannels.m")
+("C:\Documents and Settings\Daniel\Desktop\ivr1\myimgblur.m"
+Overfull \hbox (14.8897pt too wide) in paragraph at lines 11--12
+[][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[14]) ("C:\Documents and Settings\Daniel\Desktop\ivr1\normalize_rgb.m")
+("C:\Documents and Settings\Daniel\Desktop\ivr1\normchannel.m")
+("C:\Documents and Settings\Daniel\Desktop\ivr1\xyhistmax.m"
+LaTeX Font Info:    Try loading font information for OML+pcr on input line 19.
+
+("C:\Program Files\MiKTeX 2.8\tex\latex\psnfss\omlpcr.fd"
+File: omlpcr.fd 
+)
+LaTeX Font Info:    Font shape `OML/pcr/m/n' in size <8> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 19.
+ [15])
+("C:\Documents and Settings\Daniel\Desktop\ivr1\findthresh.m" [16])
+("C:\Documents and Settings\Daniel\Desktop\ivr1\cliprect.m")
+("C:\Documents and Settings\Daniel\Desktop\ivr1\calcBoundingBox.m" [17]
+LaTeX Font Info:    Try loading font information for OMS+pcr on input line 42.
+
+("C:\Program Files\MiKTeX 2.8\tex\latex\psnfss\omspcr.fd"
+File: omspcr.fd 
+)
+LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <8> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 42.
+ [18])
+("C:\Documents and Settings\Daniel\Desktop\ivr1\calcBoundingBoxCM.m")
+("C:\Documents and Settings\Daniel\Desktop\ivr1\plot_arrow.m" [19]
+Overfull \hbox (29.28984pt too wide) in paragraph at lines 9--10
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (106.09062pt too wide) in paragraph at lines 11--12
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (24.48979pt too wide) in paragraph at lines 14--15
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][] 
+ []
+
+
+Overfull \hbox (24.48979pt too wide) in paragraph at lines 15--16
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][] 
+ []
+
+
+Overfull \hbox (82.09038pt too wide) in paragraph at lines 16--17
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (72.49028pt too wide) in paragraph at lines 20--21
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[20]
+Overfull \hbox (62.89018pt too wide) in paragraph at lines 74--75
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (10.08965pt too wide) in paragraph at lines 84--86
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+) ("C:\Documents and Settings\Daniel\Desktop\ivr1\main.m" [21] [22] [23]
+Overfull \hbox (24.48979pt too wide) in paragraph at lines 186--187
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (475.69438pt too wide) in paragraph at lines 193--194
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (475.69438pt too wide) in paragraph at lines 195--196
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (475.69438pt too wide) in paragraph at lines 197--199
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[24]
+Overfull \hbox (494.89458pt too wide) in paragraph at lines 206--207
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (149.29106pt too wide) in paragraph at lines 207--208
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[] 
+ []
+
+
+Overfull \hbox (494.89458pt too wide) in paragraph at lines 217--218
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (149.29106pt too wide) in paragraph at lines 218--219
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[] 
+ []
+
+
+Overfull \hbox (494.89458pt too wide) in paragraph at lines 228--229
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (149.29106pt too wide) in paragraph at lines 229--230
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
+[] 
+ []
+
+
+Overfull \hbox (5.2896pt too wide) in paragraph at lines 241--242
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+)
 ("C:\Documents and Settings\Daniel\Desktop\ivr1\Assignment 1 Report\Main\Mankow
 itz_Swetenham_IVR.bbl"
 
 Package natbib Warning: Empty `thebibliography' environment on input line 6.
 
-) [13] [14] [15
-
-]
+) [25]
 
 Package natbib Warning: There were undefined citations.
 
@@ -722,11 +878,11 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 7287 strings out of 495285
- 107457 string characters out of 3180338
- 221098 words of memory out of 3000000
- 10207 multiletter control sequences out of 15000+200000
- 10725 words of font info for 35 fonts, out of 3000000 for 9000
+ 8345 strings out of 495285
+ 124455 string characters out of 3180338
+ 301164 words of memory out of 3000000
+ 10449 multiletter control sequences out of 15000+200000
+ 10941 words of font info for 36 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
  45i,10n,42p,1203b,1683s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.8/fonts/enc/dvips/fontname/8r.enc}<C:/Program File
@@ -735,18 +891,19 @@ s/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program Files/MiKTeX
 ts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.8/fonts/type1
 /public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.8/fonts/type1/public/
 amsfonts/cm/cmmi7.pfb><C:/Program Files/MiKTeX 2.8/fonts/type1/public/amsfonts/
-cm/cmr10.pfb><C:/Program Files/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmr12.
-pfb><C:/Program Files/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/P
-rogram Files/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Program Fil
-es/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmsl10.pfb><C:/Program Files/MiKTe
-X 2.8/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.8/fo
-nts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program Files/MiKTeX 2.8/fonts/type1
-/public/amsfonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.8/fonts/type1/public/a
-msfonts/cm/cmti10.pfb><C:/Program Files/MiKTeX 2.8/fonts/type1/urw/courier/ucrr
-8a.pfb>
-Output written on Mankowitz_Swetenham_IVR.pdf (15 pages, 12529388 bytes).
+cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmr10.
+pfb><C:/Program Files/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/P
+rogram Files/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Fi
+les/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Program Files/MiKTeX
+ 2.8/fonts/type1/public/amsfonts/cm/cmsl10.pfb><C:/Program Files/MiKTeX 2.8/fon
+ts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.8/fonts/type1
+/public/amsfonts/cm/cmsy5.pfb><C:/Program Files/MiKTeX 2.8/fonts/type1/public/a
+msfonts/cm/cmsy7.pfb><C:/Program Files/MiKTeX 2.8/fonts/type1/public/amsfonts/c
+m/cmsy8.pfb><C:/Program Files/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmti10.
+pfb><C:/Program Files/MiKTeX 2.8/fonts/type1/urw/courier/ucrr8a.pfb>
+Output written on Mankowitz_Swetenham_IVR.pdf (25 pages, 12690846 bytes).
 PDF statistics:
- 653 PDF objects out of 1000 (max. 8388607)
- 149 named destinations out of 1000 (max. 500000)
- 259 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1629 PDF objects out of 1728 (max. 8388607)
+ 916 named destinations out of 1000 (max. 500000)
+ 299 words of extra memory for PDF output out of 10000 (max. 10000000)
 
