@@ -3,10 +3,13 @@ clear all;
 clc;
 clf;
 tic
+
 % Configuration section
-DATA_FOLDER = 'data8/';
+DATA_FOLDER = 'data2/';
 ENABLE_TOOLBOX = 1;
-MAX_IMG_COUNT = 50;
+IMG_SKIP = 5;
+IMG_STEP = 1;
+MAX_IMG_COUNT = 100;
 FILTER_SIZE = 5;
 FILTER_WIDTH = 5;
 BB_SIZE = 120;
@@ -14,7 +17,7 @@ BB_SIZE = 120;
 % Attempt to acquire a toolbox license
 global HaveToolbox;
 HaveToolbox = ENABLE_TOOLBOX && license('checkout', 'Image_Toolbox');
-HaveToolbox=0;
+
 % Load in the dataset
 ImgData = myreadfolder(DATA_FOLDER, MAX_IMG_COUNT);
 
@@ -62,7 +65,8 @@ YLinkerG = [];
 XLinkerB = [];
 YLinkerB = [];
 
-for ImgIdx = 45:MAX_IMG_COUNT
+
+for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     Img = ImgData(:,:,:,ImgIdx);
  
     [ImgR, ImgG, ImgB] = processChannels(Img, FILTER_SIZE, FILTER_WIDTH);
@@ -81,8 +85,7 @@ for ImgIdx = 45:MAX_IMG_COUNT
     %***********************************
     
     CenterMass = calcCenterMass(TImgR, TImgG, TImgB);
-   
-    
+      
     %******************************************************
     %Calculate and display the bounding box for the image
     %Relative to the clipped image from the cliprect function
@@ -187,13 +190,10 @@ for ImgIdx = 45:MAX_IMG_COUNT
     %Plot the arrow on each of the cars to indicate their
     %orientation
     plot_arrow(trueCMXR,trueCMYR, trueCentroidBBXR+30*DR(1),trueCentroidBBYR+30*DR(2),'linewidth',2,'headwidth',0.25,'headheight',0.33,'color',LineColRArrow,'facecolor',LineColRArrow);
-    %plot([trueCMXR,trueCentroidBBXR+30*DR(1)], [trueCMYR, trueCentroidBBYR+30*DR(2)], LineColR, 'LineWidth',2);
     hold on
     plot_arrow(trueCMXG,trueCMYG, trueCentroidBBXG+30*DG(1),trueCentroidBBYG+30*DG(2),'linewidth',2,'headwidth',0.25,'headheight',0.33,'color',LineColGArrow,'facecolor',LineColGArrow);
-    %plot([trueCMXG,trueCentroidBBXG+30*DG(1)], [trueCMYG, trueCentroidBBYG+30*DG(2)], LineColG, 'LineWidth',2);
     hold on
     plot_arrow(trueCMXB,trueCMYB, trueCentroidBBXB+30*DB(1),trueCentroidBBYB+30*DB(2),'linewidth',2,'headwidth',0.25,'headheight',0.33,'color',LineColBArrow,'facecolor',LineColBArrow);
-    %plot([trueCMXB,trueCentroidBBXB+30*DB(1)], [trueCMYB, trueCentroidBBYB+30*DB(2)], LineColB, 'LineWidth',2);
     
     %Plot the red channel with its corresponding bounding
     %box
