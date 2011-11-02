@@ -5,7 +5,7 @@ clf;
 tic
 
 % Configuration section
-DATA_FOLDER = 'data2/';
+DATA_FOLDER = 'data10/';
 ENABLE_TOOLBOX = 1;
 IMG_SKIP = 5;
 IMG_STEP = 1;
@@ -22,7 +22,7 @@ HaveToolbox = ENABLE_TOOLBOX && license('checkout', 'Image_Toolbox');
 ImgData = myreadfolder(DATA_FOLDER, MAX_IMG_COUNT);
 
 % Compute the median image
-MedianIndices = [5 45 50];
+MedianIndices = [5 85 95];
 MedianImgs = zeros(size(ImgData,1),    ...
                    size(ImgData,2),    ...
                    size(ImgData,3),    ...
@@ -65,6 +65,7 @@ YLinkerG = [];
 XLinkerB = [];
 YLinkerB = [];
 
+MissCount = 0;
 
 for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     Img = ImgData(:,:,:,ImgIdx);
@@ -79,12 +80,6 @@ for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     TImgR = cliprect(ImgR, CR, BB_SIZE)>ThreshR;
     TImgG = cliprect(ImgG, CG, BB_SIZE)>ThreshG;
     TImgB = cliprect(ImgB, CB, BB_SIZE)>ThreshB;
-    
-    %Calculating the bounding box for the thresholded image
-    %To determine the center of mass of the objects
-    %***********************************
-    
-    CenterMass = calcCenterMass(TImgR, TImgG, TImgB);
       
     %******************************************************
     %Calculate and display the bounding box for the image
@@ -96,6 +91,7 @@ for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     %******************************************************
     %If no image is detected, skip the current frame
     if min(VerticesXR) == 0 || min(VerticesXG) == 0 || min(VerticesXB) == 0
+        MissCount = MissCount + 1;
         continue;
     end
     %Calculate the center of mass of the robot within a
@@ -106,21 +102,21 @@ for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     
     %Add variables for the center of mass of the 
     %robot relative to the original image
-    trueCMXR = (CenterMassXR + CR(2) - BB_SIZE/2);
-    trueCMYR = (CenterMassYR + CR(1) - BB_SIZE/2);
-    trueCMXG = (CenterMassXG + CG(2) - BB_SIZE/2);
-    trueCMYG = (CenterMassYG + CG(1) - BB_SIZE/2);
-    trueCMXB = (CenterMassXB + CB(2) - BB_SIZE/2);
-    trueCMYB = (CenterMassYB + CB(1) - BB_SIZE/2);
+    trueCMXR = (CenterMassXR + CR(2) - size(TImgR, 2)/2);
+    trueCMYR = (CenterMassYR + CR(1) - size(TImgR, 1)/2);
+    trueCMXG = (CenterMassXG + CG(2) - size(TImgG, 2)/2);
+    trueCMYG = (CenterMassYG + CG(1) - size(TImgG, 1)/2);
+    trueCMXB = (CenterMassXB + CB(2) - size(TImgB, 2)/2);
+    trueCMYB = (CenterMassYB + CB(1) - size(TImgB, 1)/2);
     
     %Store the true position of the bounding box centroid
     %relative to the coordinates of the original image 
-    trueCentroidBBXR = (CentroidR(1) + CR(2) - BB_SIZE/2);
-    trueCentroidBBYR = (CentroidR(2) + CR(1) - BB_SIZE/2);
-    trueCentroidBBXG = (CentroidG(1) + CG(2) - BB_SIZE/2);
-    trueCentroidBBYG = (CentroidG(2) + CG(1) - BB_SIZE/2);
-    trueCentroidBBXB = (CentroidB(1) + CB(2) - BB_SIZE/2);
-    trueCentroidBBYB = (CentroidB(2) + CB(1) - BB_SIZE/2);
+    trueCentroidBBXR = (CentroidR(1) + CR(2) - size(TImgR, 2)/2);
+    trueCentroidBBYR = (CentroidR(2) + CR(1) - size(TImgR, 1)/2);
+    trueCentroidBBXG = (CentroidG(1) + CG(2) - size(TImgG, 2)/2);
+    trueCentroidBBYG = (CentroidG(2) + CG(1) - size(TImgG, 1)/2);
+    trueCentroidBBXB = (CentroidB(1) + CB(2) - size(TImgB, 2)/2);
+    trueCentroidBBYB = (CentroidB(2) + CB(1) - size(TImgB, 1)/2);
     
     %************************************************
     %To link tracks on the estimated background image
@@ -244,4 +240,5 @@ myimshow(MedImg);
 hold on
 plot(XLinkerR, YLinkerR, 'xr-', XLinkerG, YLinkerG, 'xg-', XLinkerB, YLinkerB, 'xb-');
 xlabel(ImgIdx);
+input(int2str(MissCount));
 toc
