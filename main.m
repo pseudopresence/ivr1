@@ -22,7 +22,7 @@ HaveToolbox = ENABLE_TOOLBOX && license('checkout', 'Image_Toolbox');
 ImgData = myreadfolder(DATA_FOLDER, MAX_IMG_COUNT);
 
 % Compute the median image
-MedianIndices = [5 75 80];
+MedianIndices = [5 45 50];
 MedianImgs = zeros(size(ImgData,1),    ...
                    size(ImgData,2),    ...
                    size(ImgData,3),    ...
@@ -64,6 +64,7 @@ XLinkerG = [];
 YLinkerG = [];
 XLinkerB = [];
 YLinkerB = [];
+
 
 for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     Img = ImgData(:,:,:,ImgIdx);
@@ -112,8 +113,8 @@ for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     trueCMXB = (CenterMassXB + CB(2) - BB_SIZE/2);
     trueCMYB = (CenterMassYB + CB(1) - BB_SIZE/2);
     
-    %Store the true position of the centroid of the 
-    %bounding box of the images
+    %Store the true position of the bounding box centroid
+    %relative to the coordinates of the original image 
     trueCentroidBBXR = (CentroidR(1) + CR(2) - BB_SIZE/2);
     trueCentroidBBYR = (CentroidR(2) + CR(1) - BB_SIZE/2);
     trueCentroidBBXG = (CentroidG(1) + CG(2) - BB_SIZE/2);
@@ -121,11 +122,8 @@ for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     trueCentroidBBXB = (CentroidB(1) + CB(2) - BB_SIZE/2);
     trueCentroidBBYB = (CentroidB(2) + CB(1) - BB_SIZE/2);
     
-    %Store the previous Center of mass of the objects
-    %for plotting purposes
-    
     %************************************************
-    %To link the points on the estimated background image
+    %To link tracks on the estimated background image
     XLinkerR = [XLinkerR trueCMXR];
     YLinkerR = [YLinkerR trueCMYR];
     XLinkerG = [XLinkerG trueCMXG];
@@ -133,7 +131,8 @@ for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     XLinkerB = [XLinkerB trueCMXB];
     YLinkerB = [YLinkerB trueCMYB];
     
-    %Define unit vectors in the direction of the Centroid
+    %Define unit vectors in the direction of the bounding
+    %box centroid for each of the rgb channels respectively
     CenterMassR = [CenterMassXR CenterMassYR];
     DR = (CentroidR - CenterMassR);
 
@@ -143,7 +142,7 @@ for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     CenterMassB = [CenterMassXB CenterMassYB];
     DB = (CentroidB - CenterMassB);
 
-    %The unit vectors for each channel
+    %Calculate the unit vectors for each channel
     DR = DR/norm(DR);
     DG = DG/norm(DG);
     DB = DB/norm(DB);
@@ -176,6 +175,8 @@ for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     
     figure(1);
     clf();
+    %*****************************************************
+    %Plotting the main images
     
     subplot(3,3,1:6);
     %myimshow(MedImg);
@@ -189,13 +190,10 @@ for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     %Plot the arrow on each of the cars to indicate their
     %orientation
     plot_arrow(trueCMXR,trueCMYR, trueCentroidBBXR+30*DR(1),trueCentroidBBYR+30*DR(2),'linewidth',2,'headwidth',0.25,'headheight',0.33,'color',LineColRArrow,'facecolor',LineColRArrow);
-    %plot([trueCMXR,trueCentroidBBXR+30*DR(1)], [trueCMYR, trueCentroidBBYR+30*DR(2)], LineColR, 'LineWidth',2);
     hold on
     plot_arrow(trueCMXG,trueCMYG, trueCentroidBBXG+30*DG(1),trueCentroidBBYG+30*DG(2),'linewidth',2,'headwidth',0.25,'headheight',0.33,'color',LineColGArrow,'facecolor',LineColGArrow);
-    %plot([trueCMXG,trueCentroidBBXG+30*DG(1)], [trueCMYG, trueCentroidBBYG+30*DG(2)], LineColG, 'LineWidth',2);
     hold on
     plot_arrow(trueCMXB,trueCMYB, trueCentroidBBXB+30*DB(1),trueCentroidBBYB+30*DB(2),'linewidth',2,'headwidth',0.25,'headheight',0.33,'color',LineColBArrow,'facecolor',LineColBArrow);
-    %plot([trueCMXB,trueCentroidBBXB+30*DB(1)], [trueCMYB, trueCentroidBBYB+30*DB(2)], LineColB, 'LineWidth',2);
     
     %Plot the red channel with its corresponding bounding
     %box
@@ -229,10 +227,13 @@ for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     plot_arrow(CenterMassB(1),CenterMassB(2), CentroidB(1)+30*DB(1),CentroidB(2)+30*DB(2),'linewidth',2,'headwidth',0.25,'headheight',0.33,'color',LineColBArrow,'facecolor',LineColBArrow);
     %plot([CenterMassB(1),CentroidB(1)+30*DB(1)], [CenterMassB(2), CentroidB(2)+30*DB(2)], LineColB, 'LineWidth',2);
     xlabel('Blue Channel');
-
-    pause(0.1);
-    %input('...');
+    %*******************************************************
+    %pause(0.1);
+    input('...');
 end
+%*****************************************************
+%Once the algorithm is finished, plot the background
+%image with the linked tracks
 clf();
 myimshow(MedImg);
 hold on
