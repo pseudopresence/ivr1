@@ -65,6 +65,8 @@ The object with the largest area is then identified. A bounding box is subsequen
 
 The object will then be surrounded by its corresponding bounding box. The centroid of this bounding box is then calculated. This algorithm is performed on each of the three clipped images corresponding to the three respective colour channels.\\
 
+It must also be noted that due to bad lighting or image noise, a robot may not be detected in an image frame. This has been catered for in the \textit{calcBoundingBox} function. If the maximum calculated area of an object in the image is $0$, then it is assumed that an object has not been detected and the frame is skipped.
+
 \subsubsection{Calculate the Center of Mass}
 \label{sec:cm}
 Once a bounding box for each robot has been determined, the center of mass of the robot needs to be calculated in relation to this new bounding box. This is achieved by utilising the \textit{calcBoundingBoxCM} function.\\
@@ -87,7 +89,7 @@ The center of mass of the object is then determined using \eqnref{eqn:cm}. $(\wi
 \label{sec:linkplot}
 The final step in the linking algorithm is to link the object in image frame $n$ with the object in the previous image frame $(n-1)$. A criteria needs to be developed in order to define when this `linking' of objects should occur. \\
 
-The criteria has been defined as follows. It has been previously mentioned that each image has been separated into its R,G and B channels. The object with the largest area of pixels in each channel is chosen to represent the robot. For example, the object with the largest area of red pixels in the red colour channel, represents the red robot. Based on this assumption, the largest objects detected in adjacent image frames in the same colour channel are connected. This is a safe assumption as the largest concentration of  red, green and blue pixels are usually associated with the red, green and blue robots respectively. \\
+The criteria has been defined as follows. It has been previously mentioned that each image has been separated into its R,G and B channels. The R,G,B images have also been cropped into $120X120$ dimension images. Within these cropped images, the object with the largest area of pixels in each channel is chosen to represent the robot. For example, the object with the largest area of red pixels in the red channel cropped image, represents the red robot. Based on this assumption, the largest objects detected in adjacent image frames, in the same colour channel, are connected. This is a safe assumption as the largest concentration of  red, green and blue pixels are usually associated with the red, green and blue robots respectively, once the images have been cropped to a $120X120$ dimension. \\
 
 The center of mass of the red, green and blue robots are stored in `linker' arrays as shown below. The links are plotted on the estimated background image at the end of the program.\\
 
@@ -95,9 +97,9 @@ The center of mass of the red, green and blue robots are stored in `linker' arra
 
 \subsection{Identifying Robot Orientation}
 \label{sec:direction}
-Once the positions of the robots have been identified, the next step is to determine the direction in which the robot is currently travelling. In order to achieve this objective, an orientation algorithm has been developed.  \\
+Once the positions of the robots have been identified, the next step is to determine the direction in which the robot is currently travelling. The orientation of the robot is identified by an arrow that points in the robot's current direction of movement. In order to determine the robot's current orientation, an algorithm has been developed.  \\
 
-This algorithm ultimately connects the center of mass of the robot to the centroid of the bounding box surrounding the robot as seen in \figref{fig:orientation}. Since the center of mass of the robot is found near the robot's base, connecting this coordinate to the centroid will generally result in an accurate vector describing the robot's orientation.\\
+This algorithm ultimately connects the center of mass of the robot to the centroid of the bounding box surrounding the robot as seen in \figref{fig:orientation}. Due to the structure of the robot, the robot's center of mass is found just below the centroid. Connecting the center of mass to the centroid will generally result in an accurate vector describing the robot's orientation.\\
 
 \begin{figure}[h!]
 	\centering
@@ -138,7 +140,8 @@ The \textit{Region Erasing and Filling} functional block is implemented on the t
 
 \section{Results}
 \label{sec:results}
-Test data
+This section details the performance of the image detection algorithms. The algorithms are generally able to detect the robot and determine its orientation. There are some situations where the algorithm cannot achieve this objective. An analysis of the estimated background images are also conducted.
+ 
 \subsection{Robot Detection}
 \label{sec:detect}
 
@@ -152,13 +155,14 @@ Test data
 \hline
 Type &Red & Green & Blue & Red & Green & Blue &Red &Green &Blue \\ 
 \hline
-Correct Detection	& 73 & 91 & 95 & 95 & 95  &95 &95 &95 &95 \\
+Correct Detection	& 83 & 93 & 95 & 95 & 95  &95 &95 &95 &95 \\
 Missed Detection	& 0  & 0  & 0  & 0  & 0   &0  &0  &0  &0  \\
-Incorrect Detection & 22 & 4  & 0  & 0  & 0   &0  &0  &0  &0 \\
+Incorrect Detection & 12 & 2  & 0  & 0  & 0   &0  &0  &0  &0 \\
 \hline %inserts single line
 \end{tabular}
 \label{table:detection}
 \end{table} 
+
 
 An example of an incorrect detection of a robot due to the robot leaving the image frame.
 \begin{figure}[h!]
@@ -193,7 +197,7 @@ An example of an incorrect detection of a robot due to a region of highly satura
 
 \subsection{Linking Robot Tracks}
 \label{sec:linking}
-As detailed in \secref{sec:linking}, a linking algorithm for the robots has been developed. This algorithm was tested on a variety of datasets and the results are tabulated in \tabref{table:linking}. This table details the number of \textit{Correct tracks, Incorrect Tracks} and \textit{Broken Tracks}. A \textit{Broken Track} has been defined as a connection between two tracks whereby the latter track is an incorrect detection of a robot. \\
+As detailed in \secref{sec:linking}, a linking algorithm for the robots has been developed. This algorithm was tested on a variety of datasets and the results are tabulated in \tabref{table:linking}. This table details the number of \textit{Correct tracks, Incorrect Tracks} and \textit{Broken Tracks}. A \textit{Broken Track} has been defined as the lack of a connection between two adjacent tracks. \\
 
 The linking algorithm performed well on dataset $8$ and dataset $10$. However, dataset $1$ had a large number of incorrect and broken tracks, especially on the red channel. These errors occurred as a result of the red robot leaving the image frame. As the robot leaves the frame, the algorithm looks for a set of red pixels that correspond to a red robot. Since the robot is not present, the algorithm identifies the next largest area of red pixels as being the red robot. This is incorrect and causes the results below.\\
 
@@ -208,15 +212,16 @@ An example of this is shown in \figref{fig:InDetectData2} and \figref{fig:redInD
 \hline
 Type &Red & Green & Blue & Red & Green & Blue &Red &Green &Blue \\ 
 \hline
-Correct Tracks	 & 73 & 91 & 95 & 95 & 95  &95 &95 &95 &95 \\
-Incorrect Tracks & 10 & 2  & 0  & 0  & 0   &0  &0  &0  &0  \\
-Broken Tracks    & 12 & 2  & 0  & 0  & 0   &0  &0  &0  &0 \\
+Correct Tracks	 & 83 & 93 & 95 & 95 & 95  &95 &95 &95 &95 \\
+Incorrect Tracks & 12 & 2  & 0  & 0  & 0   &0  &0  &0  &0  \\
+Broken Tracks    & 0 & 0  & 0  & 0  & 0   &0  &0  &0  &0 \\
 \hline %inserts single line
 \end{tabular}
 \label{table:linking}
 \end{table} 
 
-Another situation occurs whereby the robot tracks are incorrectly linked. As seen in \figref{fig:InDetectData7}, the green robot track has been incorrectly linked to the left hand side of the image frame. 
+Another situation occurs whereby the robot tracks are incorrectly linked. As seen in \figref{fig:InDetectData7}, the green robot track has been incorrectly linked to the left hand side of the image frame. This is due to a pixel or group of pixels, \textit{$p_{i}$} having a peak intensity that is higher than the peak intensity of the green robot's pixels. Thus the group of pixels, \textit{$p_{i}$}, will be selected as being the robot object rather than the robot itself.  This occurs due to the normalisation of the image as very dark pixels are normalised to high intensity values causing an incorrect linkage between tracks. 
+
 %Check the cause of this problem.
 
 \begin{figure}[h!]
@@ -229,7 +234,13 @@ Another situation occurs whereby the robot tracks are incorrectly linked. As see
 
 \subsection{Robot Orientation}
 \label{sec:orient}
-The orientation of the robots was tested on a variety of different datasets and the results for each dataset is presented in \tabref{table:direction}. It has been found that it is generally possible to determine the orientation of the robot. However, there are a number of scenarios whereby the orientation is incorrectly determined causing the arrowheads to point in incorrect directions. 
+The orientation of the robots was tested on a variety of different datasets and the results for each dataset is presented in \tabref{table:direction}. There are a number of scenarios whereby the orientation is incorrectly determined causing the arrowheads to point in incorrect directions. This created a number of missed and incorrect directions as shown in \tabref{table:direction}.
+
+An incorrect direction is defined as an arrow pointing at least $45^{\circ}$ away, in either direction, from the central vertex of the robot's arrowhead. The  algorithm is unable to detect that the arrow is pointing in an incorrect direction. This is shown in \figref{fig:missIncorrect}.
+
+A missed direction is defined as an arrow oriented in an incorrect direction relative to the robot's current direction of motion. However, here the algorithm is able to identify this incorrect orientation and subsequently marks the arrow with a red colour as seen in \figref{fig:missIncorrect}. 
+
+
 
 \begin{table}[ht]
 \caption{Results obtained from determining which direction the robot is facing} 
@@ -248,6 +259,18 @@ Correct Direction 	& 89 & 83& 93& 94& 84 &92 &91 &81 &89 \\
 \label{table:direction}
 \end{table}  
 
+
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.5\textwidth]{../Drawings/missedandIncorrectDetData2Ready.pdf}
+	\caption{Examples of correct, incorrect and missed arrow orientations respectively}
+	\label{fig:missIncorrect}
+\end{figure}
+
+\figref{fig:indetect} is an example of one of the shortcomings of the current orientation algorithm. As can be seen in the figure, the bounding box of the robot has been placed around the lower segment of the robot's face. It has completely ignored the arrowhead attached to the robot's upper segment. This is because the upper and lower segments of the robot are separated as there is no 4 or 8 connectivity present between the pixels. The algorithm thus sees the lower segment of the robot as having a larger area and subsequently surrounds that image portion with a bounding box. \\
+
+This creates another problem. The centroid of the bounding box is now found below the center of mass of the robot as seen in the figure. Therefore, when the direction arrow is constructed, the arrow points in the incorrect, and in this case, opposite, direction.\\ 
+
   \begin{figure}[h!]
 	\centering
 		\includegraphics[width=0.5\textwidth]{../Drawings/IncorrectDirectionResults.pdf}
@@ -255,19 +278,11 @@ Correct Direction 	& 89 & 83& 93& 94& 84 &92 &91 &81 &89 \\
 	\label{fig:indetect}
 \end{figure}
 
-An example of incorrect and missed orientation in an image frame.
-
-\begin{figure}[h!]
-	\centering
-		\includegraphics[width=0.5\textwidth]{../Drawings/missedandIncorrectDetData2Ready.pdf}
-	\caption{Examples of correct, incorrect and missed arrow orientations respectively}
-	\label{fig:indetect}
-\end{figure}
-
-
 \subsection{Background Images}
 \label{sec:back}
-An example of background images produced using the Background Estimation Algorithm detailed in \secref{sec:back}.
+This section analyses the background images produced using the Background Estimation Algorithm detailed in \secref{sec:back}. As can be seen in each of the estimated backgrounds from \figref{fig:backdata1} to \figref{fig:backdata10}, the presence of the robots have caused a slightly blurred effect on each of the images. This is because the corner pixel averaging, detailed in \secref{sec:back}, does not create a perfect representation of the background colour for every pixel that it replaces.\\
+
+Backgrounds with less texture, such as \figref{fig:backdata1}, gave better estimation results. This is because these backgrounds have less colour variation and so the corner pixel averaging technique created a much better representation of the background colour for each pixel.\\
 
 \begin{figure}[h!]
 \begin{minipage}[b]{0.5\linewidth}
@@ -298,11 +313,31 @@ An example of background images produced using the Background Estimation Algorit
 \end{minipage}
 \end{figure}
 
+
 %Show an example of results for each stage of detection
 
 \section{Discussion}
 \label{sec:discussion}
-Assess the success of the program with regard to:
+This section details the limitations and problems present in the current design, as well as future improvements that could be implemented to enhance the algorithm's performance.
+
+\subsection{Limitations and Problems}
+\label{sec:limits}
+A prominent problem presented during this project was that of Image-encoding noise \cite{ref:digitalProcessing}. The datasets provided for the project were of a JPEG file type. JPEG images contain compression artefacts which represent data lost due to the compression of the image \cite{ref:digitalProcessing}. These artefacts presented a problem as important image information was lost that could have been useful during image processing. The artefacts themselves were also problematic after the image was normalised, producing pixels of high intensity, which was disruptive to the robot detection process. 
+
+ 
+
+\subsection{Future Improvements}
+\label{sec:improve}
+The \textit{normChannel} Matlab function currently performs contrast stretching on each image. This technique is used to stretch the range of pixel intensity values which ultimately increases the contrast of the image. However, this technique is sensitive to pixel outliers \cite{ref:digitalProcessing}. The algorithm does not currently take this into account, but could do so in a future implementation which would result in an improvement in image contrast.\\
+
+The current algorithm used to determine the orientation of the robot could also be improved. The current technique relies on the center of mass of the robot as well as the centroid of the bounding box surrounding the robot.
+
+
+
+ 
+
+
+%Assess the success of the program with regard to:
 
 %1. Report results
 
@@ -318,8 +353,9 @@ Assess the success of the program with regard to:
 \section{Conclusion}
 \label{sec:conclusion}
 
-%\bibliographystyle{witseie}
-%\bibliography{bibliography}
+\bibliographystyle{witseie}
+\bibliography{bibliography}
+
  \newpage
 \onecolumn
 \appendix

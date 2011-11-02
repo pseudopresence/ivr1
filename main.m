@@ -156,8 +156,13 @@ for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     LineColRArrow = [0 0 1];
     LineColGArrow = [0 0 1];
     LineColBArrow = [0 0 1];
-    
+ %Calculate the dot product between the arrows current 
+ %orientation and its previous orientation. If the value
+ %is less than 0.5, then the arrow is pointing in an incorrect
+ %direction
     if dot(DR, OldDirR) < 0.5
+  %Arrow is pointing in an incorrect direction,
+  %therefore make the arrow red to indicate this.
         LineColR = 'r-';
         LineColRArrow = [1 0 0];
     end
