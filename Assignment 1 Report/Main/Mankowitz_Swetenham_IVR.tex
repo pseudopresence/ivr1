@@ -88,14 +88,14 @@ Once a bounding box for each robot has been determined, the center of mass of th
 The algorithm initially calculates the area of the object within the bounding box using \eqnref{eqn:area}. This value is used to determine the center of mass of the object within the bounding box.\\
 
 \begin{equation}
-A = \Sigma_{r}\Sigma_{c}P_{rc}
+A = \Sigma_{r}\Sigma_{c}P_{rc} 
 \label{eqn:area}
 \end{equation}
 
 The center of mass of the object is then determined using \eqnref{eqn:cm}. $(\widehat{r}, \widehat{c})$ are the row and column coordinates of the center of mass of the object respectively.
 
 \begin{equation}
-(\widehat{r}, \widehat{c}) = (\frac{1}{A}\Sigma_{r}\Sigma_{c}r P_{rc}, \frac{1}{A}\Sigma_{r}\Sigma_{c}c P_{rc})
+(\widehat{r}, \widehat{c}) = (\frac{1}{A}\Sigma_{r}\Sigma_{c}r P_{rc}, \frac{1}{A}\Sigma_{r}\Sigma_{c}c P_{rc}) 
 \label{eqn:cm}
 \end{equation}
 
@@ -111,9 +111,16 @@ The center of mass of the red, green and blue robots are stored in `linker' arra
 
 \subsection{Identifying Robot Orientation}
 \label{sec:direction}
-Once the positions of the robots have been identified, the next step is to determine the direction in which the robot is currently travelling. The orientation of the robot is identified by an arrow that points in the robot's current direction of movement. In order to determine the robot's current orientation, an algorithm has been developed.  \\
+Once the positions of the robots have been identified, the next step is to determine the direction in which the robot is currently travelling. The orientation of the robot is identified by an arrow that points in the robot's current direction of movement. At this stage it is important to define the difference between the meaning of an arrow and an arrowhead in this report. An arrow refers to the vector calculated to point in the robot's current direction of movement as shown in \figref{fig:def}. An arrowhead refers to the arrow attached to the face of the robot. 
 
-This algorithm ultimately connects the center of mass of the robot to the centroid of the bounding box surrounding the robot as seen in \figref{fig:orientation}. Due to the structure of the robot, the robot's center of mass is found just below the centroid. Connecting the center of mass to the centroid will generally result in an accurate vector describing the robot's orientation.\\
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.5\textwidth]{../Drawings/arrowvariation.pdf}
+	\caption{The definition of an arrow and an arrowhead}
+	\label{fig:def}
+\end{figure}
+
+The orientation algorithm ultimately connects the center of mass of the robot to the centroid of the bounding box surrounding the robot as seen in \figref{fig:orientation}. Due to the structure of the robot, the robot's center of mass is found just below the centroid. Connecting the center of mass to the centroid will generally result in an accurate vector describing the robot's orientation.\\
 
 \begin{figure}[h!]
 	\centering
@@ -213,7 +220,7 @@ An example of an incorrect detection of a robot due to a region of highly satura
 \label{sec:linking}
 As detailed in \secref{sec:linking}, a linking algorithm for the robots has been developed. This algorithm was tested on a variety of datasets and the results are tabulated in \tabref{table:linking}. This table details the number of \textit{Correct tracks, Incorrect Tracks} and \textit{Broken Tracks}. A \textit{Broken Track} has been defined as the lack of a connection between two adjacent tracks. \\
 
-The linking algorithm performed well on dataset $8$ and dataset $10$. However, dataset $1$ had a large number of incorrect and broken tracks, especially on the red channel. These errors occurred as a result of the red robot leaving the image frame. As the robot leaves the frame, the algorithm looks for a set of red pixels that correspond to a red robot. Since the robot is not present, the algorithm identifies the next largest area of red pixels as being the red robot. This is incorrect and causes the results below.\\
+The linking algorithm performed well on dataset $8$ and dataset $10$. However, dataset $1$ had a large number of incorrect and broken tracks, especially on the red channel. These errors occurred as a result of the red robot leaving the image frame. As the robot leaves the frame, the algorithm looks for a set of red pixels that correspond to a red robot. Since the robot is not present, the algorithm identifies the next largest area of red pixels as being the red robot. This is incorrect and causes the results shown in the table.\\
 
 An example of this is shown in \figref{fig:InDetectData2} and \figref{fig:redInDetect}. In this example, the red robot has left the scene and a group of red pixels, as shown in \figref{fig:redInDetect}, have been incorrectly defined as being the red robot. This results in an incorrect linkage between two tracks.
 
@@ -248,9 +255,17 @@ Another situation occurs whereby the robot tracks are incorrectly linked. As see
 
 \subsection{Robot Orientation}
 \label{sec:orient}
-The orientation of the robots was tested on a variety of different datasets and the results for each dataset is presented in \tabref{table:direction}. There are a number of scenarios whereby the orientation is incorrectly determined causing the arrowheads to point in incorrect directions. This created a number of missed and incorrect directions as shown in \tabref{table:direction}.
+The orientation of the robots was tested on a variety of different datasets and the results for each dataset is presented in \tabref{table:direction}. There are a number of scenarios whereby the orientation is incorrectly determined causing the arrows to point in incorrect directions. This created a number of missed and incorrect directions as shown in \tabref{table:direction}.
 
-An incorrect direction is defined as an arrow pointing at least $45^{\circ}$ away, in either direction, from the central vertex of the robot's arrowhead. The  algorithm is unable to detect that the arrow is pointing in an incorrect direction. This is shown in \figref{fig:missIncorrect}.
+An incorrect direction is defined as an arrow pointing at least $45^{\circ}$ away, in either direction, from the central vertex of the robot's arrowhead as shown in \figref{fig:arrowdef}. The  algorithm is unable to detect that the arrow is pointing in an incorrect direction. An example of this situation is seen in \figref{fig:missIncorrect}.
+
+
+\begin{figure}[h!]
+	\centering
+		\includegraphics[width=0.5\textwidth]{../Drawings/arrowdegreevariation.pdf}
+	\caption{The boundaries for a correct detection}
+	\label{fig:arrowdef}
+\end{figure}
 
 A missed direction is defined as an arrow oriented in an incorrect direction relative to the robot's current direction of motion. However, here the algorithm is able to identify this incorrect orientation and subsequently marks the arrow with a red colour as seen in \figref{fig:missIncorrect}. 
 
@@ -283,7 +298,7 @@ Correct Direction 	& 89 & 83& 93& 94& 84 &92 &91 &81 &89 \\
 
 \figref{fig:indetect} is an example of one of the shortcomings of the current orientation algorithm. As can be seen in the figure, the bounding box of the robot has been placed around the lower segment of the robot's face. It has completely ignored the arrowhead attached to the robot's upper segment. This is because the upper and lower segments of the robot are separated as there is no 4 or 8 connectivity present between the pixels. The algorithm thus sees the lower segment of the robot as having a larger area and subsequently surrounds that image portion with a bounding box. \\
 
-This creates another problem. The centroid of the bounding box is now found below the center of mass of the robot as seen in the figure. Therefore, when the direction arrow is constructed, the arrow points in the incorrect, and in this case, opposite, direction.\\ 
+This creates another problem. The centroid of the bounding box is now found below the center of mass of the robot as seen in the figure. Therefore, when the direction arrow is constructed, the arrow points in the incorrect, and in this case, opposite, direction of the robot's movement.\\ 
 
   \begin{figure}[h!]
 	\centering
@@ -332,7 +347,15 @@ Backgrounds with less texture, such as \figref{fig:backdata1}, gave better estim
 
 \section{Discussion}
 \label{sec:discussion}
-This section details the limitations and problems present in the current design, as well as future improvements that could be implemented to enhance the algorithm's performance.
+This section determines the success of the above-mentioned image processing algorithm. In addition, the limitations and problems present in the current design are discussed, as well as future improvements that could be implemented to enhance the algorithm's performance.
+
+\subsection{Success Evaluation}
+\label{sec:success}
+The image processing algorithm performs particularly well on uniform backgrounds. It is able to detect the robot's in almost every frame and maintains a fairly accurate estimate of the robot's current orientation. Textured backgrounds do interfere with processing each robot's orientation. This is partly due to the normalisation procedure performed on each image frame.\\
+
+The algorithm encounters a problem when a robot leaves the image frame as was the case in dataset 1. Incorrect detections result and incorrect tracks are formed on the image frame. The algorithm also struggles with pixels of high intensity that do not form a part of the robot. If these pixels are the same colour as the robot, they are then incorrectly chosen to represent the robot in the specified image frame.\\
+
+One of the advantages of the algorithm is that it efficiently processes the images at a relatively high speed. This is due to the efficient implementation of the algorithm in Matlab. This is an important feature if the algorithm is to be exposed to larger datasets.
 
 \subsection{Limitations and Problems}
 \label{sec:limits}
@@ -342,14 +365,13 @@ A prominent problem presented during this project was that of Image-encoding noi
 
 \subsection{Future Improvements}
 \label{sec:improve}
-The \textit{normChannel} Matlab function currently performs contrast stretching on each image. This technique is used to stretch the range of pixel intensity values which ultimately increases the contrast of the image. However, this technique is sensitive to pixel outliers \cite{ref:digitalProcessing}. The algorithm does not currently take this into account, but could do so in a future implementation which would result in an improvement in image contrast.\\
+The \textit{normChannel} Matlab function currently performs contrast stretching on each image. This technique is used to stretch the range of pixel intensity values which ultimately increases the contrast of the image. However, this technique is sensitive to pixel outliers \cite{ref:digitalProcessing}. The algorithm does not currently take this into account. Doing so in a future implementation would result in an improvement in image contrast.\\
 
-The current algorithm used to determine the orientation of the robot could also be improved. The current technique relies on the center of mass of the robot as well as the centroid of the bounding box surrounding the robot.
+The current algorithm used to determine the orientation of the robot could also be improved. An alternative approach would be to calculate the center of mass of the arrowhead situated on the robot. Connecting the robot's center of mass with the arrowhead center of mass may provide an improved estimate of the robot's current orientation.\\
 
+There are also alternative techniques to detecting the robot's in a given image. Once such technique is that of region splitting \cite{ref:digitalProcessing}. This technique treats an image as a single region and iteratively splits the image into sub-regions that share the same, or similar, characteristics. This is achieved using a split-and-merge algorithm. As the process iterates, regions that contain similar characteristics are also merged together. This is an effective way to detect different regions as well as objects in an image.
 
-
- 
-
+Another effective method that can be used to detect the robots is edge detection. By taking a Laplacian of a Gaussian (LoG), it is possible to detect the edges of an object \cite{ref:digitalprocessing}. This technique could be applied to the robot images to effectively detect the robot edges.
 
 %Assess the success of the program with regard to:
 
@@ -366,6 +388,7 @@ The current algorithm used to determine the orientation of the robot could also 
 
 \section{Conclusion}
 \label{sec:conclusion}
+The image processing algorithm developed to detect robots in an image sequence has been detailed. Various techniques such as normalisation, blurring, contrast stretching and histogram smoothing have been implemented in this algorithm. Various sub-algorithms have been defined such as robot detection, linking tracks in successive image frames as well as determining the robot's current orientation. The algorithm was able to maintain near perfect performance in detecting robots. However, if a robot leaves an image frame or there are highly saturated pixels of the same colour as the robot, then the algorithm struggles to detect the robot creating incorrect tracks. An estimated image of the background has been processed. Blurred patches are present on some of the background images, but this can be minimised. Various improvements have also been suggested such as region splitting for detecting the robots as well as finding the center of mass of the arrowhead in order to create a better orientation arrow.
 
 \bibliographystyle{witseie}
 \bibliography{bibliography}
