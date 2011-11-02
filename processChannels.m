@@ -1,4 +1,6 @@
 function [ImgR, ImgG, ImgB] = processChannels(Img, FilterSize, FilterWidth)
+    
+
     % Blur the image
     FImg = myimgblur(Img, FilterSize, FilterWidth);
     

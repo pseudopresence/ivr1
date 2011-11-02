@@ -19,45 +19,71 @@
 \newlabel{sec:linking}{{2.1}{1}{Linking Algorithm\relax }{subsection.2.1}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces The algorithm developed to link detections of the robot in consecutive frames}}{1}{figure.1}}
 \newlabel{fig:link}{{1}{1}{The algorithm developed to link detections of the robot in consecutive frames\relax }{figure.1}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.1}Finding the Bounding Box}{2}{subsubsection.2.1.1}}
+\newlabel{sec:boundbox}{{2.1.1}{2}{Finding the Bounding Box\relax }{subsubsection.2.1.1}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The bounding box calculation for each robot }}{2}{figure.2}}
 \newlabel{fig:bounding}{{2}{2}{The bounding box calculation for each robot \relax }{figure.2}{}}
-\newlabel{eqn:area}{{1}{2}{Linking Algorithm\relax }{equation.2.1}{}}
-\newlabel{eqn:cm}{{2}{2}{Linking Algorithm\relax }{equation.2.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Background Estimation}{2}{subsection.2.2}}
-\newlabel{sec:back}{{2.2}{2}{Background Estimation\relax }{subsection.2.2}{}}
-\@writefile{lol}{\contentsline {lstlisting}{eraseRegion.m}{2}{lstlisting.-1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces The corner pixel intensities are averaged and are then used to fill the region of the image containing the robot}}{3}{figure.3}}
-\newlabel{fig:vertices}{{3}{3}{The corner pixel intensities are averaged and are then used to fill the region of the image containing the robot\relax }{figure.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Results}{3}{section.3}}
-\newlabel{sec:results}{{3}{3}{Results\relax }{section.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Robot Detection}{3}{subsection.3.1}}
-\newlabel{sec:detect}{{3.1}{3}{Robot Detection\relax }{subsection.3.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Robot Orientation}{3}{subsection.3.2}}
-\newlabel{sec:orient}{{3.2}{3}{Robot Orientation\relax }{subsection.3.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces An incorrect detection of a robot}}{4}{figure.4}}
-\newlabel{fig:InDetectData2}{{4}{4}{An incorrect detection of a robot\relax }{figure.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces The incorrect detection of the red robot as shown in the red channel thresholded image}}{4}{figure.5}}
-\newlabel{fig:redInDetect}{{5}{4}{The incorrect detection of the red robot as shown in the red channel thresholded image\relax }{figure.5}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces An incorrect detection of the green robot}}{4}{figure.6}}
-\newlabel{fig:InDetectData7}{{6}{4}{An incorrect detection of the green robot\relax }{figure.6}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces The incorrect detection of the green robot due to a small region of highly saturated pixels}}{4}{figure.7}}
-\newlabel{fig:greenInDetect}{{7}{4}{The incorrect detection of the green robot due to a small region of highly saturated pixels\relax }{figure.7}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Examples of incorrect and missed detections of invalid arrow orientations}}{4}{figure.8}}
-\newlabel{fig:indetect}{{8}{4}{Examples of incorrect and missed detections of invalid arrow orientations\relax }{figure.8}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Background Images}{4}{subsection.3.3}}
-\newlabel{sec:back}{{3.3}{4}{Background Images\relax }{subsection.3.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces The estimated background image of the first dataset provided for image processing}}{5}{figure.9}}
-\newlabel{fig:backdata1}{{9}{5}{The estimated background image of the first dataset provided for image processing\relax }{figure.9}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces The estimated background image of the second dataset provided for image processing}}{5}{figure.10}}
-\newlabel{fig:backdata2}{{10}{5}{The estimated background image of the second dataset provided for image processing\relax }{figure.10}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces The estimated background image of a new test dataset}}{5}{figure.11}}
-\newlabel{fig:backdata7}{{11}{5}{The estimated background image of a new test dataset\relax }{figure.11}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces The estimated background image of a new test dataset}}{5}{figure.12}}
-\newlabel{fig:backdata10}{{12}{5}{The estimated background image of a new test dataset\relax }{figure.12}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Discussion}{5}{section.4}}
-\newlabel{sec:discussion}{{4}{5}{Discussion\relax }{section.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Code}{5}{section.5}}
-\newlabel{sec:code}{{5}{5}{Code\relax }{section.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{5}{section.6}}
-\newlabel{sec:conclusion}{{6}{5}{Conclusion\relax }{section.6}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {A.1}Control Program}{6}{appendix.A}}
+\@writefile{lol}{\contentsline {lstlisting}{calcBoundingBoxReport.m}{2}{lstlisting.-1}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.2}Calculate the Center of Mass}{3}{subsubsection.2.1.2}}
+\newlabel{sec:cm}{{2.1.2}{3}{Calculate the Center of Mass\relax }{subsubsection.2.1.2}{}}
+\newlabel{eqn:area}{{1}{3}{Calculate the Center of Mass\relax }{equation.2.1}{}}
+\newlabel{eqn:cm}{{2}{3}{Calculate the Center of Mass\relax }{equation.2.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.3}Linking and Plotting}{3}{subsubsection.2.1.3}}
+\newlabel{sec:linkplot}{{2.1.3}{3}{Linking and Plotting\relax }{subsubsection.2.1.3}{}}
+\@writefile{lol}{\contentsline {lstlisting}{linkerReport.m}{3}{lstlisting.-2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Identifying Robot Orientation}{3}{subsection.2.2}}
+\newlabel{sec:direction}{{2.2}{3}{Identifying Robot Orientation\relax }{subsection.2.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Connecting the center of mass of the robot to the bounding box centroid to determine the robot's orientation}}{4}{figure.3}}
+\newlabel{fig:orientation}{{3}{4}{Connecting the center of mass of the robot to the bounding box centroid to determine the robot's orientation\relax }{figure.3}{}}
+\newlabel{eqn:norm}{{3}{4}{Identifying Robot Orientation\relax }{equation.2.3}{}}
+\@writefile{lol}{\contentsline {lstlisting}{unitVectorReport.m}{4}{lstlisting.-3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Background Estimation}{5}{subsection.2.3}}
+\newlabel{sec:back}{{2.3}{5}{Background Estimation\relax }{subsection.2.3}{}}
+\@writefile{lol}{\contentsline {lstlisting}{eraseRegion.m}{5}{lstlisting.-4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces The corner pixel intensities are averaged and are then used to fill the region of the image containing the robot}}{6}{figure.4}}
+\newlabel{fig:vertices}{{4}{6}{The corner pixel intensities are averaged and are then used to fill the region of the image containing the robot\relax }{figure.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Results}{6}{section.3}}
+\newlabel{sec:results}{{3}{6}{Results\relax }{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Robot Detection}{6}{subsection.3.1}}
+\newlabel{sec:detect}{{3.1}{6}{Robot Detection\relax }{subsection.3.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Results obtained from trying to detect whether or not a robot is in an image frame}}{6}{table.1}}
+\newlabel{table:detection}{{1}{6}{Results obtained from trying to detect whether or not a robot is in an image frame\relax }{table.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Linking Robot Tracks}{6}{subsection.3.2}}
+\newlabel{sec:linking}{{3.2}{6}{Linking Robot Tracks\relax }{subsection.3.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces An incorrect detection of the red robot. This track has been linked to the track of the blue robot creating an incorrect track.}}{7}{figure.5}}
+\newlabel{fig:InDetectData2}{{5}{7}{An incorrect detection of the red robot. This track has been linked to the track of the blue robot creating an incorrect track}{figure.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces The incorrect detection of the red robot as shown in the red channel binary image.}}{7}{figure.6}}
+\newlabel{fig:redInDetect}{{6}{7}{The incorrect detection of the red robot as shown in the red channel binary image}{figure.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces An incorrect detection of the green robot. This results in a broken track}}{7}{figure.7}}
+\newlabel{fig:InDetectData7}{{7}{7}{An incorrect detection of the green robot. This results in a broken track\relax }{figure.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces The incorrect detection of the green robot due to a small region of highly saturated pixels. }}{7}{figure.8}}
+\newlabel{fig:greenInDetect}{{8}{7}{The incorrect detection of the green robot due to a small region of highly saturated pixels. \relax }{figure.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Results obtained from linking robot tracks on a variety of different datasets}}{7}{table.2}}
+\newlabel{table:linking}{{2}{7}{Results obtained from linking robot tracks on a variety of different datasets\relax }{table.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Robot Orientation}{7}{subsection.3.3}}
+\newlabel{sec:orient}{{3.3}{7}{Robot Orientation\relax }{subsection.3.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces An example of correct robot tracks}}{8}{figure.9}}
+\newlabel{fig:tracks}{{9}{8}{An example of correct robot tracks\relax }{figure.9}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Results obtained from determining which direction the robot is facing}}{8}{table.3}}
+\newlabel{table:direction}{{3}{8}{Results obtained from determining which direction the robot is facing\relax }{table.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Examples of correct, incorrect and missed arrow orientations respectively}}{8}{figure.10}}
+\newlabel{fig:indetect}{{10}{8}{Examples of correct, incorrect and missed arrow orientations respectively\relax }{figure.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Background Images}{8}{subsection.3.4}}
+\newlabel{sec:back}{{3.4}{8}{Background Images\relax }{subsection.3.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Discussion}{8}{section.4}}
+\newlabel{sec:discussion}{{4}{8}{Discussion\relax }{section.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Examples of correct, incorrect and missed arrow orientations respectively}}{9}{figure.11}}
+\newlabel{fig:indetect}{{11}{9}{Examples of correct, incorrect and missed arrow orientations respectively\relax }{figure.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces The estimated background image of the first dataset provided for image processing}}{9}{figure.12}}
+\newlabel{fig:backdata1}{{12}{9}{The estimated background image of the first dataset provided for image processing\relax }{figure.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces The estimated background image of the second dataset provided for image processing}}{9}{figure.13}}
+\newlabel{fig:backdata2}{{13}{9}{The estimated background image of the second dataset provided for image processing\relax }{figure.13}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces The estimated background image of a new test dataset}}{9}{figure.14}}
+\newlabel{fig:backdata7}{{14}{9}{The estimated background image of a new test dataset\relax }{figure.14}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces The estimated background image of a new test dataset}}{9}{figure.15}}
+\newlabel{fig:backdata10}{{15}{9}{The estimated background image of a new test dataset\relax }{figure.15}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Code}{9}{section.5}}
+\newlabel{sec:code}{{5}{9}{Code\relax }{section.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{9}{section.6}}
+\newlabel{sec:conclusion}{{6}{9}{Conclusion\relax }{section.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.1}Control Program}{10}{appendix.A}}
