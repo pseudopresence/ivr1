@@ -27,7 +27,21 @@
 
 %Justify design decisions where appropriate
 
+\subsection{Initial Processing}
+\label{sec:processing}
 
+\begin{figure}[htbp!] 
+  \centering
+    \includegraphics[width=0.3\textwidth]{../Drawings/processing.pdf}
+    \caption{Image Processing Pipeline}
+    \label{fig:processing}
+\end{figure}
+
+The first part of the algorithm, summarised in Figure~\ref{fig:processing}, processes each image to minimise variations both between datasets and across each image. First, the image is blurred using a gaussian kernel of width 5; this removes some of the noise in the image which would cause trouble in later stages. Next, the rgb value of each pixel is normalized; this corrects for variations in illumination across the image. At this stage, the green channel is modified by subtracting 0.2 times the blue channel. This is because the colours of the cars are not a pure value in a single channel; in particular, the blue car shows up brightly on the green channel. This simple operation is equivalent to finding a new "green car channel" attuned particularly to the green car. If the cars were other colours, such as cyan, magenta and yellow, we could have constructed dedicated channels for each car; but in this case a simple tweak to the green channel was enough to disambiguate the cars. Finally, each colour channel is scaled so that the minimum and maximum values present in the channel map to 0 and 1. This helps the thresholding after detection.
+
+The detection algorithm a single image, and identifies the most likely location of the red, green and blue cars.
+Once these steps have been performed, the algorithm estimates the location of each car in the image using the corresponding colour channel. For the red car for instance, it looks at the red channel, and computes the maximal value for each row, and for each column. It convolves each of these to reduce noise, and finds the maximum along the rows and maximum along the columns. The corresponding x and y coordinate are the identified centre of the car. The algorithm takes a 120x120 bounding box around the centre, and passes the image to the next stage for finer-grained processing.
+(Is this equivalent to just blurring the image and finding the x, y coord of the maximum, then thresholding at 75\% of that value?)
 
 \subsection{Linking Algorithm}
 \label{sec:linking}
