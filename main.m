@@ -5,7 +5,7 @@ clf;
 tic
 
 % Configuration section
-DATA_FOLDER = 'data7/';
+DATA_FOLDER = 'data10/';
 ENABLE_TOOLBOX = 1;
 IMG_SKIP = 5;
 IMG_STEP = 1;
@@ -65,6 +65,7 @@ YLinkerG = [];
 XLinkerB = [];
 YLinkerB = [];
 
+MissCount = 0;
 
 for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     Img = ImgData(:,:,:,ImgIdx);
@@ -90,6 +91,7 @@ for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     %******************************************************
     %If no image is detected, skip the current frame
     if min(VerticesXR) == 0 || min(VerticesXG) == 0 || min(VerticesXB) == 0
+        MissCount = MissCount + 1;
         continue;
     end
     %Calculate the center of mass of the robot within a
@@ -223,7 +225,7 @@ for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     xlabel('Blue Channel');
     %*******************************************************
     %pause(0.1);
-    %input('...');
+    input('...');
 end
 %*****************************************************
 %Once the algorithm is finished, plot the background
@@ -233,4 +235,5 @@ myimshow(MedImg);
 hold on
 plot(XLinkerR, YLinkerR, 'xr-', XLinkerG, YLinkerG, 'xg-', XLinkerB, YLinkerB, 'xb-');
 xlabel(ImgIdx);
+input(int2str(MissCount));
 toc
