@@ -165,7 +165,7 @@ This section details the performance of the image detection algorithms. The algo
  
 \subsection{Robot Detection}
 \label{sec:detect}
-
+The robot detection algorithm was able to detect the robots in most of the datasets.  
 
 \begin{table}[ht]
 \caption{Results obtained from trying to detect whether or not a robot is in an image frame} 
@@ -371,7 +371,7 @@ The current algorithm used to determine the orientation of the robot could also 
 
 There are also alternative techniques to detecting the robot's in a given image. Once such technique is that of region splitting \cite{ref:digitalProcessing}. This technique treats an image as a single region and iteratively splits the image into sub-regions that share the same, or similar, characteristics. This is achieved using a split-and-merge algorithm. As the process iterates, regions that contain similar characteristics are also merged together. This is an effective way to detect different regions as well as objects in an image.
 
-Another effective method that can be used to detect the robots is edge detection. By taking a Laplacian of a Gaussian (LoG), it is possible to detect the edges of an object \cite{ref:digitalprocessing}. This technique could be applied to the robot images to effectively detect the robot edges.
+Another effective method that can be used to detect the robots is edge detection. By taking a Laplacian of a Gaussian (LoG), it is possible to detect the edges of an object \cite{ref:digitalProcessing}. This technique could be applied to the robot images to effectively detect the robot edges.
 
 %Assess the success of the program with regard to:
 
@@ -381,7 +381,26 @@ Another effective method that can be used to detect the robots is edge detection
 %1. Limitations, problems
 %2. Improvements you would make
 
-\section{Code}
+%Any downloaded code should be recorded in the report. Does not need to be in the appendix
+%Code from course web pages are not needed
+
+\section{Conclusion}
+\label{sec:conclusion}
+The image processing algorithm developed to detect robots in an image sequence has been detailed. Various techniques such as normalisation, blurring, contrast stretching and histogram smoothing have been implemented in this algorithm. Various sub-algorithms have been defined such as robot detection, linking tracks in successive image frames as well as determining the robot's current orientation. The algorithm was able to maintain near perfect performance in detecting robots. However, if a robot leaves an image frame or there are highly saturated pixels of the same colour as the robot, then the algorithm struggles to detect the robot creating incorrect tracks. An estimated image of the background has been processed. Blurred patches are present on some of the background images, but this can be minimised. Various improvements have also been suggested such as region splitting for detecting the robots as well as finding the center of mass of the arrowhead in order to create a better orientation arrow.
+
+\bibliographystyle{witseie}
+\bibliography{bibliography}
+
+ \newpage
+\onecolumn
+\appendix
+\setcounter{table}{0}
+\setcounter{figure}{0}
+\setcounter{subsection}{0}
+\makeatletter \renewcommand{\thefigure}{A.\@arabic\c@figure} \renewcommand{\thetable}{A.\@arabic\c@table} \renewcommand{\thesection}{A.\@arabic\c@section} \makeatother
+\section*{APPENDIX A}
+
+\section{Program Code}
 \label{sec:code}
 
 \subsection{Read Image Sequences into Matlab}
@@ -415,14 +434,14 @@ Another effective method that can be used to detect the robots is edge detection
 
 \lstinputlisting{../../cliprect.m}
 
-\section{Linking Algorithm Functions}
+\subsection{Linking Algorithm Functions}
 
 \lstinputlisting{../../calcBoundingBox.m}
 
 
 \lstinputlisting{../../calcBoundingBoxCM.m}
 
-\section{Orientation Algorithm Third Party Helper Function}
+\subsection{Orientation Algorithm Third Party Helper Function}
 
 
 \lstinputlisting{../../plot_arrow.m}
@@ -431,24 +450,6 @@ Another effective method that can be used to detect the robots is edge detection
 \subsection{Main Program Code}
 \label{code:main}
 \lstinputlisting{../../main.m}
-%Any downloaded code should be recorded in the report. Does not need to be in the appendix
-%Code from course web pages are not needed
-
-\section{Conclusion}
-\label{sec:conclusion}
-The image processing algorithm developed to detect robots in an image sequence has been detailed. Various techniques such as normalisation, blurring, contrast stretching and histogram smoothing have been implemented in this algorithm. Various sub-algorithms have been defined such as robot detection, linking tracks in successive image frames as well as determining the robot's current orientation. The algorithm was able to maintain near perfect performance in detecting robots. However, if a robot leaves an image frame or there are highly saturated pixels of the same colour as the robot, then the algorithm struggles to detect the robot creating incorrect tracks. An estimated image of the background has been processed. Blurred patches are present on some of the background images, but this can be minimised. Various improvements have also been suggested such as region splitting for detecting the robots as well as finding the center of mass of the arrowhead in order to create a better orientation arrow.
-
-\bibliographystyle{witseie}
-\bibliography{bibliography}
-
-% \newpage
-%\onecolumn
-%\appendix
-%\setcounter{table}{0}
-%\setcounter{figure}{0}
-%\setcounter{subsection}{0}
-%\makeatletter \renewcommand{\thefigure}{A.\@arabic\c@figure} \renewcommand{\thetable}{A.\@arabic\c@table} \renewcommand{\thesection}{A.\@arabic\c@section} \makeatother
-%\section*{APPENDIX A}
 %
 %\section{Control Program}
 %Add the matlab code to this file...

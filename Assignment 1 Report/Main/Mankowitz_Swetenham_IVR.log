@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (MiKTeX 2.8) (preloaded format=pdflatex 2010.2.2)  2 NOV 2011 21:27
+This is pdfTeX, Version 3.1415926-1.40.10 (MiKTeX 2.8) (preloaded format=pdflatex 2010.2.2)  3 NOV 2011 12:36
 entering extended mode
 **Mankowitz_Swetenham_IVR.tex
 
@@ -699,24 +699,32 @@ Package natbib Warning: Citation `ref:digitalProcessing' on page 13 undefined o
 n input line 372.
 
 
-Package natbib Warning: Citation `ref:digitalprocessing' on page 13 undefined o
+Package natbib Warning: Citation `ref:digitalProcessing' on page 13 undefined o
 n input line 374.
 
-("C:\Documents and Settings\Daniel\Desktop\ivr1\myreadfolder.m"
+
+("C:\Documents and Settings\Daniel\Desktop\ivr1\Assignment 1 Report\Main\Mankow
+itz_Swetenham_IVR.bbl"
+
+Package natbib Warning: Empty `thebibliography' environment on input line 6.
+
+) [13] ("C:\Documents and Settings\Daniel\Desktop\ivr1\myreadfolder.m"
 Overfull \hbox (29.28984pt too wide) in paragraph at lines 5--6
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-) ("C:\Documents and Settings\Daniel\Desktop\ivr1\myreadimg.m") [13]
+) ("C:\Documents and Settings\Daniel\Desktop\ivr1\myreadimg.m")
 ("C:\Documents and Settings\Daniel\Desktop\ivr1\eraseRegion.m")
-("C:\Documents and Settings\Daniel\Desktop\ivr1\processChannels.m")
+("C:\Documents and Settings\Daniel\Desktop\ivr1\processChannels.m" [14
+
+])
 ("C:\Documents and Settings\Daniel\Desktop\ivr1\myimgblur.m"
 Overfull \hbox (14.8897pt too wide) in paragraph at lines 11--12
 [][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[14]) ("C:\Documents and Settings\Daniel\Desktop\ivr1\normalize_rgb.m")
-("C:\Documents and Settings\Daniel\Desktop\ivr1\normchannel.m")
+) ("C:\Documents and Settings\Daniel\Desktop\ivr1\normalize_rgb.m")
+("C:\Documents and Settings\Daniel\Desktop\ivr1\normchannel.m") [15]
 ("C:\Documents and Settings\Daniel\Desktop\ivr1\xyhistmax.m"
 LaTeX Font Info:    Try loading font information for OML+pcr on input line 19.
 
@@ -725,10 +733,10 @@ File: omlpcr.fd
 )
 LaTeX Font Info:    Font shape `OML/pcr/m/n' in size <8> not available
 (Font)              Font shape `OML/cmm/m/it' tried instead on input line 19.
- [15])
-("C:\Documents and Settings\Daniel\Desktop\ivr1\findthresh.m" [16])
+)
+("C:\Documents and Settings\Daniel\Desktop\ivr1\findthresh.m" [16]) [17]
 ("C:\Documents and Settings\Daniel\Desktop\ivr1\cliprect.m")
-("C:\Documents and Settings\Daniel\Desktop\ivr1\calcBoundingBox.m" [17]
+("C:\Documents and Settings\Daniel\Desktop\ivr1\calcBoundingBox.m"
 LaTeX Font Info:    Try loading font information for OMS+pcr on input line 42.
 
 ("C:\Program Files\MiKTeX 2.8\tex\latex\psnfss\omspcr.fd"
@@ -737,8 +745,8 @@ File: omspcr.fd
 LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <8> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 42.
  [18])
-("C:\Documents and Settings\Daniel\Desktop\ivr1\calcBoundingBoxCM.m")
-("C:\Documents and Settings\Daniel\Desktop\ivr1\plot_arrow.m" [19]
+("C:\Documents and Settings\Daniel\Desktop\ivr1\calcBoundingBoxCM.m" [19])
+("C:\Documents and Settings\Daniel\Desktop\ivr1\plot_arrow.m"
 Overfull \hbox (29.28984pt too wide) in paragraph at lines 9--10
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]
@@ -791,7 +799,8 @@ Overfull \hbox (10.08965pt too wide) in paragraph at lines 84--86
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-) ("C:\Documents and Settings\Daniel\Desktop\ivr1\main.m" [21] [22] [23]
+[21]) ("C:\Documents and Settings\Daniel\Desktop\ivr1\main.m" [22] [23]
+[24]
 Overfull \hbox (24.48979pt too wide) in paragraph at lines 186--187
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][] 
@@ -815,7 +824,7 @@ Overfull \hbox (475.69438pt too wide) in paragraph at lines 197--199
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[24]
+
 Overfull \hbox (494.89458pt too wide) in paragraph at lines 206--207
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
 ][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
@@ -860,12 +869,6 @@ Overfull \hbox (5.2896pt too wide) in paragraph at lines 241--242
 ][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-)
-("C:\Documents and Settings\Daniel\Desktop\ivr1\Assignment 1 Report\Main\Mankow
-itz_Swetenham_IVR.bbl"
-
-Package natbib Warning: Empty `thebibliography' environment on input line 6.
-
 ) [25]
 
 Package natbib Warning: There were undefined citations.
@@ -879,9 +882,9 @@ LaTeX Warning: There were multiply-defined labels.
  ) 
 Here is how much of TeX's memory you used:
  8345 strings out of 495285
- 124455 string characters out of 3180338
- 301164 words of memory out of 3000000
- 10449 multiletter control sequences out of 15000+200000
+ 124464 string characters out of 3180338
+ 298701 words of memory out of 3000000
+ 10448 multiletter control sequences out of 15000+200000
  10941 words of font info for 36 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
  45i,10n,42p,1203b,1683s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -901,9 +904,9 @@ ts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.8/fonts/type1
 msfonts/cm/cmsy7.pfb><C:/Program Files/MiKTeX 2.8/fonts/type1/public/amsfonts/c
 m/cmsy8.pfb><C:/Program Files/MiKTeX 2.8/fonts/type1/public/amsfonts/cm/cmti10.
 pfb><C:/Program Files/MiKTeX 2.8/fonts/type1/urw/courier/ucrr8a.pfb>
-Output written on Mankowitz_Swetenham_IVR.pdf (25 pages, 12690846 bytes).
+Output written on Mankowitz_Swetenham_IVR.pdf (25 pages, 12690658 bytes).
 PDF statistics:
- 1629 PDF objects out of 1728 (max. 8388607)
- 916 named destinations out of 1000 (max. 500000)
+ 1630 PDF objects out of 1728 (max. 8388607)
+ 917 named destinations out of 1000 (max. 500000)
  299 words of extra memory for PDF output out of 10000 (max. 10000000)
 
