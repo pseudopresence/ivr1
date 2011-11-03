@@ -2,6 +2,7 @@
 \usepackage{KJN}
 \usepackage{a4wide,changebar}
 \usepackage[numbered,framed]{mcode}
+\usepackage[pdftex]{graphicx}
 
 \title{Introduction to Vision and Robotics: Assignment 1}
 \author{Chris Swetenham: Student Num, Daniel Mankowitz: S1128165}
@@ -12,12 +13,14 @@
 
 \section{Introduction}
 \label{sec:introduction}
-An overview of the main ideas used in the approach
-
+% An overview of the main ideas used in the approach
+For this assignment, our task was to identify and track three 'cars' or 'robots' in a sequence of images taken using a webcam. The images have a relatively uniform background, and the cars have distinct red, green and blue colours, and identical shapes with an arrow indicating their facing. Only one car of each colour is present, and the cars are visible in most but not all frames.
+The two obvious approaches to detection are one based on the shapes, and one based on the colours of the cars. We chose to use colours, since an approach based on shape would need to use colour to disambiguate the cars in any case.
+Our approach makes use of several simple image filtering techniques, a search for colour maxima across rows and columns, thresholding and region segmentation to separate the cars from their background, and region centroids and centres of mass to identify the facing of the cars.
 
 \section{Methods}
 \label{sec:methods}
-Describe the vision techniques used
+%Describe the vision techniques used
 
 %Detail how these ideas were implemented
 
@@ -39,9 +42,38 @@ Describe the vision techniques used
 
 The first part of the algorithm, summarised in Figure~\ref{fig:processing}, processes each image to minimise variations both between datasets and across each image. First, the image is blurred using a gaussian kernel of width 5; this removes some of the noise in the image which would cause trouble in later stages. Next, the rgb value of each pixel is normalized; this corrects for variations in illumination across the image. At this stage, the green channel is modified by subtracting 0.2 times the blue channel. This is because the colours of the cars are not a pure value in a single channel; in particular, the blue car shows up brightly on the green channel. This simple operation is equivalent to finding a new "green car channel" attuned particularly to the green car. If the cars were other colours, such as cyan, magenta and yellow, we could have constructed dedicated channels for each car; but in this case a simple tweak to the green channel was enough to disambiguate the cars. Finally, each colour channel is scaled so that the minimum and maximum values present in the channel map to 0 and 1. This helps the thresholding after detection.
 
-The detection algorithm a single image, and identifies the most likely location of the red, green and blue cars.
-Once these steps have been performed, the algorithm estimates the location of each car in the image using the corresponding colour channel. For the red car for instance, it looks at the red channel, and computes the maximal value for each row, and for each column. It convolves each of these to reduce noise, and finds the maximum along the rows and maximum along the columns. The corresponding x and y coordinate are the identified centre of the car. The algorithm takes a 120x120 bounding box around the centre, and passes the image to the next stage for finer-grained processing.
-(Is this equivalent to just blurring the image and finding the x, y coord of the maximum, then thresholding at 75\% of that value?)
+\subsection{Detection}
+\label{sec:detection}
+
+The detection algorithm works on a single image at a time, and identifies the most likely location of the red, green and blue cars. The algorithm estimates the location of each car in the image using the corresponding colour channel. For the red car for instance, it looks at the red channel, and computes the maximal value for each row, and for each column. It convolves each of these to reduce noise, and finds the maximum along the rows and maximum along the columns.
+
+\begin{figure}[htbp!]
+  \centering
+    \includegraphics[width=1.0\textwidth]{../Drawings/yMaxima.pdf}
+    \caption{Red value maxima along each image column}
+    \label{fig:maxima}
+\end{figure}
+
+Although this point is likely to be within the robot, it is not necessarily at its center. To get a better estimate of the center of the robot, we find the neighbourhood along each axis which stays within 90% of the maximum value; we compute the center of this neighbourhood as the estimated center of the robot.
+
+Finally, we compute a threshold for separating the robot from the background in the colour channel; we choose a value of 0.75 times the maximal value.
+
+\begin{figure}[htbp!]
+  \centering
+    \includegraphics[width=0.7\textwidth]{../Drawings/pipeline-06-boundingboxes.png}
+    \caption{Initial bounding box}
+    \label{fig:firstbb}
+\end{figure}
+
+For each channel, the algorithm then takes a 120x120 bounding box around the estimated robot centre, thresholds it using the computed threshold, and passes the image to the next stage for finer-grained processing.
+
+\begin{figure}[htbp!]
+  \centering
+    \includegraphics[width=0.7\textwidth]{../Drawings/pipeline-07-R-bin.png}
+    \caption{Binary image (Red channel)}
+    \label{fig:timg}
+\end{figure}
+
 
 \subsection{Linking Algorithm}
 \label{sec:linking}
@@ -172,13 +204,15 @@ The robot detection algorithm was able to detect the robots in most of the datas
 \centering 
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|} 
 \hline
- & \multicolumn{3}{c} {Dataset 1}&\multicolumn{3}{c} {Dataset 8}&\multicolumn{3}{c} {Dataset 10}\\
+ & \multicolumn{3}{c} {Correct Detection}\vline&\multicolumn{3}{c} {Missed Detection}\vline&\multicolumn{3}{c} {Incorrect Detection}\vline\\
 \hline
 Type &Red & Green & Blue & Red & Green & Blue &Red &Green &Blue \\ 
 \hline
-Correct Detection	& 83 & 93 & 95 & 95 & 95  &95 &95 &95 &95 \\
-Missed Detection	& 0  & 0  & 0  & 0  & 0   &0  &0  &0  &0  \\
-Incorrect Detection & 12 & 2  & 0  & 0  & 0   &0  &0  &0  &0 \\
+Dataset 1  & 83 & 93 & 95 & 0  & 0  & 0  & 12 & 2  & 0  \\
+Dataset 2  & 95 & 95 & 95 & 0  & 0  & 0  & 0  & 0  & 0  \\
+Dataset 7  & 64 & 57 & 64 & 30 & 30 & 30 & 1  & 8  & 1  \\
+Dataset 8  & 95 & 95 & 95 & 0  & 0  & 0  & 0  & 0  & 0  \\
+Dataset 10 & 95 & 95 & 95 & 0  & 0  & 0  & 0  & 0  & 0  \\
 \hline %inserts single line
 \end{tabular}
 \label{table:detection}
@@ -227,17 +261,21 @@ An example of this is shown in \figref{fig:InDetectData2} and \figref{fig:redInD
 \begin{table}[ht]
 \caption{Results obtained from linking robot tracks on a variety of different datasets} 
 \centering 
+
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|} 
 \hline
- & \multicolumn{3}{c} {Dataset 1}&\multicolumn{3}{c} {Dataset 8}&\multicolumn{3}{c} {Dataset 10}\\
+ & \multicolumn{3}{c} {Correct Tracks}\vline&\multicolumn{3}{c} {Broken Tracks}\vline&\multicolumn{3}{c} {Incorrect Tracks}\vline\\
 \hline
 Type &Red & Green & Blue & Red & Green & Blue &Red &Green &Blue \\ 
 \hline
-Correct Tracks	 & 83 & 93 & 95 & 95 & 95  &95 &95 &95 &95 \\
-Incorrect Tracks & 12 & 2  & 0  & 0  & 0   &0  &0  &0  &0  \\
-Broken Tracks    & 0 & 0  & 0  & 0  & 0   &0  &0  &0  &0 \\
+Dataset 1  & 83 & 93 & 95 & 12 & 2  & 0  & 0  & 0  & 0  \\
+Dataset 2  & 95 & 95 & 95 & 0  & 0  & 0  & 0  & 0  & 0  \\
+Dataset 7  & 64 & 57 & 64 & 30 & 30 & 30 & 1  & 8  & 1  \\
+Dataset 8  & 95 & 95 & 95 & 0  & 0  & 0  & 0  & 0  & 0  \\
+Dataset 10 & 95 & 95 & 95 & 0  & 0  & 0  & 0  & 0  & 0  \\
 \hline %inserts single line
 \end{tabular}
+
 \label{table:linking}
 \end{table} 
 
@@ -276,15 +314,18 @@ A missed direction is defined as an arrow oriented in an incorrect direction rel
 \centering 
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|} 
 \hline
- & \multicolumn{3}{c} {Dataset 1}&\multicolumn{3}{c} {Dataset 8}&\multicolumn{3}{c} {Dataset 10}\\
+&\multicolumn{3}{c} {Correct Direction}\vline& \multicolumn{3}{c} {Missed Direction}\vline&\multicolumn{3}{c} {Incorrect Direction}\vline\\
 \hline
 Type &Red & Green & Blue & Red & Green & Blue &Red &Green &Blue \\ 
 \hline
-Missed Direction	& 6  & 6 & 2 & 0 & 0  &0  &0 &2 &4 \\
-Incorrect Direction	& 0  & 6 & 0 & 1 & 11 &3  &4 &12 &2  \\
-Correct Direction 	& 89 & 83& 93& 94& 84 &92 &91 &81 &89 \\
+Dataset 1  & 89 & 83 & 93 & 6  & 6  & 2  & 0  & 6  & 0  \\
+Dataset 2  & 89 & 77 & 90 & 5  & 8  & 0  & 1  & 10 & 5  \\
+Dataset 7  & 57 & 44 & 44 & 32 & 40 & 32 & 6  & 11 & 19 \\
+Dataset 8  & 94 & 84 & 92 & 0  & 0  & 0  & 1  & 11 & 3  \\
+Dataset 10 & 91 & 81 & 89 & 0  & 2  & 4  & 4  & 12 & 2  \\
 \hline %inserts single line
 \end{tabular}
+
 \label{table:direction}
 \end{table}  
 
