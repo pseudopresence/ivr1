@@ -17,6 +17,7 @@
 For this assignment, our task was to identify and track three 'cars' or 'robots' in a sequence of images taken using a webcam. The images have a relatively uniform background, and the cars have distinct red, green and blue colours, and identical shapes with an arrow indicating their facing. Only one car of each colour is present, and the cars are visible in most but not all frames.
 The two obvious approaches to detection are one based on the shapes, and one based on the colours of the cars. We chose to use colours, since an approach based on shape would need to use colour to disambiguate the cars in any case.
 Our approach makes use of several simple image filtering techniques, a search for colour maxima across rows and columns, thresholding and region segmentation to separate the cars from their background, and region centroids and centres of mass to identify the facing of the cars.
+We will detail the methods used for each stage, then evaluate our algorithm on several test sets of data, including ones provided as part of the assignment and ones we captured ourselves.
 
 \section{Methods}
 \label{sec:methods}
@@ -40,12 +41,16 @@ Our approach makes use of several simple image filtering techniques, a search fo
     \label{fig:processing}
 \end{figure}
 
-The first part of the algorithm, summarised in Figure~\ref{fig:processing}, processes each image to minimise variations both between datasets and across each image. First, the image is blurred using a gaussian kernel of width 5; this removes some of the noise in the image which would cause trouble in later stages. Next, the rgb value of each pixel is normalized; this corrects for variations in illumination across the image. At this stage, the green channel is modified by subtracting 0.2 times the blue channel. This is because the colours of the cars are not a pure value in a single channel; in particular, the blue car shows up brightly on the green channel. This simple operation is equivalent to finding a new "green car channel" attuned particularly to the green car. If the cars were other colours, such as cyan, magenta and yellow, we could have constructed dedicated channels for each car; but in this case a simple tweak to the green channel was enough to disambiguate the cars. Finally, each colour channel is scaled so that the minimum and maximum values present in the channel map to 0 and 1. This helps the thresholding after detection.
+The first part of the algorithm, summarised in Figure~\ref{fig:processing}, processes each image to minimise variations both between datasets and across each image. The images have been loaded from disk and converted to double precision floating-point values in the range 0.0-1.0.
+
+First, the image is blurred using a gaussian kernel of width 5; this removes some of the noise in the image which would cause trouble in later stages. Next, the rgb value of each pixel is normalized; this corrects for variations in illumination across the image. At this stage, the green channel is modified by subtracting 0.2 times the blue channel. This is because the colours of the cars are not a pure value in a single channel; in particular, the blue car shows up brightly on the green channel. This simple operation is equivalent to finding a new "green car channel" attuned particularly to the green car. If the cars were other colours, such as cyan, magenta and yellow, we could have constructed dedicated channels for each car; but in this case a simple tweak to the green channel was enough to disambiguate the cars. Finally, each colour channel is scaled so that the minimum and maximum values present in the channel map to 0 and 1. This helps the thresholding after detection.
 
 \subsection{Detection}
 \label{sec:detection}
 
 The detection algorithm works on a single image at a time, and identifies the most likely location of the red, green and blue cars. The algorithm estimates the location of each car in the image using the corresponding colour channel. For the red car for instance, it looks at the red channel, and computes the maximal value for each row, and for each column. It convolves each of these to reduce noise, and finds the maximum along the rows and maximum along the columns.
+
+\lstinputlisting{xyhistmaxReport.m}
 
 \begin{figure}[htbp!]
   \centering
@@ -54,10 +59,9 @@ The detection algorithm works on a single image at a time, and identifies the mo
     \label{fig:maxima}
 \end{figure}
 
-Although this point is likely to be within the robot, it is not necessarily at its center. To get a better estimate of the center of the robot, we find the neighbourhood along each axis which stays within 90% of the maximum value; we compute the center of this neighbourhood as the estimated center of the robot.
+Although this point is likely to be within the robot, it is not necessarily at its center. To get a better estimate of the center of the robot, we find the neighbourhood along each axis which stays within 90\% of the maximum value; we compute the center of this neighbourhood as the estimated center of the robot.
 
-Finally, we compute a threshold for separating the robot from the background in the colour channel; we choose a value of 0.75 times the maximal value.
-
+Finally, we compute a threshold for separating the robot from the background in the colour channel; we choose a value of 0.75 times the maximal value. This whole process is illustrated in Figure~\ref{fig:maxima}, which shows the maxima for each column in the red channel of a test image, and the computed threshold and center values. 
 \begin{figure}[htbp!]
   \centering
     \includegraphics[width=0.7\textwidth]{../Drawings/pipeline-06-boundingboxes.png}
@@ -65,7 +69,7 @@ Finally, we compute a threshold for separating the robot from the background in 
     \label{fig:firstbb}
 \end{figure}
 
-For each channel, the algorithm then takes a 120x120 bounding box around the estimated robot centre, thresholds it using the computed threshold, and passes the image to the next stage for finer-grained processing.
+For each channel, the algorithm then takes a 120x120 bounding box around the estimated robot centre, thresholds it using the computed threshold, and passes the image to the next stage for finer-grained processing. This is illustrated in Figure~\ref{fig:firstbb} and Figure~\ref{fig:timg}.
 
 \begin{figure}[htbp!]
   \centering
@@ -111,7 +115,7 @@ The object with the largest area is then identified. A bounding box is subsequen
 
 The object will then be surrounded by its corresponding bounding box. The centroid of this bounding box is then calculated. This algorithm is performed on each of the three clipped images corresponding to the three respective colour channels.\\
 
-It must also be noted that due to bad lighting or image noise, a robot may not be detected in an image frame. This has been catered for in the \textit{calcBoundingBox} function. If the maximum calculated area of an object in the image is $0$, then it is assumed that an object has not been detected and the frame is skipped.
+It must also be noted that due to bad lighting or image noise, we may have no object pixels at all in the thresholded image, in which case no position or direction will be available. The only dataset in which this occured was Dataset 7. This has been handled in the \textit{calcBoundingBox} function; if the maximum calculated area of an object in the image is $0$, then it is assumed that an object has not been detected and the entire frame is abandoned. Although this might seem drastic, it only happens while processing our most pathological dataset. We counted such occurences as missed detections in our results, and report the number of missed frames at the end of each run of the program.
 
 \subsubsection{Calculate the Center of Mass}
 \label{sec:cm}
@@ -133,9 +137,9 @@ The center of mass of the object is then determined using \eqnref{eqn:cm}. $(\wi
 
 \subsubsection{Linking and Plotting}
 \label{sec:linkplot}
-The final step in the linking algorithm is to link the object in image frame $n$ with the object in the previous image frame $(n-1)$. A criteria needs to be developed in order to define when this `linking' of objects should occur. \\
+The final step in the linking algorithm is to link the object in image frame $n$ with the object in the previous image frame $(n-1)$. A criterion needs to be developed in order to define when this `linking' of objects should occur. \\
 
-The criteria has been defined as follows. It has been previously mentioned that each image has been separated into its R,G and B channels. The R,G,B images have also been cropped into $120X120$ dimension images. Within these cropped images, the object with the largest area of pixels in each channel is chosen to represent the robot. For example, the object with the largest area of red pixels in the red channel cropped image, represents the red robot. Based on this assumption, the largest objects detected in adjacent image frames, in the same colour channel, are connected. This is a safe assumption as the largest concentration of  red, green and blue pixels are usually associated with the red, green and blue robots respectively, once the images have been cropped to a $120X120$ dimension. \\
+The criterion has been defined as follows. It has been previously mentioned that each image has been separated into its R,G and B channels. The R,G,B images have also been cropped into $120 \times 120$ dimension images. Within these cropped images, the object with the largest area of pixels in each channel is chosen to represent the robot. For example, the object with the largest area of red pixels in the red channel cropped image, represents the red robot. Based on this assumption, the largest objects detected in adjacent image frames, in the same colour channel, are connected. This is a safe assumption as the largest concentration of  red, green and blue pixels are usually associated with the red, green and blue robots respectively, once the images have been cropped to a $120 \times 120$ dimension. \\
 
 The center of mass of the red, green and blue robots are stored in `linker' arrays as shown below. The links are plotted on the estimated background image at the end of the program.\\
 
@@ -172,7 +176,7 @@ D_{x} = \frac{D_{x}}{\vert\vert D_{x} \vert\vert}
 
 \subsection{Background Estimation}
 \label{sec:back}
-Estimation of the background image required the implementation of a variety of different image processing techniques. This is because the datasets provided presented a number of challenges. One such challenge was that of removing robots that were stationary for a significant portion of a frame sequence. This prevented the simple implementation of a median filter to calculate the background image. This is due to the fact that objects that are stationary for a large subset of the frames will be incorporated into the median and subsequently into the background image.\\
+Estimation of the background image required the implementation of a variety of image processing techniques. The provided datasets presented a number of challenges in terms of background identification, most notably the presence of robots that were stationary for most of the frames in a sequence. This prevented the simple implementation of a median filter to calculate the background image; objects that are stationary for the majority of the frames will be incorporated into the median and subsequently into the background image.\\
 
 Therefore, in order to solve this problem, an algorithm has been developed to calculate the background image, regardless of stationary robots being in large subsets of the frame sequence. \\
 
@@ -194,6 +198,8 @@ The \textit{Region Erasing and Filling} functional block is implemented on the t
 \section{Results}
 \label{sec:results}
 This section details the performance of the image detection algorithms. The algorithms are generally able to detect the robot and determine its orientation. There are some situations where the algorithm cannot achieve this objective. An analysis of the estimated background images are also conducted.
+
+To compile these results, we manually assessed the performance of the algorithm in each frame. We counted as correct any detection which lies within the rbot, and we counted as correct any direction within 45 degrees of the true direction; these were both estimated by eye.
  
 \subsection{Robot Detection}
 \label{sec:detect}
@@ -218,8 +224,7 @@ Dataset 10 & 95 & 95 & 95 & 0  & 0  & 0  & 0  & 0  & 0  \\
 \label{table:detection}
 \end{table} 
 
-
-An example of an incorrect detection of a robot due to the robot leaving the image frame.
+An example of an incorrect detection of a robot due to the robot leaving the image frame is shown in Figure~\ref{fig:InDetectData2}.
 \begin{figure}[h!]
 \begin{minipage}[b]{0.5\linewidth}
 \includegraphics[scale=0.5]{../Drawings/incorrectdetBackdata1.pdf}
@@ -234,7 +239,7 @@ An example of an incorrect detection of a robot due to the robot leaving the ima
 \end{minipage}
 \end{figure}
 
-An example of an incorrect detection of a robot due to a region of highly saturated pixels that have a similar colour to that of the robot.
+An example of an incorrect detection of a robot due to a region of highly saturated pixels that have a similar colour to that of the robot is shown in Figure~\ref{fig:InDetectData7}.
 
 \begin{figure}[h!]
 \begin{minipage}[b]{0.5\linewidth}
