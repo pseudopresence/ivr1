@@ -190,11 +190,17 @@ for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     hold on;
     %Plot the arrow on each of the cars to indicate their
     %orientation
-    plot_arrow(trueCMXR,trueCMYR, trueCentroidBBXR+30*DR(1),trueCentroidBBYR+30*DR(2),'linewidth',2,'headwidth',0.25,'headheight',0.33,'color',LineColRArrow,'facecolor',LineColRArrow);
+    plot_arrow(trueCMXR,trueCMYR, trueCentroidBBXR+30*DR(1),trueCentroidBBYR+30*DR(2),...
+	'linewidth',2,'headwidth',0.25,'headheight',0.33,'color',LineColRArrow,...
+	'facecolor',LineColRArrow);
     hold on
-    plot_arrow(trueCMXG,trueCMYG, trueCentroidBBXG+30*DG(1),trueCentroidBBYG+30*DG(2),'linewidth',2,'headwidth',0.25,'headheight',0.33,'color',LineColGArrow,'facecolor',LineColGArrow);
+    plot_arrow(trueCMXG,trueCMYG, trueCentroidBBXG+30*DG(1),trueCentroidBBYG+30*DG(2),...
+	'linewidth',2,'headwidth',0.25,'headheight',0.33,'color',LineColGArrow,...
+	'facecolor',LineColGArrow);
     hold on
-    plot_arrow(trueCMXB,trueCMYB, trueCentroidBBXB+30*DB(1),trueCentroidBBYB+30*DB(2),'linewidth',2,'headwidth',0.25,'headheight',0.33,'color',LineColBArrow,'facecolor',LineColBArrow);
+    plot_arrow(trueCMXB,trueCMYB, trueCentroidBBXB+30*DB(1),trueCentroidBBYB+30*DB(2),...
+	'linewidth',2,'headwidth',0.25,'headheight',0.33,'color',LineColBArrow,...
+	'facecolor',LineColBArrow);
     
     %Plot the red channel with its corresponding bounding
     %box
@@ -203,8 +209,9 @@ for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     colormap('gray');
     hold on;
     plot(VerticesXR, VerticesYR, 'r-', 'LineWidth', 5);
-    plot_arrow(CenterMassR(1),CenterMassR(2), CentroidR(1)+30*DR(1),CentroidR(2)+30*DR(2),'linewidth',2,'headwidth',0.25,'headheight',0.33,'color',LineColRArrow,'facecolor',LineColRArrow);
-    %plot([CenterMassR(1),CentroidR(1)+30*DR(1)], [CenterMassR(2), CentroidR(2)+30*DR(2)], LineColR, 'LineWidth',2);
+    plot_arrow(CenterMassR(1),CenterMassR(2), CentroidR(1)+30*DR(1),...
+	CentroidR(2)+30*DR(2),'linewidth',2,'headwidth',0.25,'headheight',0.33,...
+	'color',LineColRArrow,'facecolor',LineColRArrow);
     xlabel('Red Channel');
 
     %Plot the green channel with its corresponding bounding
@@ -214,8 +221,9 @@ for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     colormap('gray');
     hold on;
     plot(VerticesXG, VerticesYG, 'g-', 'LineWidth', 5);
-    plot_arrow(CenterMassG(1),CenterMassG(2), CentroidG(1)+30*DG(1),CentroidG(2)+30*DG(2),'linewidth',2,'headwidth',0.25,'headheight',0.33,'color',LineColRArrow,'facecolor',LineColRArrow);
-    %plot([CenterMassG(1),CentroidG(1)+30*DG(1)], [CenterMassG(2), CentroidG(2)+30*DG(2)], LineColG, 'LineWidth',2);
+    plot_arrow(CenterMassG(1),CenterMassG(2), CentroidG(1)+30*DG(1),...
+	CentroidG(2)+30*DG(2),'linewidth',2,'headwidth',0.25,'headheight',0.33,...
+	'color',LineColRArrow,'facecolor',LineColRArrow);
     xlabel('Green Channel');
 
     %Plot the blue channel with its corresponding bounding
@@ -225,8 +233,9 @@ for ImgIdx = IMG_SKIP:IMG_STEP:MAX_IMG_COUNT
     colormap('gray');
     hold on;
     plot(VerticesXB, VerticesYB, 'b-', 'LineWidth', 5);
-    plot_arrow(CenterMassB(1),CenterMassB(2), CentroidB(1)+30*DB(1),CentroidB(2)+30*DB(2),'linewidth',2,'headwidth',0.25,'headheight',0.33,'color',LineColBArrow,'facecolor',LineColBArrow);
-    %plot([CenterMassB(1),CentroidB(1)+30*DB(1)], [CenterMassB(2), CentroidB(2)+30*DB(2)], LineColB, 'LineWidth',2);
+    plot_arrow(CenterMassB(1),CenterMassB(2), CentroidB(1)+30*DB(1),...
+	CentroidB(2)+30*DB(2),'linewidth',2,'headwidth',0.25,'headheight',0.33,...
+	'color',LineColBArrow,'facecolor',LineColBArrow);
     xlabel('Blue Channel');
     %*******************************************************
     %pause(0.1);

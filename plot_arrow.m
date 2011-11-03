@@ -1,3 +1,7 @@
+%Retrieved from http://www.mathworks.com/matlabcentral/fileexchange/3345-plot-arrowhead
+%Author: Ohad Gal
+%Date of creation: 27 April 2003
+
 function handles = plot_arrow( x1,y1,x2,y2,varargin )
 %
 % plot_arrow - plots an arrow to the current plot

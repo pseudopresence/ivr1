@@ -5,7 +5,7 @@
 \usepackage[pdftex]{graphicx}
 
 \title{Introduction to Vision and Robotics: Assignment 1}
-\author{Chris Swetenham: Student Num, Daniel Mankowitz: S1128165}
+\author{Chris Swetenham: S1149322, Daniel Mankowitz: S1128165}
 \date{3/11/2011}
 
 \begin{document}
@@ -197,7 +197,7 @@ This section details the performance of the image detection algorithms. The algo
  
 \subsection{Robot Detection}
 \label{sec:detect}
-The robot detection algorithm was able to detect the robots in most of the datasets.  
+The robot detection algorithm was able to detect the robots in most of the datasets.  It did however miss a number of detections on dataset $7$. One of the primary reasons for this is that certain image frames in dataset $7$ contain areas of dark pixels. These pixels may be a result of bad lighting when the frame was captured. It may also be due to JPEG artefacts that were generated when the frame was captured and compressed \cite{ref:digitalprocessing}. The dark pixels become a problem when the image frame is normalised. Normalisation amplifies the intensity of dark pixels causing sharp peaks to form. These peaks are, on occasion, mistaken for robots and the incorrect object is identified in the image frame. An example of this can be seen in \figref{fig:InDetectData7} where an area of highly saturated green pixels have resulted in an incorrect detection. The bounding box identifying the object in the green colour channel is very compact indicating that the algorithm has selected the high intensity pixels rather than the green robot as shown in \figref{fig:greenInDetect}.
 
 \begin{table}[ht]
 \caption{Results obtained from trying to detect whether or not a robot is in an image frame} 
@@ -218,23 +218,7 @@ Dataset 10 & 95 & 95 & 95 & 0  & 0  & 0  & 0  & 0  & 0  \\
 \label{table:detection}
 \end{table} 
 
-
-An example of an incorrect detection of a robot due to the robot leaving the image frame.
-\begin{figure}[h!]
-\begin{minipage}[b]{0.5\linewidth}
-\includegraphics[scale=0.5]{../Drawings/incorrectdetBackdata1.pdf}
-\caption{An incorrect detection of the red robot. This track has been linked to the track of the blue robot creating an incorrect track.}
-\label{fig:InDetectData2}
-\end{minipage}
-\hspace{0.5cm}
-\begin{minipage}[b]{0.5\linewidth}
-\includegraphics[scale=0.8]{../Drawings/incorrectdetrobotdata1.pdf}
-\caption{The incorrect detection of the red robot as shown in the red channel binary image.}
-\label{fig:redInDetect}
-\end{minipage}
-\end{figure}
-
-An example of an incorrect detection of a robot due to a region of highly saturated pixels that have a similar colour to that of the robot.
+Dataset $1$ also generated some incorrect detections. These errors occurred as a result of the red robot leaving the image frame. As the robot leaves the frame, the algorithm looks for a set of red pixels that correspond to a red robot. Since the robot is not present, the algorithm identifies the next largest area of red pixels as being the red robot. This is incorrect and causes the results shown in the table. An example of this is shown in \figref{fig:InDetectData2} and \figref{fig:redInDetect} respectively. In this example, the red robot has left the scene and a group of red pixels, as shown in \figref{fig:redInDetect}, have been incorrectly defined as being the red robot resulting in an incorrect detection. Another reason for incorrect detections may be due to a non-uniform background as seen in \figref{fig:InDetectData7}. This causes problems, especially after normalisation, adding unwanted high intensity pixels.
 
 \begin{figure}[h!]
 \begin{minipage}[b]{0.5\linewidth}
@@ -250,13 +234,30 @@ An example of an incorrect detection of a robot due to a region of highly satura
 \end{minipage}
 \end{figure}
 
+
+
+\begin{figure}[h!]
+\begin{minipage}[b]{0.5\linewidth}
+\includegraphics[scale=0.5]{../Drawings/incorrectdetBackdata1.pdf}
+\caption{An incorrect detection of the red robot. This track has been linked to the track of the blue robot creating an incorrect track.}
+\label{fig:InDetectData2}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.5\linewidth}
+\includegraphics[scale=0.8]{../Drawings/incorrectdetrobotdata1.pdf}
+\caption{The incorrect detection of the red robot as shown in the red channel binary image.}
+\label{fig:redInDetect}
+\end{minipage}
+\end{figure}
+
+
 \subsection{Linking Robot Tracks}
 \label{sec:linking}
 As detailed in \secref{sec:linking}, a linking algorithm for the robots has been developed. This algorithm was tested on a variety of datasets and the results are tabulated in \tabref{table:linking}. This table details the number of \textit{Correct tracks, Incorrect Tracks} and \textit{Broken Tracks}. A \textit{Broken Track} has been defined as the lack of a connection between two adjacent tracks. \\
 
-The linking algorithm performed well on dataset $8$ and dataset $10$. However, dataset $1$ had a large number of incorrect and broken tracks, especially on the red channel. These errors occurred as a result of the red robot leaving the image frame. As the robot leaves the frame, the algorithm looks for a set of red pixels that correspond to a red robot. Since the robot is not present, the algorithm identifies the next largest area of red pixels as being the red robot. This is incorrect and causes the results shown in the table.\\
+The linking algorithm performed well on datasets $2, 8$ and $10$ recording no incorrect detections. However, dataset $1$ had a large number of incorrect and broken tracks, especially on the red channel. This is a result of the red robot leaving the image frame as detailed in \secref{sec:detect}. An example of this is shown in \figref{fig:InDetectData2} and \figref{fig:redInDetect} respectively. In this example, the red robot has left the scene and a group of red pixels, as shown in \figref{fig:redInDetect}, have been incorrectly defined as being the red robot. This results in an incorrect linkage between two tracks.\\
 
-An example of this is shown in \figref{fig:InDetectData2} and \figref{fig:redInDetect}. In this example, the red robot has left the scene and a group of red pixels, as shown in \figref{fig:redInDetect}, have been incorrectly defined as being the red robot. This results in an incorrect linkage between two tracks.
+Dataset $7$ also has a large number of broken tracks and this is as a result of the highly saturated pixels and bad lighting in the image frames as detailed in \secref{sec:detect}.\\
 
 \begin{table}[ht]
 \caption{Results obtained from linking robot tracks on a variety of different datasets} 

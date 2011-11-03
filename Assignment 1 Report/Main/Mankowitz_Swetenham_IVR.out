@@ -1,12 +1,13 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}
 \BOOKMARK [1][-]{section.2}{Methods}{}
 \BOOKMARK [2][-]{subsection.2.1}{Initial Processing}{section.2}
-\BOOKMARK [2][-]{subsection.2.2}{Linking Algorithm}{section.2}
-\BOOKMARK [3][-]{subsubsection.2.2.1}{Finding the Bounding Box}{subsection.2.2}
-\BOOKMARK [3][-]{subsubsection.2.2.2}{Calculate the Center of Mass}{subsection.2.2}
-\BOOKMARK [3][-]{subsubsection.2.2.3}{Linking and Plotting}{subsection.2.2}
-\BOOKMARK [2][-]{subsection.2.3}{Identifying Robot Orientation}{section.2}
-\BOOKMARK [2][-]{subsection.2.4}{Background Estimation}{section.2}
+\BOOKMARK [2][-]{subsection.2.2}{Detection}{section.2}
+\BOOKMARK [2][-]{subsection.2.3}{Linking Algorithm}{section.2}
+\BOOKMARK [3][-]{subsubsection.2.3.1}{Finding the Bounding Box}{subsection.2.3}
+\BOOKMARK [3][-]{subsubsection.2.3.2}{Calculate the Center of Mass}{subsection.2.3}
+\BOOKMARK [3][-]{subsubsection.2.3.3}{Linking and Plotting}{subsection.2.3}
+\BOOKMARK [2][-]{subsection.2.4}{Identifying Robot Orientation}{section.2}
+\BOOKMARK [2][-]{subsection.2.5}{Background Estimation}{section.2}
 \BOOKMARK [1][-]{section.3}{Results}{}
 \BOOKMARK [2][-]{subsection.3.1}{Robot Detection}{section.3}
 \BOOKMARK [2][-]{subsection.3.2}{Linking Robot Tracks}{section.3}
