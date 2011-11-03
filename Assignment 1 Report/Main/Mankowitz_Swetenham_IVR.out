@@ -1,12 +1,13 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}
 \BOOKMARK [1][-]{section.2}{Methods}{}
 \BOOKMARK [2][-]{subsection.2.1}{Initial Processing}{section.2}
-\BOOKMARK [2][-]{subsection.2.2}{Linking Algorithm}{section.2}
-\BOOKMARK [3][-]{subsubsection.2.2.1}{Finding the Bounding Box}{subsection.2.2}
-\BOOKMARK [3][-]{subsubsection.2.2.2}{Calculate the Center of Mass}{subsection.2.2}
-\BOOKMARK [3][-]{subsubsection.2.2.3}{Linking and Plotting}{subsection.2.2}
-\BOOKMARK [2][-]{subsection.2.3}{Identifying Robot Orientation}{section.2}
-\BOOKMARK [2][-]{subsection.2.4}{Background Estimation}{section.2}
+\BOOKMARK [2][-]{subsection.2.2}{Detection}{section.2}
+\BOOKMARK [2][-]{subsection.2.3}{Linking Algorithm}{section.2}
+\BOOKMARK [3][-]{subsubsection.2.3.1}{Finding the Bounding Box}{subsection.2.3}
+\BOOKMARK [3][-]{subsubsection.2.3.2}{Calculate the Center of Mass}{subsection.2.3}
+\BOOKMARK [3][-]{subsubsection.2.3.3}{Linking and Plotting}{subsection.2.3}
+\BOOKMARK [2][-]{subsection.2.4}{Identifying Robot Orientation}{section.2}
+\BOOKMARK [2][-]{subsection.2.5}{Background Estimation}{section.2}
 \BOOKMARK [1][-]{section.3}{Results}{}
 \BOOKMARK [2][-]{subsection.3.1}{Robot Detection}{section.3}
 \BOOKMARK [2][-]{subsection.3.2}{Linking Robot Tracks}{section.3}
@@ -16,11 +17,11 @@
 \BOOKMARK [2][-]{subsection.4.1}{Success Evaluation}{section.4}
 \BOOKMARK [2][-]{subsection.4.2}{Limitations and Problems}{section.4}
 \BOOKMARK [2][-]{subsection.4.3}{Future Improvements}{section.4}
-\BOOKMARK [1][-]{section.5}{Code}{}
-\BOOKMARK [2][-]{subsection.5.1}{Read Image Sequences into Matlab}{section.5}
-\BOOKMARK [2][-]{subsection.5.2}{Background Estimation Functions}{section.5}
-\BOOKMARK [2][-]{subsection.5.3}{Detection Algorithm Helper Functions}{section.5}
-\BOOKMARK [1][-]{section.6}{Linking Algorithm Functions}{}
-\BOOKMARK [1][-]{section.7}{Orientation Algorithm Third Party Helper Function}{}
-\BOOKMARK [2][-]{subsection.7.1}{Main Program Code}{section.7}
-\BOOKMARK [1][-]{section.8}{Conclusion}{}
+\BOOKMARK [1][-]{section.5}{Conclusion}{}
+\BOOKMARK [1][-]{appendix.A}{Program Code}{}
+\BOOKMARK [2][-]{subsection.A.1}{Read Image Sequences into Matlab}{appendix.A}
+\BOOKMARK [2][-]{subsection.A.2}{Background Estimation Functions}{appendix.A}
+\BOOKMARK [2][-]{subsection.A.3}{Detection Algorithm Helper Functions}{appendix.A}
+\BOOKMARK [2][-]{subsection.A.4}{Linking Algorithm Functions}{appendix.A}
+\BOOKMARK [2][-]{subsection.A.5}{Orientation Algorithm Third Party Helper Function}{appendix.A}
+\BOOKMARK [2][-]{subsection.A.6}{Main Program Code}{appendix.A}
